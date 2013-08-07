@@ -8,6 +8,7 @@ KIARAServerContext *initServer(KIARAServerConfig config){
 	//TODO: Validate params and check if server can be started
 	//TODO: Set parameters on context
 	KIARAServerContext *context;
+	context = malloc(sizeof(KIARAServerContext));
 	context->config = config;
 	return context;
 }
