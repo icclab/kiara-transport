@@ -2,19 +2,23 @@
 #include <zmq.h>
 
 #include "server.h"
+#include "kmessage.h"
+#include "ktransport.h"
 
 //Validate the config params here and return a context
-KIARAServerContext *initServer(KIARAServerConfig config){
+
+KIARA_ServerContext *initServer(KIARA_ServerConfig config) {
 	//TODO: Validate params and check if server can be started
 	//TODO: Set parameters on context
-	KIARAServerContext *context;
-	context = malloc(sizeof(KIARAServerContext));
+	KIARA_ServerContext *context;
+	context = malloc(sizeof (KIARA_ServerContext));
 	context->config = config;
 	return context;
 }
 
 //The main server function, accessed by the world
-void *runServer(KIARAServerContext *context, void (*f)(char*, char*, char*)) {
+
+void *runServer(KIARA_ServerContext *context, void (*f)(char*, char*, char*)) {
 	zctx_t *ctx = zctx_new();
 
 	//This is the front-end, usually talks TCP
@@ -36,17 +40,19 @@ void *runServer(KIARAServerContext *context, void (*f)(char*, char*, char*)) {
 	zmq_proxy(frontend, backend, NULL);
 
 	//TODO: We never get here, save shutdown
+	//TODO: Put this in stopServer
 	zctx_destroy(&ctx);
-	return NULL;
+	return 1;
 }
 
 //The main worker function
+
 static void server_worker(void *args, zctx_t *ctx, void *pipe) {
 	void *worker = zsocket_new(ctx, ZMQ_DEALER);
 	void (*f)(char*, char*, char*) = args;
 	zsocket_connect(worker, "inproc://backend");
 
-	while (1) {
+	for (;;) {
 		//At the moment, just send back Hello World with http header
 		char *http_ok = "HTTP/1.0 200 OK\r\nVary: Accept-Encoding, Accept-Language\r\nConnection: Close\r\nContent-Type: text/plain\r\nContent-Length:12\r\n\r\nHello, World";
 
@@ -57,13 +63,15 @@ static void server_worker(void *args, zctx_t *ctx, void *pipe) {
 		assert(frame_identity);
 
 		//parse the http request
-		server_worker_parse_request(frame_content);
+		kmessage_parse(frame_content);
 
 		zmsg_destroy(&msg);
 
+		//TODO: Put this in server_worker_compose_response
 		zframe_t *frame_reply = zframe_new(http_ok, strlen(http_ok));
-		//Pass the correct args here
+		//Pass the correct args here after parsing
 		//f("1", "1", "1");
+		kmessage_compose();
 
 		zframe_send(&frame_identity, worker, ZFRAME_MORE + ZFRAME_REUSE);
 		zframe_send(&frame_reply, worker, ZFRAME_REUSE);

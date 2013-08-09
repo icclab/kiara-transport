@@ -38,6 +38,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/client.o \
 	${OBJECTDIR}/http.o \
 	${OBJECTDIR}/http_parser.o \
+	${OBJECTDIR}/kmessage.o \
+	${OBJECTDIR}/ktransport.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/server.o
 
@@ -60,36 +62,46 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/http_req_rep
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${TESTDIR}/TestFiles/f1
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/http_req_rep: ${OBJECTFILES}
-	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/http_req_rep ${OBJECTFILES} ${LDLIBSOPTIONS}
+${TESTDIR}/TestFiles/f1: ${OBJECTFILES}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.c} -o ${TESTDIR}/TestFiles/f1 ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/client.o: client.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/client.o client.c
+	$(COMPILE.c) -O2 -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/client.o client.c
 
 ${OBJECTDIR}/http.o: http.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/http.o http.c
+	$(COMPILE.c) -O2 -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/http.o http.c
 
 ${OBJECTDIR}/http_parser.o: http_parser.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/http_parser.o http_parser.c
+	$(COMPILE.c) -O2 -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/http_parser.o http_parser.c
+
+${OBJECTDIR}/kmessage.o: kmessage.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/kmessage.o kmessage.c
+
+${OBJECTDIR}/ktransport.o: ktransport.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/ktransport.o ktransport.c
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
+	$(COMPILE.c) -O2 -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
 
 ${OBJECTDIR}/server.o: server.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/server.o server.c
+	$(COMPILE.c) -O2 -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/server.o server.c
 
 # Subprojects
 .build-subprojects:
@@ -97,7 +109,7 @@ ${OBJECTDIR}/server.o: server.c
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/http_req_rep
+	${RM} ${TESTDIR}/TestFiles/f1
 
 # Subprojects
 .clean-subprojects:

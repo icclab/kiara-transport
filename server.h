@@ -4,7 +4,11 @@
  *
  * Created on 24. Juli 2013, 14:24
  */
+//TODO: Replace czmq by ktransport.h
 #include <czmq.h>
+#include "kiara.h"
+#include "kmessage.h"
+#include "ktransport.h"
 
 #ifndef SERVER_H
 #define	SERVER_H
@@ -13,18 +17,8 @@
 extern "C" {
 #endif
 	
-typedef struct KIARAServerConfig KIARAServerConfig;
-typedef struct KIARAServerContext KIARAServerContext;
-	
-enum server_type {
-	TCP,							// 0
-	TCP_HTTP						// 1
-
-#ifdef WITH_SSL
-	,
-	TCP_HTTPS,				// 3
-#endif
-};
+typedef struct KIARA_ServerConfig KIARA_ServerConfig;
+typedef struct KIARA_ServerContext KIARA_ServerContext;
 
 enum threading_model {
 	BOSS_WORKER,			// 0
@@ -37,22 +31,23 @@ enum communication_pattern {
 };
 
 //public
-struct KIARAServerConfig {
+struct KIARA_ServerConfig {
 	int type;
 	char *base_url;
 };
 
 //private
-struct KIARAServerContext {
-	struct KIARAServerConfig config;
+struct KIARA_ServerContext {
+	struct KIARA_ServerConfig config;
 	int th_model;
 	int thread_nbr;
 	zctx_t *ctx;
 };
 
 //public
-KIARAServerContext *initServer(KIARAServerConfig config);
-void *runServer(KIARAServerContext *context, void (*f)(char*, char*, char*));
+KIARA_ServerContext *initServer(KIARA_ServerConfig config);
+KIARA_Result runServer(KIARA_ServerContext *context, void (*f)(char*, char*, char*));
+KIARA_Result stopServer(KIARA_ServerContext *context);
 
 //private
 static void server_worker(void *args, zctx_t *ctx, void *pipe);

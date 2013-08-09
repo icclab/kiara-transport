@@ -2,11 +2,12 @@
 #include <zmq.h>
 
 #include "client.h"
+#include "kmessage.h"
+#include "ktransport.h"
 
 //TODO: Implementation in existing message.c in the KIARA Project.
 //TODO: curl is used as http-client
 //TODO: For KIARA2KIARA traffic, we use ZMQ DEALER Clients with identity
-//TODO: 
 static void *client_native(void *args) {
     zctx_t *ctx = zctx_new();
     void *client = zsocket_new(ctx, ZMQ_DEALER);

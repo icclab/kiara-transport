@@ -4,6 +4,14 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>client.h</itemPath>
+      <itemPath>http.h</itemPath>
+      <itemPath>http_parser.h</itemPath>
+      <itemPath>kiara.h</itemPath>
+      <itemPath>kmessage.h</itemPath>
+      <itemPath>ktransport.h</itemPath>
+      <itemPath>server.h</itemPath>
+      <itemPath>/home/staff/aepp/unix/NetBeansProjects/http_req_rep/zhelpers.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -13,15 +21,12 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>client.c</itemPath>
-      <itemPath>client.h</itemPath>
       <itemPath>http.c</itemPath>
-      <itemPath>http.h</itemPath>
       <itemPath>http_parser.c</itemPath>
-      <itemPath>http_parser.h</itemPath>
+      <itemPath>kmessage.c</itemPath>
+      <itemPath>ktransport.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>server.c</itemPath>
-      <itemPath>server.h</itemPath>
-      <itemPath>/home/staff/aepp/unix/NetBeansProjects/http_req_rep/zhelpers.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -48,14 +53,24 @@
         <cTool>
           <incDir>
             <pElem>/usr/local/include</pElem>
+            <pElem>.</pElem>
           </incDir>
-          <commandLine>-lzmq -lczmq</commandLine>
         </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
         <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
           <linkerAddLib>
             <pElem>/usr/local/lib64</pElem>
-            <pElem>/lib64</pElem>
           </linkerAddLib>
+          <commandlineTool>gcc</commandlineTool>
+          <linkerLibItems>
+            <linkerLibLibItem>czmq</linkerLibLibItem>
+            <linkerLibLibItem>zmq</linkerLibLibItem>
+          </linkerLibItems>
         </linkerTool>
       </compileType>
       <item path="/home/staff/aepp/unix/NetBeansProjects/http_req_rep/zhelpers.h"
@@ -69,21 +84,6 @@
       </item>
       <item path="client.h" ex="false" tool="3" flavor2="0">
       </item>
-      <folder path="TestFiles/f1">
-        <cTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f1</output>
-        </linkerTool>
-      </folder>
       <item path="http.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="http.h" ex="false" tool="3" flavor2="0">
@@ -91,6 +91,16 @@
       <item path="http_parser.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="http_parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="kiara.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="kmessage.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="kmessage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ktransport.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="ktransport.h" ex="false" tool="0" flavor2="0">
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -109,9 +119,15 @@
       <compileType>
         <cTool>
           <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -119,6 +135,9 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
       </compileType>
       <item path="/home/staff/aepp/unix/NetBeansProjects/http_req_rep/zhelpers.h"
             ex="false"
@@ -131,21 +150,6 @@
       </item>
       <item path="client.h" ex="false" tool="3" flavor2="0">
       </item>
-      <folder path="TestFiles/f1">
-        <cTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f1</output>
-        </linkerTool>
-      </folder>
       <item path="http.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="http.h" ex="false" tool="3" flavor2="0">
@@ -153,6 +157,16 @@
       <item path="http_parser.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="http_parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="kiara.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="kmessage.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="kmessage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ktransport.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="ktransport.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>

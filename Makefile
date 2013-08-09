@@ -1,9 +1,10 @@
 ## -*- Makefile -*-
 ##
 ## User: aepp
-## Time: 24.07.2013 15:29:55
+## Time: 06.08.2013 18:14:54
+## Makefile created by Oracle Solaris Studio.
 ##
-## This file is generated automatically, more or less.
+## This file is generated automatically.
 ##
 
 
@@ -21,16 +22,12 @@ TARGETDIR_client=GNU-amd64-Linux
 all: $(TARGETDIR_server)/server $(TARGETDIR_client)/client
 
 ## Target: server
-CPPFLAGS_server = \
-	-I/usr/include \
-	-I/usr/local/include \
-	-I.
 OBJS_server =  \
-	$(TARGETDIR_server)/http_parser.o \
 	$(TARGETDIR_server)/http.o \
+	$(TARGETDIR_server)/http_parser.o \
 	$(TARGETDIR_server)/main.o \
 	$(TARGETDIR_server)/server.o
-USERLIBS_server = -lczmq -lzmq $(SYSLIBS_server) 
+USERLIBS_server = /usr/local/lib64/libzmq.so /usr/local/lib64/libczmq.so $(SYSLIBS_server) 
 DEPLIBS_server =    
 LDLIBS_server = $(USERLIBS_server)
 
@@ -41,11 +38,11 @@ $(TARGETDIR_server)/server: $(TARGETDIR_server) $(OBJS_server) $(DEPLIBS_server)
 
 
 # Compile source files into .o files
-$(TARGETDIR_server)/http_parser.o: $(TARGETDIR_server) http_parser.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ http_parser.c
-	
 $(TARGETDIR_server)/http.o: $(TARGETDIR_server) http.c
 	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ http.c
+
+$(TARGETDIR_server)/http_parser.o: $(TARGETDIR_server) http_parser.c
+	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ http_parser.c
 
 $(TARGETDIR_server)/main.o: $(TARGETDIR_server) main.c
 	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ main.c
@@ -56,13 +53,10 @@ $(TARGETDIR_server)/server.o: $(TARGETDIR_server) server.c
 
 
 ## Target: client
-CPPFLAGS_client = \
-	-I/usr/include \
-	-I/usr/local/include
 OBJS_client =  \
 	$(TARGETDIR_client)/client.o
-USERLIBS_client = -lczmq -lzmq -lcurl $(SYSLIBS_client) 
-DEPLIBS_client =     
+USERLIBS_client = /usr/local/lib64/libzmq.so /usr/local/lib64/libczmq.so $(SYSLIBS_client) 
+DEPLIBS_client =    
 LDLIBS_client = $(USERLIBS_client)
 
 
@@ -81,8 +75,8 @@ $(TARGETDIR_client)/client.o: $(TARGETDIR_client) client.c
 clean:
 	rm -f \
 		$(TARGETDIR_server)/server \
-		$(TARGETDIR_server)/http_parser.o \
 		$(TARGETDIR_server)/http.o \
+		$(TARGETDIR_server)/http_parser.o \
 		$(TARGETDIR_server)/main.o \
 		$(TARGETDIR_server)/server.o \
 		$(TARGETDIR_client)/client \
