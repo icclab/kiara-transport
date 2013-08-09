@@ -1,7 +1,10 @@
+/* 
+ * File:   ktransport.h
+ * Author: aepp
+ *
+ * Created on 26. Juli 2013, 13:58
+ */
 //Example of KIARAClient/Server API
-//the following two includes are soon replaced by ktransport.h and kmessage.h
-#include <czmq.h>
-#include <zmq.h>
 
 #include "server.h"
 #include "client.h"

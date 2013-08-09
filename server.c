@@ -1,3 +1,9 @@
+/* 
+ * File:   ktransport.h
+ * Author: aepp
+ *
+ * Created on 26. Juli 2013, 14:02
+ */
 #include <czmq.h>
 #include <zmq.h>
 
