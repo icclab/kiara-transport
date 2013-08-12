@@ -6,7 +6,6 @@
  */
 
 #include "kiara.h"
-#include "kmessage.h"
 #include "ktransport.h"
 
 #ifndef CLIENT_H
@@ -16,6 +15,9 @@
 extern "C" {
 #endif
 	
+typedef struct KIARA_ClientConfig KIARA_ClientConfig;
+typedef struct KIARA_ClientContext KIARA_ClientContext;
+	
 //public
 struct KIARA_ClientConfig {
 	int type;
@@ -24,7 +26,7 @@ struct KIARA_ClientConfig {
 
 //private
 struct KIARA_ClientContext {
-	struct KIARA_clientConfig config;
+	struct KIARA_ClientConfig config;
 	zctx_t *ctx;
 };
 

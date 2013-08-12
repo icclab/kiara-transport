@@ -8,13 +8,12 @@
 #include <zmq.h>
 
 #include "client.h"
-#include "kmessage.h"
 #include "ktransport.h"
 
 //TODO: Implementation in existing message.c in the KIARA Project.
 //TODO: curl is used as http-client
 //TODO: For KIARA2KIARA traffic, we use ZMQ DEALER Clients with identity
-static void *client_native(void *args) {
+static void * client_native(void *args) {
     zctx_t *ctx = zctx_new();
     void *client = zsocket_new(ctx, ZMQ_DEALER);
 
@@ -32,12 +31,13 @@ static void *client_native(void *args) {
     return NULL;
 }
 
-static void *client_curl(void *args) {
-    
+KIARA_ClientContext * initClient(KIARA_ClientConfig config){
+	zctx_t *ctx = zctx_new();
+}
+KIARA_Result finalizeClient(KIARA_ClientContext *context){
+	return 0;
 }
 
-int main(int argc, char** argv) {
-	client_native(NULL);
-	//zclock_sleep (5 * 1000);
-    return (EXIT_SUCCESS);
+KIARA_Result sendMessageSync(KIARA_ClientContext *context, char *msgData, KIARA_MessageRaw *inMsg){
+	return 0;
 }

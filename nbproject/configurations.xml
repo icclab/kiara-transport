@@ -8,10 +8,8 @@
       <itemPath>http.h</itemPath>
       <itemPath>http_parser.h</itemPath>
       <itemPath>kiara.h</itemPath>
-      <itemPath>kmessage.h</itemPath>
       <itemPath>ktransport.h</itemPath>
       <itemPath>server.h</itemPath>
-      <itemPath>/home/staff/aepp/unix/NetBeansProjects/http_req_rep/zhelpers.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -23,7 +21,6 @@
       <itemPath>client.c</itemPath>
       <itemPath>http.c</itemPath>
       <itemPath>http_parser.c</itemPath>
-      <itemPath>kmessage.c</itemPath>
       <itemPath>ktransport.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>server.c</itemPath>
@@ -73,11 +70,6 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="/home/staff/aepp/unix/NetBeansProjects/http_req_rep/zhelpers.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="Makefile" ex="false" tool="3" flavor2="0">
       </item>
       <item path="client.c" ex="false" tool="0" flavor2="0">
@@ -93,10 +85,6 @@
       <item path="http_parser.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="kiara.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="kmessage.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="kmessage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ktransport.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -139,11 +127,6 @@
           <output>${TESTDIR}/TestFiles/f1</output>
         </linkerTool>
       </compileType>
-      <item path="/home/staff/aepp/unix/NetBeansProjects/http_req_rep/zhelpers.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="Makefile" ex="false" tool="3" flavor2="0">
       </item>
       <item path="client.c" ex="false" tool="0" flavor2="0">
@@ -159,10 +142,6 @@
       <item path="http_parser.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="kiara.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="kmessage.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="kmessage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ktransport.c" ex="false" tool="0" flavor2="0">
       </item>

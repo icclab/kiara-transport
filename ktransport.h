@@ -5,6 +5,9 @@
  * Created on 7. August 2013, 17:04
  */
 
+#include <czmq.h>
+#include <zmq.h>
+
 #ifndef KTRANSPORT_H
 #define	KTRANSPORT_H
 
@@ -20,6 +23,21 @@ enum message_type {
 	HTTP_TLS					// 1
 #endif
 };
+
+typedef struct KIARA_MessageRaw KIARA_MessageRaw;
+
+struct KIARA_MessageRaw
+{
+    char *body;
+	char *msgData;
+	int type;	
+};
+
+typedef zctx_t kctx_t;
+
+/*kctx_t* kctx_new() {
+	return (kctx_t*) zctx_new();
+}*/
 
 #ifdef	__cplusplus
 }

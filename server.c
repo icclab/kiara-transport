@@ -8,7 +8,7 @@
 #include <zmq.h>
 
 #include "server.h"
-#include "kmessage.h"
+#include "kiara.h"
 #include "ktransport.h"
 
 //Validate the config params here and return a context
@@ -24,7 +24,7 @@ KIARA_ServerContext *initServer(KIARA_ServerConfig config) {
 
 //The main server function, accessed by the world
 
-void *runServer(KIARA_ServerContext *context, void (*f)(char*, char*, char*)) {
+KIARA_Result runServer(KIARA_ServerContext *context, void (*f)(KIARA_MessageRaw* msgData)) {
 	zctx_t *ctx = zctx_new();
 
 	//This is the front-end, usually talks TCP
@@ -51,11 +51,15 @@ void *runServer(KIARA_ServerContext *context, void (*f)(char*, char*, char*)) {
 	return 1;
 }
 
+KIARA_Result stopServer(KIARA_ServerContext *context){
+	
+}
+
 //The main worker function
 
 static void server_worker(void *args, zctx_t *ctx, void *pipe) {
 	void *worker = zsocket_new(ctx, ZMQ_DEALER);
-	void (*f)(char*, char*, char*) = args;
+	void (*f)(KIARA_MessageRaw* msgData) = args;
 	zsocket_connect(worker, "inproc://backend");
 
 	for (;;) {
@@ -69,7 +73,7 @@ static void server_worker(void *args, zctx_t *ctx, void *pipe) {
 		assert(frame_identity);
 
 		//parse the http request
-		kmessage_parse(frame_content);
+		//kmessage_parse(frame_content);
 
 		zmsg_destroy(&msg);
 
@@ -77,7 +81,7 @@ static void server_worker(void *args, zctx_t *ctx, void *pipe) {
 		zframe_t *frame_reply = zframe_new(http_ok, strlen(http_ok));
 		//Pass the correct args here after parsing
 		//f("1", "1", "1");
-		kmessage_compose();
+		//kmessage_compose();
 
 		zframe_send(&frame_identity, worker, ZFRAME_MORE + ZFRAME_REUSE);
 		zframe_send(&frame_reply, worker, ZFRAME_REUSE);

@@ -7,7 +7,6 @@
 //Example of KIARAClient/Server API
 
 #include "server.h"
-#include "client.h"
 
 //This is the performCall methode from kiara_impl.cpp, as example
 
@@ -16,7 +15,7 @@ void handleRequest(KIARA_MessageRaw* msgData) {
 	sleep(1);
 }
 
-int main_server() {
+int main() {
 	//Define the Request handler
 	void (*f)(KIARA_MessageRaw* msgData) = NULL;
 
@@ -41,37 +40,5 @@ int main_server() {
 	//TODO: Debugg/Err
 	//TODO: We never get here, pass correct Err/Succ Message
 	res = stopServer(s_ctx);
-	return 0;
-}
-
-int main_client() {
-	int buf_len, res = 0;
-	char *msgData = "{\"J\":5,\"0\":\"N\"}";
-
-	KIARA_ClientConfig config;
-	KIARA_ClientContext *c_ctx;
-	KIARA_MessageRaw inMsg;
-
-	//set the config
-	config.base_url = "tcp://localhost:5570";
-	//initialize the client (network nego phase)
-	c_ctx = initClient(config);
-	//send some data. The Data to send must be serialized. As native http client
-	//we still use curl. For KIARA to KIARA we use native TCP means, we have no
-	//application protocol to parse.
-	res = sendMessageSync(c_ctx, msgData, &inMsg);
-	//Do something with the Result. inMsg->body contains the raw content of the
-	//message wihtout any headers of the application protocol.
-	buf_len = strlen(inMsg.body);
-	//clean-up the client
-	res = finalizeClient(c_ctx);
-	return 0;
-}
-
-int main(int argc, char** argv) {
-	int res;
-
-	res = main_server();
-	res = main_client();
 	return 0;
 }

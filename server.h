@@ -7,7 +7,6 @@
 //TODO: Replace czmq by ktransport.h
 #include <czmq.h>
 #include "kiara.h"
-#include "kmessage.h"
 #include "ktransport.h"
 
 #ifndef SERVER_H
@@ -46,7 +45,7 @@ struct KIARA_ServerContext {
 
 //public
 KIARA_ServerContext *initServer(KIARA_ServerConfig config);
-KIARA_Result runServer(KIARA_ServerContext *context, void (*f)(char*, char*, char*));
+KIARA_Result runServer(KIARA_ServerContext *context, void (*f)(KIARA_MessageRaw* msgData));
 KIARA_Result stopServer(KIARA_ServerContext *context);
 
 //private

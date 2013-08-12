@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=http_req_rep
+PROJECTNAME=transport
 
 # Active Configuration
 DEFAULTCONF=Debug

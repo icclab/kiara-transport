@@ -38,7 +38,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/client.o \
 	${OBJECTDIR}/http.o \
 	${OBJECTDIR}/http_parser.o \
-	${OBJECTDIR}/kmessage.o \
 	${OBJECTDIR}/ktransport.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/server.o
@@ -82,11 +81,6 @@ ${OBJECTDIR}/http_parser.o: http_parser.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/http_parser.o http_parser.c
-
-${OBJECTDIR}/kmessage.o: kmessage.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.c) -O2 -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/kmessage.o kmessage.c
 
 ${OBJECTDIR}/ktransport.o: ktransport.c 
 	${MKDIR} -p ${OBJECTDIR}
