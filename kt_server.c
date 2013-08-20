@@ -1,5 +1,5 @@
 /* 
- * File:   ktransport.h
+ * File:   kt_server.c
  * Author: aepp
  *
  * Created on 26. Juli 2013, 14:02
@@ -7,59 +7,58 @@
 #include <czmq.h>
 #include <zmq.h>
 
-#include "server.h"
+#include "kt_server.h"
 #include "kiara.h"
 #include "ktransport.h"
 
 //Validate the config params here and return a context
 
-KIARA_ServerContext *initServer(KIARA_ServerConfig config) {
+kt_srvctx *kt_init_server(kt_srvconf config) {
 	//TODO: Validate params and check if server can be started
 	//TODO: Set parameters on context
-	KIARA_ServerContext *context;
-	context = malloc(sizeof (KIARA_ServerContext));
-	context->config = config;
-	return context;
+	kt_srvctx *kt_ctx;
+	kt_ctx = malloc(sizeof (kt_srvctx));
+	kt_ctx->config = config;
+        kt_ctx->ctx = zctx_new();
+
+        //This is the front-end, usually talks TCP
+	kt_ctx->frontend = zsocket_new(kt_ctx->ctx, ZMQ_ROUTER);
+	//Bring the socket in correct mode
+	zsocket_set_router_raw(kt_ctx->frontend, kt_ctx->config.type);
+	zsocket_bind(kt_ctx->frontend, kt_ctx->config.base_url);
+
+	//The worker sockets are talking via inproc
+	kt_ctx->backend = zsocket_new(kt_ctx->ctx, ZMQ_DEALER);
+	zsocket_bind(kt_ctx->backend, "inproc://backend");
+
+	return kt_ctx;
 }
 
 //The main server function, accessed by the world
 
-KIARA_Result runServer(KIARA_ServerContext *context, void (*f)(KIARA_MessageRaw* msgData)) {
-	zctx_t *ctx = zctx_new();
-
-	//This is the front-end, usually talks TCP
-	void *frontend = zsocket_new(ctx, ZMQ_ROUTER);
-	//Bring the socket in correct mode
-	zsocket_set_router_raw(frontend, context->config.type);
-	zsocket_bind(frontend, context->config.base_url);
-
-	//The worker sockets are talking via inproc
-	void *backend = zsocket_new(ctx, ZMQ_DEALER);
-	zsocket_bind(backend, "inproc://backend");
-
+int kt_run_server(kt_srvctx *kt_ctx, void (*f)(kt_messageraw* msgData)) {
 	//Launch the pool
 	int thread_nbr;
 	for (thread_nbr = 0; thread_nbr < 5; thread_nbr++)
-		zthread_fork(ctx, server_worker, f);
+		zthread_fork(kt_ctx->ctx, server_worker, f);
 
 	//connect workers and frontend
-	zmq_proxy(frontend, backend, NULL);
+	zmq_proxy(kt_ctx->frontend, kt_ctx->backend, NULL);
 
-	//TODO: We never get here, save shutdown
-	//TODO: Put this in stopServer
-	zctx_destroy(&ctx);
 	return 1;
 }
 
-KIARA_Result stopServer(KIARA_ServerContext *context){
-	
+int kt_stop_server(kt_srvctx *kt_ctx){
+    	//TODO: We never get here, save shutdown
+	//TODO: Put this in stopServer
+	zctx_destroy(&(kt_ctx->ctx));
 }
 
 //The main worker function
 
 static void server_worker(void *args, zctx_t *ctx, void *pipe) {
 	void *worker = zsocket_new(ctx, ZMQ_DEALER);
-	void (*f)(KIARA_MessageRaw* msgData) = args;
+	void (*f)(kt_messageraw* msgData) = args;
 	zsocket_connect(worker, "inproc://backend");
 
 	for (;;) {

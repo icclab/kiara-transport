@@ -29,9 +29,9 @@ OBJS_main =  \
 	$(TARGETDIR_main)/client.o \
 	$(TARGETDIR_main)/http_parser.o \
 	$(TARGETDIR_main)/http.o \
-	$(TARGETDIR_main)/server.o
+	$(TARGETDIR_main)/kt_server.o
 USERLIBS_main = $(SYSLIBS_main) -lzmq -lczmq
-DEPLIBS_main =  
+DEPLIBS_main =
 LDLIBS_main = $(USERLIBS_main)
 
 
@@ -56,8 +56,8 @@ $(TARGETDIR_main)/http_parser.o: $(TARGETDIR_main) http_parser.c
 $(TARGETDIR_main)/http.o: $(TARGETDIR_main) http.c
 	$(COMPILE.c) $(CFLAGS_main) $(CPPFLAGS_main) -o $@ http.c
 
-$(TARGETDIR_main)/server.o: $(TARGETDIR_main) server.c
-	$(COMPILE.c) $(CFLAGS_main) $(CPPFLAGS_main) -o $@ server.c
+$(TARGETDIR_main)/kt_server.o: $(TARGETDIR_main) kt_server.c
+	$(COMPILE.c) $(CFLAGS_main) $(CPPFLAGS_main) -o $@ kt_server.c
 
 
 
@@ -68,9 +68,9 @@ OBJS_server =  \
 	$(TARGETDIR_server)/http_parser.o \
 	$(TARGETDIR_server)/http.o \
 	$(TARGETDIR_server)/main_server.o \
-	$(TARGETDIR_server)/server.o
+	$(TARGETDIR_server)/kt_server.o
 USERLIBS_server = $(SYSLIBS_server) -lzmq -lczmq
-DEPLIBS_server =  
+DEPLIBS_server =
 LDLIBS_server = $(USERLIBS_server)
 
 
@@ -95,8 +95,8 @@ $(TARGETDIR_server)/http.o: $(TARGETDIR_server) http.c
 $(TARGETDIR_server)/main_server.o: $(TARGETDIR_server) main_server.c
 	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ main_server.c
 
-$(TARGETDIR_server)/server.o: $(TARGETDIR_server) server.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ server.c
+$(TARGETDIR_server)/kt_server.o: $(TARGETDIR_server) kt_server.c
+	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ kt_server.c
 
 
 
@@ -107,9 +107,9 @@ OBJS_client =  \
 	$(TARGETDIR_client)/client.o \
 	$(TARGETDIR_client)/http_parser.o \
 	$(TARGETDIR_client)/http.o \
-	$(TARGETDIR_client)/server.o
+	$(TARGETDIR_client)/kt_server.o
 USERLIBS_client = $(SYSLIBS_client) -lzmq -lczmq
-DEPLIBS_client =  
+DEPLIBS_client =
 LDLIBS_client = $(USERLIBS_client)
 
 
@@ -135,8 +135,8 @@ $(TARGETDIR_client)/http_parser.o: $(TARGETDIR_client) http_parser.c
 $(TARGETDIR_client)/http.o: $(TARGETDIR_client) http.c
 	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ http.c
 
-$(TARGETDIR_client)/server.o: $(TARGETDIR_client) server.c
-	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ server.c
+$(TARGETDIR_client)/kt_server.o: $(TARGETDIR_client) kt_server.c
+	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ kt_server.c
 
 
 
@@ -149,14 +149,14 @@ clean:
 		$(TARGETDIR_main)/client.o \
 		$(TARGETDIR_main)/http_parser.o \
 		$(TARGETDIR_main)/http.o \
-		$(TARGETDIR_main)/server.o \
+		$(TARGETDIR_main)/kt_server.o \
 		$(TARGETDIR_server)/server \
 		$(TARGETDIR_server)/ktransport.o \
 		$(TARGETDIR_server)/client.o \
 		$(TARGETDIR_server)/http_parser.o \
 		$(TARGETDIR_server)/http.o \
 		$(TARGETDIR_server)/main_server.o \
-		$(TARGETDIR_server)/server.o \
+		$(TARGETDIR_server)/kt_server.o \
 		$(TARGETDIR_client)/client \
 		$(TARGETDIR_client)/main.o \
 		$(TARGETDIR_client)/main_client.o \
@@ -164,7 +164,7 @@ clean:
 		$(TARGETDIR_client)/client.o \
 		$(TARGETDIR_client)/http_parser.o \
 		$(TARGETDIR_client)/http.o \
-		$(TARGETDIR_client)/server.o
+		$(TARGETDIR_client)/kt_server.o
 	rm -f -r $(TARGETDIR_server)
 	rm -f -r $(TARGETDIR_client)
 	rm -f -r $(TARGETDIR_main)

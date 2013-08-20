@@ -15,29 +15,22 @@
 extern "C" {
 #endif
 
+typedef zctx_t kctx_t;
+
 enum message_type {
-	HTTP,						// 0
+	HTTP,
 
 #ifdef WITH_SSL
-	,
-	HTTP_TLS					// 1
+	HTTP_TLS
 #endif
 };
 
-typedef struct KIARA_MessageRaw KIARA_MessageRaw;
-
-struct KIARA_MessageRaw
+typedef struct kt_messageraw
 {
-    char *body;
-	char *msgData;
-	int type;	
-};
-
-typedef zctx_t kctx_t;
-
-/*kctx_t* kctx_new() {
-	return (kctx_t*) zctx_new();
-}*/
+        char *body;
+        char *msgData;
+	int type;
+} kt_messageraw;
 
 #ifdef	__cplusplus
 }
