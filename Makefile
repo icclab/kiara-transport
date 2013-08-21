@@ -22,6 +22,8 @@ TARGETDIR_client=GNU-amd64-Linux
 
 all: $(TARGETDIR_main)/main $(TARGETDIR_server)/server $(TARGETDIR_client)/client
 
+server: $(TARGETDIR_server)/server
+
 ## Target: main
 OBJS_main =  \
 	$(TARGETDIR_main)/main.o \
