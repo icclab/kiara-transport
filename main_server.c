@@ -14,10 +14,10 @@ kt_srvctx_t *s_ctx;
 
 void handleRequest() {
 	char *http_ok = "HTTP/1.0 200 OK\r\nVary: Accept-Encoding, Accept-Language\r\nConnection: Close\r\nContent-Type: text/plain\r\nContent-Length:12\r\n\r\nHello, World";
-	void *client_backend = connect_to_backend(s_ctx->ctx);
-	kt_messageraw_t *msg = recv_message(client_backend);
+	connect_to_backend(s_ctx);
+	kt_messageraw_t *msg = recv_message(s_ctx);
 	msg->msgData = http_ok;
-	send_message(client_backend, msg);
+	send_message(s_ctx, msg);
 }
 
 int main() {

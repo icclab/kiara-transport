@@ -37,6 +37,7 @@ typedef struct {
 	kt_srvconf_t config;
         void *frontend;
         void *backend;
+	void *dispatcher;
         enum threading_model th_model;
 	int thread_nbr;
 	kctx_t *ctx;
@@ -47,9 +48,9 @@ kt_srvctx_t *kt_init_server(kt_srvconf_t config);
 int kt_run_server(kt_srvctx_t *context, void (*f)(kt_messageraw_t* msgData));
 int kt_stop_server(kt_srvctx_t *context);
 static void server_worker(void *args, zctx_t *ctx, void *pipe);
-void* connect_to_backend(kctx_t *ctx);
-kt_messageraw_t* recv_message(void *backend);
-int send_message(void *backend, kt_messageraw_t *msg);
+void connect_to_backend(kt_srvctx_t *ctx);
+kt_messageraw_t* recv_message(kt_srvctx_t *ctx);
+int send_message(kt_srvctx_t *ctx, kt_messageraw_t *msg);
 
 #ifdef	__cplusplus
 }
