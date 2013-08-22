@@ -9,7 +9,7 @@
 
 
 #### Compiler and tool definitions shared by all build targets #####
-CC = gcc
+CC = clang
 BASICOPTS = -g
 CFLAGS = $(BASICOPTS)
 
@@ -66,9 +66,6 @@ $(TARGETDIR_main)/kt_server.o: $(TARGETDIR_main) kt_server.c
 ## Target: server
 OBJS_server =  \
 	$(TARGETDIR_server)/ktransport.o \
-	$(TARGETDIR_server)/client.o \
-	$(TARGETDIR_server)/http_parser.o \
-	$(TARGETDIR_server)/http.o \
 	$(TARGETDIR_server)/main_server.o \
 	$(TARGETDIR_server)/kt_server.o
 USERLIBS_server = $(SYSLIBS_server) -lzmq -lczmq

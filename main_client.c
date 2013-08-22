@@ -14,7 +14,7 @@ int main() {
 
 	KIARA_ClientConfig config;
 	KIARA_ClientContext *c_ctx;
-	KIARA_MessageRaw inMsg;
+	kt_messageraw inMsg;
 
 	//set the config
 	config.base_url = "tcp://localhost:5570";

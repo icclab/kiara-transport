@@ -34,10 +34,10 @@ struct KIARA_ClientContext {
 KIARA_ClientContext *initClient(KIARA_ClientConfig config);
 KIARA_Result finalizeClient(KIARA_ClientContext *context);
 
-KIARA_Result sendMessageSync(KIARA_ClientContext *context, char *msgData, KIARA_MessageRaw *inMsg);
-KIARA_Result sendMessageSyncMore(KIARA_ClientContext *context, char *msgData, KIARA_MessageRaw *inMsg);
-KIARA_Result sendMessageAsync(KIARA_ClientContext *context, char *msgData, KIARA_MessageRaw *inMsg);
-KIARA_Result sendMessageAsyncMore(KIARA_ClientContext *context, char *msgData, KIARA_MessageRaw *inMsg);
+KIARA_Result sendMessageSync(KIARA_ClientContext *context, char *msgData, kt_messageraw_t *inMsg);
+KIARA_Result sendMessageSyncMore(KIARA_ClientContext *context, char *msgData, kt_messageraw_t *inMsg);
+KIARA_Result sendMessageAsync(KIARA_ClientContext *context, char *msgData, kt_messageraw_t *inMsg);
+KIARA_Result sendMessageAsyncMore(KIARA_ClientContext *context, char *msgData, kt_messageraw_t *inMsg);
 
 #ifdef	__cplusplus
 }

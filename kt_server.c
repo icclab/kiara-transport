@@ -4,6 +4,7 @@
  *
  * Created on 26. Juli 2013, 14:02
  */
+#include <stdio.h>
 #include <czmq.h>
 #include <zmq.h>
 
@@ -13,19 +14,27 @@
 
 //Validate the config params here and return a context
 
-kt_srvctx *kt_init_server(kt_srvconf config) {
+kt_srvctx_t *kt_init_server(kt_srvconf_t config)
+{
 	//TODO: Validate params and check if server can be started
 	//TODO: Set parameters on context
-	kt_srvctx *kt_ctx;
-	kt_ctx = malloc(sizeof (kt_srvctx));
+	kt_srvctx_t *kt_ctx;
+	kt_ctx = malloc(sizeof(kt_srvctx_t));
 	kt_ctx->config = config;
-        kt_ctx->ctx = zctx_new();
+	kt_ctx->ctx = zctx_new();
 
-        //This is the front-end, usually talks TCP
+	char *endpoint = malloc(256);
+	snprintf(endpoint, 255, "%s%s:%i",
+		kt_transport_prefix[config.network_config.transport],
+		config.base_url,
+		config.network_config.port
+		);
+	printf("configured endpoint: %s\n", endpoint);
+
 	kt_ctx->frontend = zsocket_new(kt_ctx->ctx, ZMQ_ROUTER);
 	//Bring the socket in correct mode
-	zsocket_set_router_raw(kt_ctx->frontend, kt_ctx->config.type);
-	zsocket_bind(kt_ctx->frontend, kt_ctx->config.base_url);
+	zsocket_set_router_raw(kt_ctx->frontend, 1);
+	zsocket_bind(kt_ctx->frontend, endpoint);
 
 	//The worker sockets are talking via inproc
 	kt_ctx->backend = zsocket_new(kt_ctx->ctx, ZMQ_DEALER);
@@ -36,7 +45,8 @@ kt_srvctx *kt_init_server(kt_srvconf config) {
 
 //The main server function, accessed by the world
 
-int kt_run_server(kt_srvctx *kt_ctx, void (*f)(kt_messageraw* msgData)) {
+int kt_run_server(kt_srvctx_t *kt_ctx, void (*f)(kt_messageraw_t* msgData))
+{
 	//Launch the pool
 	int thread_nbr;
 	for (thread_nbr = 0; thread_nbr < 5; thread_nbr++)
@@ -48,45 +58,44 @@ int kt_run_server(kt_srvctx *kt_ctx, void (*f)(kt_messageraw* msgData)) {
 	return 1;
 }
 
-int kt_stop_server(kt_srvctx *kt_ctx){
-    	//TODO: We never get here, save shutdown
-	//TODO: Put this in stopServer
+int kt_stop_server(kt_srvctx_t *kt_ctx)
+{
+	//TODO: We never get here, save shutdown
 	zctx_destroy(&(kt_ctx->ctx));
+	return 0;
 }
 
 //The main worker function
 
-static void server_worker(void *args, zctx_t *ctx, void *pipe) {
-	void *worker = zsocket_new(ctx, ZMQ_DEALER);
-	void (*f)(kt_messageraw* msgData) = args;
-	zsocket_connect(worker, "inproc://backend");
+static void server_worker(void *args, zctx_t *ctx, void *pipe)
+{
+	void (*f)() = args;
+	f();
+}
 
-	for (;;) {
-		//At the moment, just send back Hello World with http header
-		char *http_ok = "HTTP/1.0 200 OK\r\nVary: Accept-Encoding, Accept-Language\r\nConnection: Close\r\nContent-Type: text/plain\r\nContent-Length:12\r\n\r\nHello, World";
+void* connect_to_backend(kctx_t *ctx)
+{
+	void *backend = zsocket_new(ctx, ZMQ_DEALER);
+	zsocket_connect(backend, "inproc://backend");
+	return backend;
+}
 
-		zmsg_t *msg = zmsg_recv(worker);
-		zframe_t *frame_identity = zmsg_pop(msg);
-		zframe_t *frame_content = zmsg_pop(msg);
-		assert(frame_content);
-		assert(frame_identity);
+kt_messageraw_t* recv_message(void *socket)
+{
+	kt_messageraw_t *msg = malloc(sizeof(kt_messageraw_t));
+	zmsg_t *m = zmsg_recv(socket);
+	msg->identity = zmsg_pop(m);
+	msg->msgData = zframe_strdup(zmsg_pop(m));
+	zmsg_destroy(&m);
+	return msg;
+}
 
-		//parse the http request
-		//kmessage_parse(frame_content);
+int send_message(void *socket, kt_messageraw_t *msg)
+{
+	zframe_t *frame_reply = zframe_new(msg->msgData, strlen(msg->msgData));
+	zframe_send(&msg->identity, socket, ZFRAME_MORE + ZFRAME_REUSE);
+	zframe_send(&frame_reply, socket, ZFRAME_REUSE);
 
-		zmsg_destroy(&msg);
-
-		//TODO: Put this in server_worker_compose_response
-		zframe_t *frame_reply = zframe_new(http_ok, strlen(http_ok));
-		//Pass the correct args here after parsing
-		//f("1", "1", "1");
-		//kmessage_compose();
-
-		zframe_send(&frame_identity, worker, ZFRAME_MORE + ZFRAME_REUSE);
-		zframe_send(&frame_reply, worker, ZFRAME_REUSE);
-
-		zframe_destroy(&frame_identity);
-		zframe_destroy(&frame_content);
-		zframe_destroy(&frame_reply);
-	}
+	zframe_destroy(&frame_reply);
+	return 0;
 }

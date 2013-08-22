@@ -10,35 +10,41 @@
 
 //This is the performCall methode from kiara_impl.cpp, as example
 
-void handleRequest(kt_messageraw* msgData) {
-	//Do some work
-	sleep(1);
+kt_srvctx_t *s_ctx;
+
+void handleRequest() {
+	char *http_ok = "HTTP/1.0 200 OK\r\nVary: Accept-Encoding, Accept-Language\r\nConnection: Close\r\nContent-Type: text/plain\r\nContent-Length:12\r\n\r\nHello, World";
+	void *client_backend = connect_to_backend(s_ctx->ctx);
+	kt_messageraw_t *msg = recv_message(client_backend);
+	msg->msgData = http_ok;
+	send_message(client_backend, msg);
 }
 
 int main() {
-	//Define the Request handler
-	void (*f)(kt_messageraw* msgData) = NULL;
+    //Define the Request handler
+    void (*f)(kt_messageraw_t * msgData) = NULL;
 
-	kt_srvconf config;
-	kt_srvctx *s_ctx;
-	int res = 0;
+    kt_srvconf_t config;
+    int res = 0;
 
-	//set the config
-	config.base_url = "tcp://*:5570";
-	//config.base_url = "tcps://*:5570";
-	//config.base_url = "dccp://*:5570";
-	//config.base_url = "dccps://*:5570";
+    //set the config
+    config.network_config.network = IPLEGACY;
+    config.network_config.transport = TCP;
+    config.network_config.crypto = NONE;
+    config.network_config.application = HTTP;
+    config.network_config.port = 8080;
+    config.base_url = "*";
 
-	//Asign it
-	f = &handleRequest;
-	//initialize the server (network nego phase)
-	s_ctx = kt_init_server(config);
-	//The initialization of the Server sets the parameters out of the config
-	//parameters that are not set will be negotiated with the network. s_ctx can
-	//still be modified
-	res = kt_run_server(s_ctx, f);
-	//TODO: Debugg/Err
-	//TODO: We never get here, pass correct Err/Succ Message
-	res = kt_stop_server(s_ctx);
-	return 0;
+    //Asign it
+    f = &handleRequest;
+    //initialize the server (network nego phase)
+    s_ctx = kt_init_server(config);
+    //The initialization of the Server sets the parameters out of the config
+    //parameters that are not set will be negotiated with the network. s_ctx can
+    //still be modified
+    res = kt_run_server(s_ctx, f);
+    //TODO: Debugg/Err
+    //TODO: We never get here, pass correct Err/Succ Message
+    res = kt_stop_server(s_ctx);
+    return 0;
 }

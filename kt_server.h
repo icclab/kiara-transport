@@ -24,29 +24,32 @@ enum threading_model {
 enum communication_pattern {
 	REQ_REP,
 	PUBLISH_SUBSCRIBE,
-        ROUTER
+    ROUTER
 };
 
 //public
-typedef struct kt_srvconf {
-	int type;
+typedef struct {
+	struct kt_network_stack_t network_config;
 	char *base_url;
-} kt_srvconf;
+} kt_srvconf_t;
 
-typedef struct kt_srvctx {
-	struct kt_srvconf config;
+typedef struct {
+	kt_srvconf_t config;
         void *frontend;
         void *backend;
         enum threading_model th_model;
 	int thread_nbr;
 	kctx_t *ctx;
-} kt_srvctx;
+} kt_srvctx_t;
 
 //public
-kt_srvctx *kt_init_server(kt_srvconf config);
-int kt_run_server(kt_srvctx *context, void (*f)(kt_messageraw* msgData));
-int kt_stop_server(kt_srvctx *context);
+kt_srvctx_t *kt_init_server(kt_srvconf_t config);
+int kt_run_server(kt_srvctx_t *context, void (*f)(kt_messageraw_t* msgData));
+int kt_stop_server(kt_srvctx_t *context);
 static void server_worker(void *args, zctx_t *ctx, void *pipe);
+void* connect_to_backend(kctx_t *ctx);
+kt_messageraw_t* recv_message(void *backend);
+int send_message(void *backend, kt_messageraw_t *msg);
 
 #ifdef	__cplusplus
 }

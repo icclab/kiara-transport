@@ -38,6 +38,6 @@ KIARA_Result finalizeClient(KIARA_ClientContext *context){
 	return 0;
 }
 
-KIARA_Result sendMessageSync(KIARA_ClientContext *context, char *msgData, KIARA_MessageRaw *inMsg){
+KIARA_Result sendMessageSync(KIARA_ClientContext *context, char *msgData, kt_messageraw_t *inMsg){
 	return 0;
 }
