@@ -1,0 +1,68 @@
+## -*- Makefile -*-
+##
+## User: habl
+## Time: Aug 23, 2013 5:17:19 PM
+## Makefile created by Oracle Solaris Studio.
+##
+## This file is generated automatically.
+##
+
+
+#### Compiler and tool definitions shared by all build targets #####
+CC = gcc
+BASICOPTS = -g
+CFLAGS = $(BASICOPTS)
+
+
+# Define the target directories.
+TARGETDIR_server=GNU-x86_64-MacOSX
+
+
+all: $(TARGETDIR_server)/server
+
+## Target: server
+OBJS_server =  \
+	$(TARGETDIR_server)/kt_server.o \
+	$(TARGETDIR_server)/ktransport.o \
+	$(TARGETDIR_server)/main_server.o
+USERLIBS_server = -lczmq -lzmq 
+DEPLIBS_server =   
+LDLIBS_server = $(USERLIBS_server)
+
+
+# Link or archive
+$(TARGETDIR_server)/server: $(TARGETDIR_server) $(OBJS_server) $(DEPLIBS_server)
+	$(LINK.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ $(OBJS_server) $(LDLIBS_server)
+
+
+# Compile source files into .o files
+$(TARGETDIR_server)/kt_server.o: $(TARGETDIR_server) kt_server.c
+	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ kt_server.c
+
+$(TARGETDIR_server)/ktransport.o: $(TARGETDIR_server) ktransport.c
+	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ ktransport.c
+
+$(TARGETDIR_server)/main_server.o: $(TARGETDIR_server) main_server.c
+	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ main_server.c
+
+
+
+#### Clean target deletes all generated files ####
+clean:
+	rm -f \
+		$(TARGETDIR_server)/server \
+		$(TARGETDIR_server)/kt_server.o \
+		$(TARGETDIR_server)/ktransport.o \
+		$(TARGETDIR_server)/main_server.o
+	rm -f -r $(TARGETDIR_server)
+
+
+# Create the target directory (if needed)
+$(TARGETDIR_server):
+	mkdir -p $(TARGETDIR_server)
+
+
+# Enable dependency checking
+.KEEP_STATE:
+.KEEP_STATE_FILE:.make.state.GNU-x86_64-MacOSX
+
