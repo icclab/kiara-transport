@@ -80,26 +80,26 @@ void connect_to_backend(kt_srvctx_t *kt_ctx)
 	zsocket_connect(kt_ctx->dispatcher, "inproc://backend");
 }
 
-void disconnect_from_backend(kt_srvctx_t* ctx) {
-	zsocket_disconnect(ctx->dispatcher, "inproc://backend");
-	zsocket_destroy(ctx->ctx, ctx->dispatcher);
+void disconnect_from_backend(kt_srvctx_t* kt_ctx) {
+	zsocket_disconnect(kt_ctx->dispatcher, "inproc://backend");
+	zsocket_destroy(kt_ctx->ctx, kt_ctx->dispatcher);
 }
 
-kt_messageraw_t* recv_message(kt_srvctx_t *ctx)
+kt_messageraw_t* recv_message(kt_srvctx_t *kt_ctx)
 {
 	kt_messageraw_t *msg = malloc(sizeof(kt_messageraw_t));
-	zmsg_t *m = zmsg_recv(ctx->dispatcher);
+	zmsg_t *m = zmsg_recv(kt_ctx->dispatcher);
 	msg->identity = zmsg_pop(m);
 	msg->msgData = zframe_strdup(zmsg_pop(m));
 	zmsg_destroy(&m);
 	return msg;
 }
 
-int send_message(kt_srvctx_t *ctx, kt_messageraw_t *msg)
+int send_message(kt_srvctx_t *kt_ctx, kt_messageraw_t *msg)
 {
 	zframe_t *frame_reply = zframe_new(msg->msgData, strlen(msg->msgData));
-	zframe_send(&msg->identity, ctx->dispatcher, ZFRAME_MORE + ZFRAME_REUSE);
-	zframe_send(&frame_reply, ctx->dispatcher, ZFRAME_REUSE);
+	zframe_send(&msg->identity, kt_ctx->dispatcher, ZFRAME_MORE + ZFRAME_REUSE);
+	zframe_send(&frame_reply, kt_ctx->dispatcher, ZFRAME_REUSE);
 
 	zframe_destroy(&frame_reply);
 	return 0;
