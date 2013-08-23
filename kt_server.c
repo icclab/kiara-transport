@@ -70,8 +70,7 @@ int kt_stop_server(kt_srvctx_t *kt_ctx)
 static void server_worker(void *args, zctx_t *ctx, void *pipe)
 {
 	void (*f)() = args;
-	for (;;)
-		f();
+	f();
 }
 
 void connect_to_backend(kt_srvctx_t *kt_ctx)

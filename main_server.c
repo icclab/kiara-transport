@@ -12,12 +12,19 @@
 
 kt_srvctx_t *s_ctx;
 
-void handleRequest() {
+void handleRequest()
+{
+	printf("Handling request\n");
 	char *http_ok = "HTTP/1.0 200 OK\r\nVary: Accept-Encoding, Accept-Language\r\nConnection: Close\r\nContent-Type: text/plain\r\nContent-Length:12\r\n\r\nHello, World";
 	connect_to_backend(s_ctx);
-	kt_messageraw_t *msg = recv_message(s_ctx);
-	msg->msgData = http_ok;
-	send_message(s_ctx, msg);
+	printf("Connected to backend\n");
+
+	for (;;) {
+		kt_messageraw_t *msg = recv_message(s_ctx);
+		msg->msgData = http_ok;
+		send_message(s_ctx, msg);
+	}
+
 	disconnect_from_backend(s_ctx);
 }
 
