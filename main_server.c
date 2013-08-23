@@ -18,6 +18,7 @@ void handleRequest() {
 	kt_messageraw_t *msg = recv_message(s_ctx);
 	msg->msgData = http_ok;
 	send_message(s_ctx, msg);
+	disconnect_from_backend(s_ctx);
 }
 
 int main() {
@@ -35,7 +36,6 @@ int main() {
     config.network_config.port = 8080;
     config.base_url = "*";
 
-    //Asign it
     f = &handleRequest;
     //initialize the server (network nego phase)
     s_ctx = kt_init_server(config);
@@ -43,7 +43,7 @@ int main() {
     //parameters that are not set will be negotiated with the network. s_ctx can
     //still be modified
     res = kt_run_server(s_ctx, f);
-    //TODO: Debugg/Err
+    //TODO: Debug/Err
     //TODO: We never get here, pass correct Err/Succ Message
     res = kt_stop_server(s_ctx);
     return 0;

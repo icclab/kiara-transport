@@ -48,8 +48,8 @@ kt_srvctx_t *kt_init_server(kt_srvconf_t config)
 int kt_run_server(kt_srvctx_t *kt_ctx, void (*f)(kt_messageraw_t* msgData))
 {
 	//Launch the pool
-	int thread_nbr;
-	for (thread_nbr = 0; thread_nbr < 5; thread_nbr++)
+	//int thread_nbr;
+	//for (thread_nbr = 0; thread_nbr < 5; thread_nbr++)
 		zthread_fork(kt_ctx->ctx, server_worker, f);
 
 	//connect workers and frontend
@@ -70,13 +70,19 @@ int kt_stop_server(kt_srvctx_t *kt_ctx)
 static void server_worker(void *args, zctx_t *ctx, void *pipe)
 {
 	void (*f)() = args;
-	f();
+	for (;;)
+		f();
 }
 
 void connect_to_backend(kt_srvctx_t *kt_ctx)
 {
 	kt_ctx->dispatcher = zsocket_new(kt_ctx->ctx, ZMQ_DEALER);
 	zsocket_connect(kt_ctx->dispatcher, "inproc://backend");
+}
+
+void disconnect_from_backend(kt_srvctx_t* ctx) {
+	zsocket_disconnect(ctx->dispatcher, "inproc://backend");
+	zsocket_destroy(ctx->ctx, ctx->dispatcher);
 }
 
 kt_messageraw_t* recv_message(kt_srvctx_t *ctx)
