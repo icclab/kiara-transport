@@ -93,7 +93,7 @@ kt_messageraw_t* recv_message(kt_srvctx_t *kt_ctx)
 {
 	kt_messageraw_t *msg = malloc(sizeof(kt_messageraw_t));
 	zmsg_t *m = zmsg_recv(kt_ctx->dispatcher);
-	msg->identity = zmsg_pop(m);
+	msg->_identity = zmsg_pop(m);
 	msg->msgData = zframe_strdup(zmsg_pop(m));
 	zmsg_destroy(&m);
 	return msg;
@@ -102,7 +102,7 @@ kt_messageraw_t* recv_message(kt_srvctx_t *kt_ctx)
 int send_message(kt_srvctx_t *kt_ctx, kt_messageraw_t *msg)
 {
 	zframe_t *frame_reply = zframe_new(msg->msgData, strlen(msg->msgData));
-	zframe_send(&msg->identity, kt_ctx->dispatcher, ZFRAME_MORE + ZFRAME_REUSE);
+	zframe_send(&msg->_	identity, kt_ctx->dispatcher, ZFRAME_MORE + ZFRAME_REUSE);
 	zframe_send(&frame_reply, kt_ctx->dispatcher, ZFRAME_REUSE);
 
 	zframe_destroy(&frame_reply);
