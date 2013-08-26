@@ -6,6 +6,7 @@
  */
 //TODO: Replace czmq by ktransport.h
 #include <czmq.h>
+#include <stdlib.h>
 #include "kiara.h"
 #include "ktransport.h"
 
