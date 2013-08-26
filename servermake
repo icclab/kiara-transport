@@ -36,14 +36,14 @@ $(TARGETDIR_server)/server: $(TARGETDIR_server) $(OBJS_server) $(DEPLIBS_server)
 
 
 # Compile source files into .o files
-$(TARGETDIR_server)/kt_server.o: $(TARGETDIR_server) src/kt_server.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/kt_server.c
+$(TARGETDIR_server)/kt_server.o: $(TARGETDIR_server) src/core/kt_server.c
+	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/core/kt_server.c
 
-$(TARGETDIR_server)/ktransport.o: $(TARGETDIR_server) src/ktransport.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/ktransport.c
+$(TARGETDIR_server)/ktransport.o: $(TARGETDIR_server) src/core/ktransport.c
+	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/core/ktransport.c
 
-$(TARGETDIR_server)/main_server.o: $(TARGETDIR_server) src/main_server.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/main_server.c
+$(TARGETDIR_server)/main_server.o: $(TARGETDIR_server) src/examples/main_server.c
+	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/examples/main_server.c
 
 
 

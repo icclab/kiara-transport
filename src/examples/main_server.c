@@ -6,7 +6,7 @@
  */
 //Example of KIARAClient/Server API
 
-#include "kt_server.h"
+#include "../../src/core/kt_server.h"
 
 //This is the performCall methode from kiara_impl.cpp, as example
 

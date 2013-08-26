@@ -8,6 +8,8 @@
 #include <czmq.h>
 #include <zmq.h>
 
+#include "debug.h"
+
 #include "kt_server.h"
 #include "kiara.h"
 #include "ktransport.h"
@@ -30,7 +32,7 @@ kt_srvctx_t *kt_init_server(kt_srvconf_t config)
 		config.base_url,
 		config.network_config.port
 		);
-	printf("configured endpoint: %s\n", endpoint);
+	debug("configured endpoint: %s\n", endpoint);
 
 	kt_ctx->frontend = zsocket_new(kt_ctx->ctx, ZMQ_ROUTER);
 	//Bring the socket in correct mode
@@ -78,11 +80,13 @@ void connect_to_backend(kt_srvctx_t *kt_ctx)
 {
 	kt_ctx->dispatcher = zsocket_new(kt_ctx->ctx, ZMQ_DEALER);
 	zsocket_connect(kt_ctx->dispatcher, "inproc://backend");
+	debug("connected to dispatcher backend, waiting for messages\n");
 }
 
 void disconnect_from_backend(kt_srvctx_t* kt_ctx) {
 	zsocket_disconnect(kt_ctx->dispatcher, "inproc://backend");
 	zsocket_destroy(kt_ctx->ctx, kt_ctx->dispatcher);
+	debug("disconnected from dispatcher backend\n");
 }
 
 kt_messageraw_t* recv_message(kt_srvctx_t *kt_ctx)
