@@ -47,7 +47,7 @@ typedef struct {
 kt_srvctx_t *kt_init_server(kt_srvconf_t config);
 int kt_run_server(kt_srvctx_t *context, void (*f)(kt_messageraw_t* msgData));
 int kt_stop_server(kt_srvctx_t *context);
-static void server_worker(void *args, zctx_t *ctx, void *pipe);
+static void _server_worker(void *args, zctx_t *ctx, void *pipe);
 void connect_to_backend(kt_srvctx_t *ctx);
 void disconnect_from_backend(kt_srvctx_t *ctx);
 kt_messageraw_t* recv_message(kt_srvctx_t *kt_ctx);

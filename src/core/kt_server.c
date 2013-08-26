@@ -53,7 +53,7 @@ int kt_run_server(kt_srvctx_t *kt_ctx, void (*f)(kt_messageraw_t* msgData))
 	//Launch the pool
 	//int thread_nbr;
 	//for (thread_nbr = 0; thread_nbr < 5; thread_nbr++)
-		zthread_fork(kt_ctx->ctx, server_worker, f);
+		zthread_fork(kt_ctx->ctx, _server_worker, f);
 
 	//connect workers and frontend
 	zmq_proxy(kt_ctx->frontend, kt_ctx->backend, NULL);
@@ -70,7 +70,7 @@ int kt_stop_server(kt_srvctx_t *kt_ctx)
 
 //The main worker function
 
-static void server_worker(void *args, zctx_t *ctx, void *pipe)
+static void _server_worker(void *args, zctx_t *ctx, void *pipe)
 {
 	void (*f)() = args;
 	f();
