@@ -32,7 +32,7 @@ int main() {
     //Define the Request handler
     void (*f)(kt_messageraw_t * msgData) = NULL;
 
-    kt_srvconf_t config;
+    kt_connconf_t config;
     int res = 0;
 
     //set the config

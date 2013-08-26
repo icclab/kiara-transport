@@ -27,14 +27,8 @@ enum communication_pattern {
     ROUTER
 };
 
-//public
 typedef struct {
-	struct kt_network_stack_t network_config;
-	char *base_url;
-} kt_srvconf_t;
-
-typedef struct {
-	kt_srvconf_t config;
+	kt_connconf_t config;
         void *frontend;
         void *backend;
 	void *dispatcher;
@@ -44,7 +38,7 @@ typedef struct {
 } kt_srvctx_t;
 
 //public
-kt_srvctx_t *kt_init_server(kt_srvconf_t config);
+kt_srvctx_t *kt_init_server(kt_connconf_t config);
 int kt_run_server(kt_srvctx_t *context, void (*f)(kt_messageraw_t* msgData));
 int kt_stop_server(kt_srvctx_t *context);
 static void _server_worker(void *args, zctx_t *ctx, void *pipe);

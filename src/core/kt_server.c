@@ -11,12 +11,10 @@
 #include "debug.h"
 
 #include "kt_server.h"
-#include "kiara.h"
-#include "ktransport.h"
 
 //Validate the config params here and return a context
 
-kt_srvctx_t *kt_init_server(kt_srvconf_t config)
+kt_srvctx_t *kt_init_server(kt_connconf_t config)
 {
 	//TODO: Validate params and check if server can be started
 	//TODO: Set parameters on context
@@ -25,13 +23,7 @@ kt_srvctx_t *kt_init_server(kt_srvconf_t config)
 	kt_ctx->config = config;
 	kt_ctx->ctx = zctx_new();
 
-	//FIXME: Dynamic allocation of memory for endpoint
-	char *endpoint = malloc(256);
-	snprintf(endpoint, 255, "%s%s:%i",
-		kt_transport_prefix[config.network_config.transport],
-		config.base_url,
-		config.network_config.port
-		);
+	char *endpoint = compile_endpoint_string(config);
 	debug("configured endpoint: %s\n", endpoint);
 
 	kt_ctx->frontend = zsocket_new(kt_ctx->ctx, ZMQ_ROUTER);
@@ -43,6 +35,7 @@ kt_srvctx_t *kt_init_server(kt_srvconf_t config)
 	kt_ctx->backend = zsocket_new(kt_ctx->ctx, ZMQ_DEALER);
 	zsocket_bind(kt_ctx->backend, "inproc://backend");
 
+	free (endpoint);
 	return kt_ctx;
 }
 
@@ -102,7 +95,7 @@ kt_messageraw_t* recv_message(kt_srvctx_t *kt_ctx)
 int send_message(kt_srvctx_t *kt_ctx, kt_messageraw_t *msg)
 {
 	zframe_t *frame_reply = zframe_new(msg->msgData, strlen(msg->msgData));
-	zframe_send(&msg->_	identity, kt_ctx->dispatcher, ZFRAME_MORE + ZFRAME_REUSE);
+	zframe_send(&msg->_identity, kt_ctx->dispatcher, ZFRAME_MORE + ZFRAME_REUSE);
 	zframe_send(&frame_reply, kt_ctx->dispatcher, ZFRAME_REUSE);
 
 	zframe_destroy(&frame_reply);
