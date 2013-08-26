@@ -23,6 +23,7 @@ kt_srvctx_t *kt_init_server(kt_srvconf_t config)
 	kt_ctx->config = config;
 	kt_ctx->ctx = zctx_new();
 
+	//FIXME: Dynamic allocation of memory for endpoint
 	char *endpoint = malloc(256);
 	snprintf(endpoint, 255, "%s%s:%i",
 		kt_transport_prefix[config.network_config.transport],

@@ -1,7 +1,7 @@
 ## -*- Makefile -*-
 ##
 ## User: habl
-## Time: Aug 23, 2013 5:17:19 PM
+## Time: Aug 26, 2013 9:15:43 AM
 ## Makefile created by Oracle Solaris Studio.
 ##
 ## This file is generated automatically.
@@ -15,7 +15,7 @@ CFLAGS = $(BASICOPTS)
 
 
 # Define the target directories.
-TARGETDIR_server=GNU-x86_64-MacOSX
+TARGETDIR_server=build/GNU_x86_64_MACOSX
 
 
 all: $(TARGETDIR_server)/server
@@ -25,8 +25,8 @@ OBJS_server =  \
 	$(TARGETDIR_server)/kt_server.o \
 	$(TARGETDIR_server)/ktransport.o \
 	$(TARGETDIR_server)/main_server.o
-USERLIBS_server = -lczmq -lzmq 
-DEPLIBS_server =   
+USERLIBS_server = -lczmq -lzmq
+DEPLIBS_server =    
 LDLIBS_server = $(USERLIBS_server)
 
 
@@ -36,14 +36,14 @@ $(TARGETDIR_server)/server: $(TARGETDIR_server) $(OBJS_server) $(DEPLIBS_server)
 
 
 # Compile source files into .o files
-$(TARGETDIR_server)/kt_server.o: $(TARGETDIR_server) kt_server.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ kt_server.c
+$(TARGETDIR_server)/kt_server.o: $(TARGETDIR_server) src/kt_server.c
+	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/kt_server.c
 
-$(TARGETDIR_server)/ktransport.o: $(TARGETDIR_server) ktransport.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ ktransport.c
+$(TARGETDIR_server)/ktransport.o: $(TARGETDIR_server) src/ktransport.c
+	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/ktransport.c
 
-$(TARGETDIR_server)/main_server.o: $(TARGETDIR_server) main_server.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ main_server.c
+$(TARGETDIR_server)/main_server.o: $(TARGETDIR_server) src/main_server.c
+	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/main_server.c
 
 
 
