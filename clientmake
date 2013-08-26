@@ -1,0 +1,68 @@
+## -*- Makefile -*-
+##
+## User: habl
+## Time: Aug 26, 2013 11:52:34 AM
+## Makefile created by Oracle Solaris Studio.
+##
+## This file is generated automatically.
+##
+
+
+#### Compiler and tool definitions shared by all build targets #####
+CC = gcc
+BASICOPTS = -g
+CFLAGS = $(BASICOPTS)
+
+
+# Define the target directories.
+TARGETDIR_client=build/GNU-x86_64-MacOSX
+
+
+all: $(TARGETDIR_client)/client
+
+## Target: client
+OBJS_client =  \
+	$(TARGETDIR_client)/main_client.o \
+	$(TARGETDIR_client)/kt_client.o \
+	$(TARGETDIR_client)/ktransport.o
+USERLIBS_client = -lczmq -lzmq
+DEPLIBS_client =  
+LDLIBS_client = $(USERLIBS_client)
+
+
+# Link or archive
+$(TARGETDIR_client)/client: $(TARGETDIR_client) $(OBJS_client) $(DEPLIBS_client)
+	$(LINK.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ $(OBJS_client) $(LDLIBS_client)
+
+
+# Compile source files into .o files
+$(TARGETDIR_client)/main_client.o: $(TARGETDIR_client) src/examples/main_client.c
+	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_client.c
+
+$(TARGETDIR_client)/kt_client.o: $(TARGETDIR_client) src/core/kt_client.c
+	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/core/kt_client.c
+
+$(TARGETDIR_client)/ktransport.o: $(TARGETDIR_client) src/core/ktransport.c
+	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/core/ktransport.c
+
+
+
+#### Clean target deletes all generated files ####
+clean:
+	rm -f \
+		$(TARGETDIR_client)/client \
+		$(TARGETDIR_client)/main_client.o \
+		$(TARGETDIR_client)/kt_client.o \
+		$(TARGETDIR_client)/ktransport.o
+	rm -f -r $(TARGETDIR_client)
+
+
+# Create the target directory (if needed)
+$(TARGETDIR_client):
+	mkdir -p $(TARGETDIR_client)
+
+
+# Enable dependency checking
+.KEEP_STATE:
+.KEEP_STATE_FILE:.make.state.GNU-x86_64-MacOSX
+
