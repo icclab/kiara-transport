@@ -10,10 +10,9 @@
 
 int main()
 {
+	kt_connconf_t config;
 	int buf_len, res = 0;
 	char *msgData = "{\"J\":5,\"0\":\"N\"}";
-
-	kt_clientconf_t config;
 
 	//set the config
 	config.network_config.network = IPLEGACY;
@@ -23,7 +22,7 @@ int main()
 	config.network_config.port = 8080;
 	config.base_url = "localhost";
 	//initialize the client (network nego phase)
-	kt_clientctx_t k_ctx = kt_client_init (config);
+	kt_clientctx_t *k_ctx = kt_client_init (config);
 	//send some data. The Data to send must be serialized. As native http client
 	//we still use curl. For KIARA to KIARA we use native TCP means, we have no
 	//application protocol to parse.

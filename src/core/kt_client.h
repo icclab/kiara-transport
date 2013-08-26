@@ -17,17 +17,12 @@
 //#endif
 
 typedef struct {
-	struct kt_network_stack_t network_config;
-	char *base_url;
-} kt_clientconf_t;
-
-typedef struct {
-	kt_clientconf_t config;
+	kt_connconf_t config;
 	void *socket;
 	kctx_t *ctx;
 } kt_clientctx_t;
 
-kt_clientctx_t kt_client_init(kt_clientconf_t config);
+kt_clientctx_t *kt_client_init(kt_connconf_t config);
 int kt_client_connect(kt_clientctx_t *kt_ctx);
 int kt_client_disconnect(kt_clientctx_t *kt_ctx);
 kt_messageraw_t* recv_message(kt_clientctx_t *kt_ctx);

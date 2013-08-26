@@ -6,7 +6,7 @@
 
 #include "kt_client.h"
 
-kt_clientctx_t kt_client_init(kt_clientconf_t config)
+kt_clientctx_t *kt_client_init(kt_connconf_t config)
 {
 	//TODO: Validate params and check if server can be started
 	//TODO: Set parameters on context
