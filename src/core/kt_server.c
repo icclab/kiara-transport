@@ -28,7 +28,8 @@ kt_srvctx_t *kt_init_server(kt_connconf_t config)
 
 	kt_ctx->frontend = zsocket_new(kt_ctx->ctx, ZMQ_ROUTER);
 	//Bring the socket in correct mode
-	zsocket_set_router_raw(kt_ctx->frontend, 1);
+	if (kt_ctx->config.network_config.application != ZEROMQ)
+		zsocket_set_router_raw(kt_ctx->frontend, 1);
 	zsocket_bind(kt_ctx->frontend, endpoint);
 
 	//The worker sockets are talking via inproc
@@ -71,7 +72,7 @@ static void _server_worker(void *args, zctx_t *ctx, void *pipe)
 
 void connect_to_backend(kt_srvctx_t *kt_ctx)
 {
-	kt_ctx->dispatcher = zsocket_new(kt_ctx->ctx, ZMQ_DEALER);
+	kt_ctx->dispatcher = zsocket_new(kt_ctx->ctx, ZMQ_REP);
 	zsocket_connect(kt_ctx->dispatcher, "inproc://backend");
 	debug("connected to dispatcher backend, waiting for messages\n");
 }
@@ -86,18 +87,23 @@ kt_messageraw_t* recv_message(kt_srvctx_t *kt_ctx)
 {
 	kt_messageraw_t *msg = malloc(sizeof(kt_messageraw_t));
 	zmsg_t *m = zmsg_recv(kt_ctx->dispatcher);
-	msg->_identity = zmsg_pop(m);
+	assert(m);
+	//msg->_identity = zmsg_pop(m);
 	msg->msgData = zframe_strdup(zmsg_pop(m));
+	//zmsg_dump(m);
 	zmsg_destroy(&m);
 	return msg;
 }
 
 int send_message(kt_srvctx_t *kt_ctx, kt_messageraw_t *msg)
 {
-	zframe_t *frame_reply = zframe_new(msg->msgData, strlen(msg->msgData));
-	zframe_send(&msg->_identity, kt_ctx->dispatcher, ZFRAME_MORE + ZFRAME_REUSE);
-	zframe_send(&frame_reply, kt_ctx->dispatcher, ZFRAME_REUSE);
+	//zframe_t *frame_reply = zframe_new(msg->msgData, strlen(msg->msgData));
+	//zframe_send(&msg->_identity, kt_ctx->dispatcher, ZFRAME_MORE + ZFRAME_REUSE);
+	//zframe_send(&frame_reply, kt_ctx->dispatcher, ZFRAME_REUSE);
 
-	zframe_destroy(&frame_reply);
+	//zframe_destroy(&frame_reply);
+	zmsg_t *m = zmsg_new();
+	zmsg_addstr(m, msg->msgData, "%s");
+	zmsg_send(&m, kt_ctx->dispatcher);
 	return 0;
 }

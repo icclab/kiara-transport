@@ -39,6 +39,7 @@ enum kt_crypto_layer {
 };
 
 enum kt_application_layer {
+	ZEROMQ,
 	HTTP,
 	RTSP,
 	NTP,
@@ -63,7 +64,8 @@ typedef enum kt_application_type {
 	WEBSERVER,
 	PUBLISHER,
 	STREAM,
-	ROUNDROBIN
+	ROUNDROBIN,
+	REQUESTREPLY
 } kt_application_type;
 
 typedef struct kt_messageraw_t {
@@ -78,6 +80,7 @@ typedef struct kt_messageraw_t {
 
 typedef struct {
 	struct kt_network_stack_t network_config;
+	enum kt_application_type type;
 	char *base_url;
 } kt_connconf_t;
 

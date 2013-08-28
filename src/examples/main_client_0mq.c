@@ -13,19 +13,19 @@ int main()
 {
 	kt_connconf_t config;
 	int buf_len, res = 0;
-	char *msgData = "Hello server? You there?";
+	char *msgData = "Hello server? You there?\0";
 
 	//set the config
 	config.network_config.network = IPLEGACY;
 	config.network_config.transport = TCP;
 	config.network_config.crypto = NONE;
-	config.network_config.application = HTTP;
-	config.network_config.port = 8080;
+	config.network_config.application = ZEROMQ;
+	config.network_config.port = 5670;
+	config.type = REQUESTREPLY;
 	config.base_url = "localhost";
 
 	//initialize the client (network nego phase)
 	kt_clientctx_t *k_ctx = kt_client_init (config);
-
 	//connect to the endpoint
 	kt_client_connect(k_ctx);
 
