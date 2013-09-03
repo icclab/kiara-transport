@@ -1,16 +1,14 @@
 #### Compiler and tool definitions shared by all build targets #####
-CC = gcc
-# CC = clang
+# CC = gcc
+CC = clang
 BASICOPTS = -g
 CFLAGS = $(BASICOPTS)
 
 
 # Define the target directories.
-BUILDDIR=GNU-x86_64-MACOSX
-# BUILDDIR=LLVM-x86_64-MACOSX
-# BUILDDIR=GNU-x86_64-LINUX
-# BUILDDIR=LLVM-x86_64-LINUX
-
+DEST=build
+ARCH=$(shell uname -m)-$(shell uname -s)
+BUILDDIR=$(DEST)/$(ARCH)-$(CC)
 
 all: server_http server_0mq client_0mq
 server_http: $(BUILDDIR)/server_http
