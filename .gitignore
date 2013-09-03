@@ -3,3 +3,7 @@ GNU-x86_64-MacOSX
 nbproject
 build
 doc
+.settings
+.externalToolBuilders
+.project
+.cproject
