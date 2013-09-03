@@ -36,7 +36,7 @@ kt_srvctx_t *kt_init_server(kt_connconf_t config)
 	kt_ctx->backend = zsocket_new(kt_ctx->ctx, ZMQ_DEALER);
 	zsocket_bind(kt_ctx->backend, "inproc://backend");
 
-	free (endpoint);
+	free(endpoint);
 	return kt_ctx;
 }
 
@@ -47,7 +47,7 @@ int kt_run_server(kt_srvctx_t *kt_ctx, void (*f)(kt_messageraw_t* msgData))
 	//Launch the pool
 	//int thread_nbr;
 	//for (thread_nbr = 0; thread_nbr < 5; thread_nbr++)
-		zthread_fork(kt_ctx->ctx, _server_worker, f);
+	zthread_fork(kt_ctx->ctx, _server_worker, f);
 
 	//connect workers and frontend
 	zmq_proxy(kt_ctx->frontend, kt_ctx->backend, NULL);
@@ -62,8 +62,6 @@ int kt_stop_server(kt_srvctx_t *kt_ctx)
 	return 0;
 }
 
-//The main worker function
-
 static void _server_worker(void *args, zctx_t *ctx, void *pipe)
 {
 	void (*f)() = args;
@@ -77,7 +75,8 @@ void connect_to_backend(kt_srvctx_t *kt_ctx)
 	debug("connected to dispatcher backend, waiting for messages\n");
 }
 
-void disconnect_from_backend(kt_srvctx_t* kt_ctx) {
+void disconnect_from_backend(kt_srvctx_t* kt_ctx)
+{
 	zsocket_disconnect(kt_ctx->dispatcher, "inproc://backend");
 	zsocket_destroy(kt_ctx->ctx, kt_ctx->dispatcher);
 	debug("disconnected from dispatcher backend\n");
@@ -88,22 +87,21 @@ kt_messageraw_t* recv_message(kt_srvctx_t *kt_ctx)
 	kt_messageraw_t *msg = malloc(sizeof(kt_messageraw_t));
 	zmsg_t *m = zmsg_recv(kt_ctx->dispatcher);
 	assert(m);
-	//msg->_identity = zmsg_pop(m);
+	if (kt_ctx->config.network_config.application != ZEROMQ)
+		msg->_identity = zmsg_pop(m);
 	msg->msgData = zframe_strdup(zmsg_pop(m));
-	//zmsg_dump(m);
 	zmsg_destroy(&m);
 	return msg;
 }
 
 int send_message(kt_srvctx_t *kt_ctx, kt_messageraw_t *msg)
 {
-	//zframe_t *frame_reply = zframe_new(msg->msgData, strlen(msg->msgData));
-	//zframe_send(&msg->_identity, kt_ctx->dispatcher, ZFRAME_MORE + ZFRAME_REUSE);
-	//zframe_send(&frame_reply, kt_ctx->dispatcher, ZFRAME_REUSE);
+	zframe_t *frame_reply = zframe_new(msg->msgData, strlen(msg->msgData));
+	if (kt_ctx->config.network_config.application != ZEROMQ)
+		zframe_send(&msg->_identity, kt_ctx->dispatcher,
+				ZFRAME_MORE + ZFRAME_REUSE);
+	zframe_send(&frame_reply, kt_ctx->dispatcher, ZFRAME_REUSE);
 
-	//zframe_destroy(&frame_reply);
-	zmsg_t *m = zmsg_new();
-	zmsg_addstr(m, msg->msgData, "%s");
-	zmsg_send(&m, kt_ctx->dispatcher);
+	zframe_destroy(&frame_reply);
 	return 0;
 }

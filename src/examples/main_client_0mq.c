@@ -5,7 +5,6 @@
  * Created on 26. Juli 2013, 13:58
  */
 //Example of KIARAClient/Server API
-
 #include "../../src/core/kt_client.h"
 #include <stdlib.h>
 
@@ -25,7 +24,7 @@ int main()
 	config.base_url = "localhost";
 
 	//initialize the client (network nego phase)
-	kt_clientctx_t *k_ctx = kt_client_init (config);
+	kt_clientctx_t *k_ctx = kt_client_init(config);
 	//connect to the endpoint
 	kt_client_connect(k_ctx);
 
