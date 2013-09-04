@@ -4,27 +4,18 @@
 
 kt_srvctx_t *s_ctx;
 
-void handleRequest()
+kt_messageraw_t* handleRequest(kt_messageraw_t* msg)
 {
-	printf("Handling request\n");
 	char *response = "Hello World";
-	connect_to_backend(s_ctx);
-	printf("Connected to backend\n");
-
-	for (;;)
-	{
-		kt_messageraw_t *msg = recv_message(s_ctx);
-		printf("Request: %s\n", msg->msgData);
-		msg->msgData = response;
-		send_message(s_ctx, msg);
-	}
-	disconnect_from_backend(s_ctx);
+	printf("Request: %s\n", msg->msgData);
+	msg->msgData = response;
+	return msg;
 }
 
 int main()
 {
 	//Define the Request handler
-	void (*f)(kt_messageraw_t * msgData) = NULL;
+	kt_messageraw_t* (*f)(kt_messageraw_t * msg) = NULL;
 
 	kt_connconf_t config;
 	int res = 0;
