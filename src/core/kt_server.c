@@ -4,12 +4,9 @@
  *
  * Created on 26. Juli 2013, 14:02
  */
-#include <stdio.h>
-#include <czmq.h>
-#include <zmq.h>
 
-#include "debug.h"
 #include "kt_server.h"
+#include "debug.h"
 
 //Validate the config params here and return a context
 
@@ -72,7 +69,7 @@ static void _server_worker(void *args, zctx_t *ctx, void *pipe)
 
 	kt_messageraw_t *msg;
 
-	void *sock = _connect_to_backend(ctx);
+	void *sock = _connect_to_backend(ctx, srvctx->config.network_config.application == ZEROMQ ? false : true);
 	for (;;)
 	{
 		msg = _recv_message(srvctx, sock);
@@ -83,9 +80,17 @@ static void _server_worker(void *args, zctx_t *ctx, void *pipe)
 	_disconnect_from_backend(ctx, sock);
 }
 
-void* _connect_to_backend(zctx_t *ctx)
+void* _connect_to_backend(zctx_t *ctx, bool israw)
 {
-	void* sock = zsocket_new(ctx, ZMQ_REP);
+	void *sock = NULL;
+	if (israw) {
+		debug("create a raw socket for incoming data\n");
+		sock = zsocket_new(ctx, ZMQ_DEALER);
+	} else {
+		debug("create a ZMQ_REP socket for incoming messages\n");
+		sock = zsocket_new(ctx, ZMQ_REP);
+	}
+	assert(sock);
 	zsocket_connect(sock, "inproc://backend");
 	debug("connected to dispatcher backend, waiting for messages\n");
 	return sock;

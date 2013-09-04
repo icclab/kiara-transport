@@ -12,25 +12,18 @@
 
 kt_srvctx_t *s_ctx;
 
-void handleRequest()
+kt_messageraw_t* handleRequest(kt_messageraw_t* msg)
 {
-	printf("Handling request\n");
 	char *http_ok = "HTTP/1.0 200 OK\r\nVary: Accept-Encoding, Accept-Language\r\nConnection: Close\r\nContent-Type: text/plain\r\nContent-Length:12\r\n\r\nHello, World";
-	connect_to_backend(s_ctx);
-	printf("Connected to backend\n");
-
-	for (;;) {
-		kt_messageraw_t *msg = recv_message(s_ctx);
-		msg->msgData = http_ok;
-		send_message(s_ctx, msg);
-	}
-
-	disconnect_from_backend(s_ctx);
+	printf("Handling request\n");
+	//printf("Request: %s\n", msg->msgData);
+	msg->msgData = http_ok;
+	return msg;
 }
 
 int main() {
     //Define the Request handler
-    void (*f)(kt_messageraw_t * msgData) = NULL;
+	kt_messageraw_t* (*f)(kt_messageraw_t * msg) = NULL;
 
     kt_connconf_t config;
     int res = 0;
@@ -50,8 +43,6 @@ int main() {
     //parameters that are not set will be negotiated with the network. s_ctx can
     //still be modified
     res = kt_run_server(s_ctx, f);
-    //TODO: Debug/Err
-    //TODO: We never get here, pass correct Err/Succ Message
     res = kt_stop_server(s_ctx);
     return 0;
 }
