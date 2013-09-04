@@ -21,13 +21,6 @@ enum kt_transport_layer {
 	SCTP
 };
 
-static const char* kt_transport_prefix[] = {
-	"tcp://",
-	"udp://",
-	"dccp://",
-	"sctp://"
-};
-
 /* TODO: This needs some more fine tuning like setting the protocol level,
  * desired algorithms, key exchanges etc.
  * <habl> 21.08.2013
@@ -39,6 +32,7 @@ enum kt_crypto_layer {
 };
 
 enum kt_application_layer {
+	ZEROMQ,
 	HTTP,
 	RTSP,
 	NTP,
@@ -63,7 +57,8 @@ typedef enum kt_application_type {
 	WEBSERVER,
 	PUBLISHER,
 	STREAM,
-	ROUNDROBIN
+	ROUNDROBIN,
+	REQUESTREPLY
 } kt_application_type;
 
 typedef struct kt_messageraw_t {
@@ -78,6 +73,7 @@ typedef struct kt_messageraw_t {
 
 typedef struct {
 	struct kt_network_stack_t network_config;
+	enum kt_application_type type;
 	char *base_url;
 } kt_connconf_t;
 
