@@ -11,7 +11,6 @@
 int main()
 {
 	kt_connconf_t config;
-	int buf_len, res = 0;
 	char *msgData = "Hello server? You there?\0";
 
 	//set the config

@@ -2,7 +2,7 @@
 # CC = gcc
 CC = clang
 BASICOPTS = -g
-CFLAGS = $(BASICOPTS)
+CFLAGS = $(BASICOPTS) -pedantic -Wall -std=c11
 
 
 # Define the target directories.

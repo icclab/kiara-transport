@@ -21,13 +21,6 @@ enum kt_transport_layer {
 	SCTP
 };
 
-static const char* kt_transport_prefix[] = {
-	"tcp://",
-	"udp://",
-	"dccp://",
-	"sctp://"
-};
-
 /* TODO: This needs some more fine tuning like setting the protocol level,
  * desired algorithms, key exchanges etc.
  * <habl> 21.08.2013

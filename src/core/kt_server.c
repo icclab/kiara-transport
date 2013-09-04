@@ -8,6 +8,12 @@
 #include "kt_server.h"
 #include "debug.h"
 
+static void _server_worker(void *args, zctx_t *ctx, void *pipe);
+static void* _connect_to_backend(zctx_t *ctx, bool israw);
+static void _disconnect_from_backend(zctx_t *ctx, void* socket);
+static kt_messageraw_t* _recv_message(kt_srvctx_t *kt_ctx, void *sock);
+static int _send_message(kt_srvctx_t *kt_ctx, void *sock, kt_messageraw_t *msg);
+
 //Validate the config params here and return a context
 
 kt_srvctx_t *kt_init_server(kt_connconf_t config)
@@ -80,7 +86,7 @@ static void _server_worker(void *args, zctx_t *ctx, void *pipe)
 	_disconnect_from_backend(ctx, sock);
 }
 
-void* _connect_to_backend(zctx_t *ctx, bool israw)
+static void* _connect_to_backend(zctx_t *ctx, bool israw)
 {
 	void *sock = NULL;
 	if (israw) {
@@ -96,14 +102,14 @@ void* _connect_to_backend(zctx_t *ctx, bool israw)
 	return sock;
 }
 
-void _disconnect_from_backend(zctx_t *ctx, void* socket)
+static void _disconnect_from_backend(zctx_t *ctx, void* socket)
 {
 	zsocket_disconnect(socket, "inproc://backend");
 	zsocket_destroy(ctx, socket);
 	debug("disconnected from dispatcher backend\n");
 }
 
-kt_messageraw_t* _recv_message(kt_srvctx_t *kt_ctx, void *sock)
+static kt_messageraw_t* _recv_message(kt_srvctx_t *kt_ctx, void *sock)
 {
 	kt_messageraw_t *msg = malloc(sizeof(kt_messageraw_t));
 	zmsg_t *m = zmsg_recv(sock);
@@ -115,7 +121,7 @@ kt_messageraw_t* _recv_message(kt_srvctx_t *kt_ctx, void *sock)
 	return msg;
 }
 
-int _send_message(kt_srvctx_t *kt_ctx, void *sock, kt_messageraw_t *msg)
+static int _send_message(kt_srvctx_t *kt_ctx, void *sock, kt_messageraw_t *msg)
 {
 	zframe_t *frame_reply = zframe_new(msg->msgData, strlen(msg->msgData));
 	if (kt_ctx->config.network_config.application != ZEROMQ)

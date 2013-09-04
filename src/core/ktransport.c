@@ -1,5 +1,12 @@
 #include "ktransport.h"
 
+static const char* kt_transport_prefix[] = {
+	"tcp://",
+	"udp://",
+	"dccp://",
+	"sctp://"
+};
+
 char* compile_endpoint_string(kt_connconf_t config)
 {
 	//FIXME: Dynamic allocation of memory for endpoint
