@@ -6,7 +6,8 @@ kt_srvctx_t *s_ctx;
 
 kt_messageraw_t* handleRequest(kt_messageraw_t* msg)
 {
-	char *response = "Hello World";
+	char *response = malloc(sizeof(char) * 128);
+	memcpy(response, "Hello World\0", 12);
 	printf("Request: %s\n", msg->msgData);
 	msg->msgData = response;
 	return msg;

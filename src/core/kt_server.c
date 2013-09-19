@@ -111,12 +111,12 @@ static void _disconnect_from_backend(zctx_t *ctx, void* socket)
 
 static kt_messageraw_t* _recv_message(kt_srvctx_t *kt_ctx, void *sock)
 {
-	kt_messageraw_t *msg = malloc(sizeof(kt_messageraw_t));
 	zmsg_t *m = zmsg_recv(sock);
 	assert(m);
+	kt_messageraw_t *msg = malloc(sizeof(kt_messageraw_t));
 	if (kt_ctx->config.network_config.application != ZEROMQ)
 		msg->_identity = zmsg_pop(m);
-	msg->msgData = zframe_strdup(zmsg_pop(m));
+	msg->msgData = zmsg_popstr(m);
 	zmsg_destroy(&m);
 	return msg;
 }
@@ -128,7 +128,10 @@ static int _send_message(kt_srvctx_t *kt_ctx, void *sock, kt_messageraw_t *msg)
 		zframe_send(&msg->_identity, sock,
 		ZFRAME_MORE + ZFRAME_REUSE);
 	zframe_send(&frame_reply, sock, ZFRAME_REUSE);
-
 	zframe_destroy(&frame_reply);
+	if (kt_ctx->config.network_config.application != ZEROMQ)
+		zframe_destroy (&msg->_identity);
+	free (msg->msgData);
+	free (msg);
 	return 0;
 }
