@@ -115,7 +115,7 @@ static kt_messageraw_t* _recv_message(kt_srvctx_t *kt_ctx, void *sock)
 	assert(m);
 	kt_messageraw_t *msg = malloc(sizeof(kt_messageraw_t));
 	if (kt_ctx->config.network_config.application != ZEROMQ)
-		msg->_identity = zmsg_pop(m);
+		msg->_identity = zmsg_unwrap(m);
 	msg->msgData = zmsg_popstr(m);
 	zmsg_destroy(&m);
 	return msg;
