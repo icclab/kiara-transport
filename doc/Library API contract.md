@@ -3,7 +3,10 @@
 Transport Library RFC style documentation, this document describes the binding provided from the transport library to the KIARA upper layers.
 
 ## Language
-C++11 (without GNU or clang or MSVC extensions)
+
+C++11, without GNU or clang or MSVC extensions, do not use std::thread.
+
+Use as little third party libraries as possible (Boost) to keep the number of dependencies as low as possible.
 
 ## Memory handling
 
@@ -45,6 +48,10 @@ typedef struct kt_msg {
 }
 ```
 
+## remote endpoint
+
+A valid remote endpoint may look like "tcp://192.168.1.1:1234" or "dds://foobar.tld:6666" and is of type char*.
+
 # Client
 
 ## connect
@@ -53,9 +60,7 @@ Connect the client to a remote server
 
 `connect` requires a valid remote endpoint description according to its transport stack.
 
-The `connect` shall return a kt_conn_session and null on failure.
-
-A valid remote endpoint may look like "tcp://192.168.1.1:1234" or "dds://foobar.tld:6666".
+The `connect` shall return a kt_conn_session and nullptr on failure.
 
 ## send
 
