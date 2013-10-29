@@ -34,7 +34,7 @@ int main()
 
 	//receive reply, dump it
 	msg = recv_message(k_ctx);
-	printf("%s\n", msg->msgData);
+	//printf("%s\n", msg->msgData);
 
 	kt_client_disconnect(k_ctx);
 

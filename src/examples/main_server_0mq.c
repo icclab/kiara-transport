@@ -8,7 +8,7 @@ kt_messageraw_t* handleRequest(kt_messageraw_t* msg)
 {
 	char *response = malloc(sizeof(char) * 128);
 	memcpy(response, "Hello World\0", 12);
-	printf("Request: %s\n", msg->msgData);
+	//printf("Request: %s\n", msg->msgData);
 	free (msg->msgData);
 	msg->msgData = response;
 	return msg;
