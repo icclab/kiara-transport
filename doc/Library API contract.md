@@ -124,3 +124,19 @@ Disconnects the client from a remote server.
 The `disconnect` shall close the connection and destroy the kt_conn_session object, though it is the duty of the developer to destroy/free kt_conn_session.k_user_data object.
 
 # Server
+
+## KiaraInitServer
+
+Configure the requirements for the server, it negotiates the subjacent protocols.
+
+## KiaraRegisterHandle
+
+Register a callback for handling an incoming message.
+
+## KiaraRunServer
+
+Launch the server and run it.
+
+## KiaraStopServer
+
+Stop the server and destroy all associated memory.
