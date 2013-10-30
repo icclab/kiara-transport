@@ -18,6 +18,12 @@ If you cannot ensure this, you MUST provide a struct with a function freeing the
 struct foo {
 	void *ptr;
 	void free_foo(foo *to_be_freed);
+	
+	~foo()
+	{
+		if (ptr)
+			free_foo (ptr);
+	}
 }
 
 …
@@ -32,7 +38,7 @@ free (foo);
 
 ```
 typedef struct kt_conn_session {
-	void* kt_conn_session_info;
+	kt_conn_session_info* _info;
 	void* k_user_data;
 } kt_conn_session;
 ```
@@ -45,7 +51,13 @@ typedef struct kt_msg {
 	void* payload;
 	std::size_t payload_size;
 	void (*free_payload) (void*);
-}
+	
+	~kt_msg()
+	{
+		if (free_payload && payload)
+			free_payload (payload);
+	}
+} kt_msg;
 ```
 
 ## remote endpoint
