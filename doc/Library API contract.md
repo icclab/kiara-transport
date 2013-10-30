@@ -117,4 +117,10 @@ The `recv` must return a reference to a kt_msg or a nullptr if there was no data
 
 ## disconnect
 
+Disconnects the client from a remote server.
+
+`disconnect` requires a kt_conn_session.
+
+The `disconnect` shall close the connection and destroy the kt_conn_session object, though it is the duty of the developer to destroy/free kt_conn_session.k_user_data object.
+
 # Server
