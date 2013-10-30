@@ -64,6 +64,31 @@ typedef struct kt_msg {
 
 A valid remote endpoint may look like "tcp://192.168.1.1:1234" or "dds://foobar.tld:6666" and is of type char*.
 
+The EBNF:
+
+```
+/* http://railroad.my28msec.com/rr/ui for nice railroad diagrams */
+remote-endpoint ::= (protocol)? url port
+protocol ::= ( "http" | "tcp"  | "udp" | "dds" )?
+url ::= ( ip | hostname )
+ip ::=  ipnumblock ":" ipnumblock ":" ipnumblock ":" ipnumblock ":" ipnumblock ":" ipnumblock ":" ipnumblock ":" ipnumblock
+ipnumblock ::= hex hex hex hex
+hostname ::= ialpha (. hostname )?
+port ::= "1".."65535"
+
+xalpha ::= (alpha | digit | safe | extra | escape)
+xalphas ::= xalpha ( xalphas )?
+xpalpha ::= (xalpha | "+")
+xpalphas ::= xpalpha ( xpalphas )?
+ialpha ::= alpha ( xalphas )?
+digits ::= digit ( digits )?
+safe ::= ("$" | "-" | "_" | "@" | "." | "&" | "+" | "-")
+extra ::= ("!" | "*" | '"' | "'" | "(" | ")" | ",")
+escape ::= "%" hex hex
+hex ::= (digit | "a" | "b" | "c" | "d" | "e" | "f" | "A" | "B" | "C" | "D" | "E" | "F")
+
+```
+
 # Client
 
 ## connect
