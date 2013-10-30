@@ -60,9 +60,15 @@ Connect the client to a remote server
 
 `connect` requires a valid remote endpoint description according to its transport stack.
 
-The `connect` shall return a kt_conn_session and nullptr on failure.
+The `connect` must return a kt_conn_session and nullptr on failure.
 
 ## send
+
+Send data to the remote host
+
+`send` requires a kt_conn_session and a reference to a kt_msg.
+
+The `send` shall queue the message for delivery and must delete the kt_msg object if the delivery was successful.
 
 ## recv
 
