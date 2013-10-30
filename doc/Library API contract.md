@@ -109,6 +109,12 @@ The `send` shall queue the message for delivery and must delete the kt_msg objec
 
 ## recv
 
+Receive data from the remote host
+
+`recv` requires a kt_conn_session.
+
+The `recv` must return a reference to a kt_msg or a nullptr if there was no data received. The developper has now control over the returned kt_msg and must destroy the received kt_msg object.
+
 ## disconnect
 
 # Server
