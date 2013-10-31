@@ -207,9 +207,13 @@ Example:
 
 `config2` requests a publisher (see the publish-subscribe pattern) with a ZeroMQ stack with TLS transport security listening on the IP address 10.0.1.20 with the standard ZeroMQ TCP port being 5555.
 
-## KiaraRegisterHandle
+## kiara_register_handle
 
 Register a callback for handling an incoming message.
+
+`kiara_register_handle` requires a thread handle, this must be solved via preprocessor code to support different plattforms.
+
+The `kiara_register_handle` must not block.
 
 ## KiaraRunServer
 
