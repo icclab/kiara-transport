@@ -32,16 +32,16 @@ free (foo);
 
 # Constructs
 
-## kt_conn_session
+## kt_conn_session_t
 
 ```
 typedef struct kt_conn_session {
 	kt_conn_session_info* _info;
 	void* k_user_data;
-} kt_conn_session;
+} kt_conn_session_t;
 ```
 
-## kt_msg
+## kt_msg_t
 
 ```
 typedef struct kt_msg {
@@ -89,7 +89,7 @@ Connect the client to a remote server
 
 `connect` requires a valid remote endpoint description according to its transport stack.
 
-The `connect` must return a kt_conn_session and nullptr on failure.
+The `connect` must return a kt_conn_session and NULL on failure.
 
 ## send
 
@@ -105,7 +105,7 @@ Receive data from the remote host
 
 `recv` requires a kt_conn_session.
 
-The `recv` must return a reference to a kt_msg or a nullptr if there was no data received. The developper has now control over the returned kt_msg and must destroy the received kt_msg object.
+The `recv` must return a reference to a kt_msg or NULL if there was no data received. The developper has now control over the returned kt_msg and must destroy the received kt_msg object.
 
 ## disconnect
 
@@ -117,7 +117,7 @@ The `disconnect` shall close the connection and destroy the kt_conn_session obje
 
 # Server
 
-## KiaraInitServer
+## kiara_init_server
 
 Configure the requirements for the server, it negotiates the subjacent protocols.
 
