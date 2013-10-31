@@ -181,7 +181,31 @@ The `disconnect` shall close the connection and destroy the kt_conn_session obje
 
 ## kiara_init_server
 
-Configure the requirements for the server, it negotiates the subjacent protocols.
+Configure the requirements for the server, it assumes the subjacent protocols.
+
+`kiara_init_server` requires a kt_connconf_t with at least kt_application_type set.
+
+The `kiara_init_server` shall return a kt_conn_session_t and NULL on failure. It will assume certain parameters from the underlying protocols according to the kt_connconf_t set.
+
+Example:
+```
+    kt_connconf_t config;
+    //set the config
+    config.network_config.type = WEBSERVER;
+    config.network_config.port = 8080;
+    config.base_url = "*";
+    
+    kt_connconf_t config2;
+    //set the config
+    config2.network_config.crypto = TLS;
+    config2.network_config.application = ZEROMQ;
+    config2.network_config.type = PUBLISHER;
+    config2.base_url = "10.0.1.20";
+```
+
+`config` requests a webserver usually implying TCP, HTTP and port 80. In this case the developer actively overwrites the port to be 8080.
+
+`config2` requests a publisher (see the publish-subscribe pattern) with a ZeroMQ stack with TLS transport security listening on the IP address 10.0.1.20 with the standard ZeroMQ TCP port being 5555.
 
 ## KiaraRegisterHandle
 
