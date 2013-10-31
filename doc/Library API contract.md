@@ -49,7 +49,69 @@ typedef struct kt_msg {
 	void* payload;
 	std::size_t payload_size;
 	void (*free_payload) (void*);
-} kt_msg;
+} kt_msg_t;
+```
+
+## kt_connconf_t
+
+```
+enum kt_network_layer {
+	IPLEGACY,
+	IPV6
+};
+
+enum kt_transport_layer {
+	TCP,
+	UDP,
+	DCCP,
+	SCTP
+};
+
+/* TODO: This needs some more fine tuning like setting the protocol level,
+ * desired algorithms, key exchanges etc.
+ * <habl> 21.08.2013
+ */
+enum kt_crypto_layer {
+	NONE,
+	TLS,
+	SSL
+};
+
+enum kt_application_layer {
+	ZEROMQ,
+	HTTP,
+	RTSP,
+	NTP,
+	FTP,
+	NFS
+};
+
+struct kt_network_stack_t {
+	enum kt_network_layer network;
+	enum kt_transport_layer transport;
+	enum kt_crypto_layer crypto;
+	enum kt_application_layer application;
+	uint16_t port;
+};
+
+/* The application type directly decides the communication pattern of the
+ * socket and network and transport layers. Also it makes certain assumptions
+ * that for e.g. a webserver implies HTTP with TCP on Port 80 and a streaming
+ * service uses RTSP and UDP on port 554.
+ */
+typedef enum kt_application_type {
+	WEBSERVER,
+	PUBLISHER,
+	STREAM,
+	ROUNDROBIN,
+	REQUESTREPLY
+} kt_application_type;
+
+typedef struct {
+	struct kt_network_stack_t network_config;
+	enum kt_application_type type;
+	char *base_url;
+} kt_connconf_t;
 ```
 
 ## remote endpoint
