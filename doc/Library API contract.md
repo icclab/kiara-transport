@@ -4,7 +4,11 @@ Transport Library RFC style documentation, this document describes the binding p
 
 ## Language
 
-C++11, without GNU or clang or MSVC extensions, do not use std::thread.
+API must be in C99.
+
+The implementation may be in C++11, without GNU or clang or MSVC extensions, do not use std::thread; or in C99.
+
+All code must be able to be built with GCC, clang and MSVC.
 
 Use as little third party libraries as possible (Boost) to keep the number of dependencies as low as possible.
 
