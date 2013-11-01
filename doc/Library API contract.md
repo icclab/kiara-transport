@@ -211,7 +211,7 @@ Example:
 
 Register a callback for handling an incoming message.
 
-`kiara_register_handle` requires a thread handle, this must be solved via preprocessor code to support different plattforms.
+`kiara_register_handle` requires a kt_conn_session_t and a thread handle, the later must be solved via preprocessor code to support different plattforms.
 
 The `kiara_register_handle` must not block.
 
