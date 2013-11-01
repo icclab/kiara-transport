@@ -215,9 +215,13 @@ Register a callback for handling an incoming message.
 
 The `kiara_register_handle` must not block.
 
-## KiaraRunServer
+## kiara_run_server
 
-Launch the server and run it.
+Launch the server.
+
+`kiara_run_server` requires a kt_conn_session_t.
+
+The `kiara_run_server` may return 0 on success and non-zero on failure.
 
 ## KiaraStopServer
 
