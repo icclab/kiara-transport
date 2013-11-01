@@ -223,6 +223,10 @@ Launch the server.
 
 The `kiara_run_server` may return 0 on success and non-zero on failure.
 
-## KiaraStopServer
+## kiara_stop_server
 
-Stop the server and destroy all associated memory.
+Stops the server.
+
+`kiara_stop_server` requires a kt_conn_session_t and may contain a field stating the lingering time before killing any open request or to finish the request queue without accepting new ones (safe shutdown).
+
+The `kiara_stop_server` must return the kt_conn_session_t.k_user_data handle and it is the developers duty to destroy this object.
