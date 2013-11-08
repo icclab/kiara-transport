@@ -145,47 +145,47 @@ hex ::= (digit | "a" | "b" | "c" | "d" | "e" | "f" | "A" | "B" | "C" | "D" | "E"
 
 # Client
 
-## connect
+## kt_connect
 
 Connect the client to a remote server
 
-`connect` requires a valid remote endpoint description according to its transport stack.
+`kt_connect` requires a valid remote endpoint description according to its transport stack.
 
-The `connect` must return a kt_conn_session and NULL on failure.
+The `kt_connect` must return a kt_conn_session_t and NULL on failure.
 
-## send
+## kt_send
 
 Send data to the remote host
 
-`send` requires a kt_conn_session and a reference to a kt_msg.
+`kt_send` requires a kt_conn_session_t and a reference to a kt_msg_t.
 
-The `send` shall queue the message for delivery and must delete the kt_msg object if the delivery was successful.
+The `kt_send` shall queue the message for delivery and must delete the kt_msg_t object if the delivery was successful.
 
-## recv
+## kt_recv
 
 Receive data from the remote host
 
-`recv` requires a kt_conn_session.
+`kt_recv` requires a kt_conn_session.
 
-The `recv` must return a reference to a kt_msg or NULL if there was no data received. The developper has now control over the returned kt_msg and must destroy the received kt_msg object.
+The `kt_recv` must return a reference to a kt_msg_t or NULL if there was no data received. The developper has now control over the returned kt_msg_t and must destroy the received kt_msg_t object.
 
-## disconnect
+## kt_disconnect
 
 Disconnects the client from a remote server.
 
-`disconnect` requires a kt_conn_session.
+`kt_disconnect` requires a kt_conn_session_t.
 
-The `disconnect` shall close the connection and destroy the kt_conn_session object, though it is the duty of the developer to destroy/free kt_conn_session.k_user_data object.
+The `kt_disconnect` shall close the connection and destroy the kt_conn_session_t object, though it is the duty of the developer to destroy/free kt_conn_session_t.k_user_data object.
 
 # Server
 
-## kiara_init_server
+## kt_init_server
 
 Configure the requirements for the server, it assumes the subjacent protocols.
 
-`kiara_init_server` requires a kt_connconf_t with at least kt_application_type set.
+`kt_init_server` requires a kt_connconf_t with at least kt_application_type set.
 
-The `kiara_init_server` shall return a kt_conn_session_t and NULL on failure. It will assume certain parameters from the underlying protocols according to the kt_connconf_t set.
+The `kt_init_server` shall return a kt_conn_session_t and NULL on failure. It will assume certain parameters from the underlying protocols according to the kt_connconf_t set.
 
 Example:
 ```
@@ -207,26 +207,28 @@ Example:
 
 `config2` requests a publisher (see the publish-subscribe pattern) with a ZeroMQ stack with TLS transport security listening on the IP address 10.0.1.20 with the standard ZeroMQ TCP port being 5555.
 
-## kiara_register_handle
+## kt_register_handle
 
 Register a callback for handling an incoming message.
 
-`kiara_register_handle` requires a kt_conn_session_t and a thread handle, the later must be solved via preprocessor code to support different plattforms.
+`kt_register_handle` requires a kt_conn_session_t and a thread handle, the later must be solved via preprocessor code to support different plattforms.
 
-The `kiara_register_handle` must not block.
+The `kt_register_handle` must not block.
 
-## kiara_run_server
+The handle must accept a `kt_conn_session_t` and a `kt_msg_t` as parameter, and is responsible to call `kt_send` if needed.
+
+## kt_run_server
 
 Launch the server.
 
-`kiara_run_server` requires a kt_conn_session_t.
+`kt_run_server` requires a kt_conn_session_t.
 
-The `kiara_run_server` may return 0 on success and non-zero on failure.
+The `kt_run_server` may return 0 on success and non-zero on failure.
 
-## kiara_stop_server
+## kt_stop_server
 
 Stops the server.
 
-`kiara_stop_server` requires a kt_conn_session_t and may contain a field stating the lingering time before killing any open request or to finish the request queue without accepting new ones (safe shutdown).
+`kt_stop_server` requires a kt_conn_session_t and may contain a field stating the lingering time before killing any open request or to finish the request queue without accepting new ones (safe shutdown).
 
-The `kiara_stop_server` must return the kt_conn_session_t.k_user_data handle and it is the developers duty to destroy this object.
+The `kt_stop_server` must return the kt_conn_session_t.k_user_data handle and it is the developers duty to destroy this object.
