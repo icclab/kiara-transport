@@ -43,6 +43,8 @@ typedef struct kt_conn_session {
 } kt_conn_session_t;
 ```
 
+`k_user_data` is a pointer to an opaque data structure Dmitris Codebase need and will not be used nor modified by the network library.
+
 ## kt_msg_t
 
 ```
