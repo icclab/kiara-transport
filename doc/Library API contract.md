@@ -56,6 +56,10 @@ typedef struct kt_msg {
 } kt_msg_t;
 ```
 
+Since `payload` is handled as a pointer to a binary memory allocation `*free_payload` is responsible to destroy/deallocate the beforementioned memory.
+
+According to settings in `kt_conn_session_t` defined it will generate valid header and body structures from the metadata and payload when sent. The same applies the other way around when receiving messages.
+
 ## kt_connconf_t
 
 ```
