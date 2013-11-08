@@ -2,6 +2,8 @@
 
 Transport Library RFC style documentation, this document describes the binding provided from the transport library to the KIARA upper layers.
 
+For key words refer to http://www.ietf.org/rfc/rfc2119.txt
+
 ## Language
 
 API must be in C99.
@@ -157,17 +159,21 @@ The `kt_connect` must return a kt_conn_session_t and NULL on failure.
 
 Send data to the remote host
 
-`kt_send` requires a kt_conn_session_t and a reference to a kt_msg_t.
+`kt_send` requires a kt_conn_session_t, a reference to a kt_msg_t and a timeout value.
 
-The `kt_send` shall queue the message for delivery and must delete the kt_msg_t object if the delivery was successful.
+The `kt_send` shall queue the message for delivery and must delete the kt_msg_t object if the delivery was successful. The return value must be 0 if successful and non-zero on failure. On failure kt_msg_t must not be destroyed.
+
+The timeout value may define how long the sending process is allowed to take before it aborts and return a non-zero code. If the timeout is 0 `kt_send` must block until delivery is successful. However, you should nevertheless check the return code, since it may contain error indication not related to delivery.
 
 ## kt_recv
 
 Receive data from the remote host
 
-`kt_recv` requires a kt_conn_session.
+`kt_recv` requires a kt_conn_session and a timeout value.
 
 The `kt_recv` must return a reference to a kt_msg_t or NULL if there was no data received. The developper has now control over the returned kt_msg_t and must destroy the received kt_msg_t object.
+
+The timeout value may define how long the receiving process is allowed to take before it returns a NULL. If the timeout is 0 `kt_recv` must block until it received a message or an error occurred.
 
 ## kt_disconnect
 
