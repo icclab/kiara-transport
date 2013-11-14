@@ -1,3 +1,13 @@
+<!--
+To view this document you can choose the tools of your tread:
+Linux: http://sourceforge.net/p/retext/home/ReText/
+Mac OS X: http://mouapp.com/
+Windows: http://markdownpad.com/
+
+This document was written in Mou, I cannot guarantee other editors
+will render the file appropriately.
+-->
+
 # General
 
 Transport Library RFC style documentation, this document describes the binding provided from the transport library to the KIARA upper layers.
