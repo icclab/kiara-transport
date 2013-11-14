@@ -88,14 +88,14 @@ According to settings in `kt_conn_session_t` defined it will generate valid head
 ```
 
 // network layer
-#define KT_NETWORK_LAYER uint8_t
+typedef uint8_t KT_NETWORK_LAYER;
 #define KT_IPLEGACY 4
 #define KT_IPV6     6
 
 // transport layer
 // see RFC 790 for numbers
 // size defined RFC 790, 8 bit field
-#define KT_TRANSPORT_LAYER uint8_t
+typedef uint8_t KT_TRANSPORT_LAYER;
 #define KT_TCP    6
 #define KT_UDP   21
 #define KT_DCCP  33
@@ -107,13 +107,13 @@ According to settings in `kt_conn_session_t` defined it will generate valid head
  */
 
 // crypto layer
-#define KT_CRYPTO_LAYER uint8_t
+typedef uint8_t KT_CRYPTO_LAYER;
 #define NONE   0
 #define SSL    1
 #define TLS    2
 
 // application layer
-#define KT_APPLICATION_LAYER uint8_t
+typedef uint8_t KT_APPLICATION_LAYER;
 #define ZEROMQ  0
 #define HTTP    1
 #define RTSP    2
@@ -137,7 +137,7 @@ struct kt_network_stack {
  */
 
 // 8 bit allows 256 different application types, should be enough
-#define KT_APPLICATION_TYPE uint8_t
+typedef KT_APPLICATION_TYPE uint8_t
 #define KT_WEBSERVER   0
 #define KT_PUBLISHER   1
 #define KT_STREAM      2
