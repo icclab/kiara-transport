@@ -42,6 +42,19 @@ foo.free_foo (foo);
 free (foo);
 ```
 
+## Multithreading
+
+### Warning
+Dmitri requires in a first step a single threaded variant of since his code is to this date (14.11.2013) not thread safe.
+
+### Design
+
+![Design showing the thread boundaries of the different approaches](Threading.png "Threading")
+
+Threads are encapsulated in the same process environment and therefore process control block. The implication are clear: Shared resources have to be accessed with mutexes and the functions must be thread safe and also reentrant safe.
+
+The design shows that incomming messages are dispatched to several workers, each in a separate thread. These threads then invoke a callback-function (via a function pointer) which handles the message and does some computing if necessary. The callback-function may also reply (`kt_send`) and this requires that all the later functions must be thread safe.
+
 # Constructs
 
 ## kt_conn_session_t
