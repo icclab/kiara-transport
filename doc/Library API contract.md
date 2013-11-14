@@ -117,7 +117,7 @@ enum kt_application_layer {
 	NFS
 };
 
-struct kt_network_stack_t {
+struct kt_network_stack {
 	enum kt_network_layer network;
 	enum kt_transport_layer transport;
 	enum kt_crypto_layer crypto;
@@ -136,7 +136,7 @@ typedef enum kt_application_type {
 	STREAM,
 	ROUNDROBIN,
 	REQUESTREPLY
-} kt_application_type;
+} kt_application_type_t;
 
 typedef struct {
 	struct kt_network_stack_t network_config;
