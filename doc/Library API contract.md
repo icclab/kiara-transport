@@ -85,6 +85,8 @@ According to settings in `kt_conn_session_t` defined it will generate valid head
 
 ## kt_connconf_t
 
+The extensive use of `#define` instead of `enum` is to allow adding of further stacks at runtime. If the core provides functionality for a stack it must be #defined, if a stack is loaded as a plugin at runtime it must be registered and added to a `std::map` which is searched if the transport library could not find the stack in the #defined section.
+
 ```
 
 // network layer
