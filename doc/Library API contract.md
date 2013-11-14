@@ -108,18 +108,18 @@ typedef uint8_t kt_transport_layer;
 
 // crypto layer
 typedef uint8_t kt_crypto_layer;
-#define NONE   0
-#define SSL    1
-#define TLS    2
+#define KT_NONE   0
+#define KT_SSL    1
+#define KT_TLS    2
 
 // application layer
 typedef uint8_t kt_application_layer;
-#define ZEROMQ  0
-#define HTTP    1
-#define RTSP    2
-#define NTP     3
-#define FTP     4
-#define NFS     5
+#define KT_ZEROMQ  0
+#define KT_HTTP    1
+#define KT_RTSP    2
+#define KT_NTP     3
+#define KT_FTP     4
+#define KT_NFS     5
 
 struct kt_network_stack {
 	kt_network_layer kt_network_layer;
@@ -138,11 +138,11 @@ struct kt_network_stack {
 
 // 8 bit allows 256 different application types, should be enough
 typedef kt_application_type uint8_t
-#define KT_WEBSERVER   0
-#define KT_PUBLISHER   1
-#define KT_STREAM      2
-#define KT_ROUNDROBIN  3
-#define REQUESTREPLY   4
+#define KT_WEBSERVER      0
+#define KT_PUBLISHER      1
+#define KT_STREAM         2
+#define KT_ROUNDROBIN     3
+#define KT_REQUESTREPLY   4
 
 typedef struct {
 	struct kt_network_stack_t network_config;
