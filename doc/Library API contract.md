@@ -88,14 +88,14 @@ According to settings in `kt_conn_session_t` defined it will generate valid head
 ```
 
 // network layer
-typedef uint8_t KT_NETWORK_LAYER;
+typedef uint8_t kt_network_layer;
 #define KT_IPLEGACY 4
 #define KT_IPV6     6
 
 // transport layer
 // see RFC 790 for numbers
 // size defined RFC 790, 8 bit field
-typedef uint8_t KT_TRANSPORT_LAYER;
+typedef uint8_t kt_transport_layer;
 #define KT_TCP    6
 #define KT_UDP   21
 #define KT_DCCP  33
@@ -107,13 +107,13 @@ typedef uint8_t KT_TRANSPORT_LAYER;
  */
 
 // crypto layer
-typedef uint8_t KT_CRYPTO_LAYER;
+typedef uint8_t kt_crypto_layer;
 #define NONE   0
 #define SSL    1
 #define TLS    2
 
 // application layer
-typedef uint8_t KT_APPLICATION_LAYER;
+typedef uint8_t kt_application_layer;
 #define ZEROMQ  0
 #define HTTP    1
 #define RTSP    2
@@ -122,10 +122,10 @@ typedef uint8_t KT_APPLICATION_LAYER;
 #define NFS     5
 
 struct kt_network_stack {
-	KT_NETWORK_LAYER kt_network_layer;
-	KT_TRANSPORT_LAYER kt_transport_layer;
-	KT_CRYPTO_LAYER kt_crypto_layer;
-	KT_APPLICATION_LAYER kt_application_layer;
+	kt_network_layer kt_network_layer;
+	kt_transport_layer kt_transport_layer;
+	kt_crypto_layer kt_crypto_layer;
+	kt_application_layer kt_application_layer;
 	// as defined by RFC 793 this field is 16 bit long
 	uint16_t port;
 };
@@ -137,7 +137,7 @@ struct kt_network_stack {
  */
 
 // 8 bit allows 256 different application types, should be enough
-typedef KT_APPLICATION_TYPE uint8_t
+typedef kt_application_type uint8_t
 #define KT_WEBSERVER   0
 #define KT_PUBLISHER   1
 #define KT_STREAM      2
@@ -146,7 +146,7 @@ typedef KT_APPLICATION_TYPE uint8_t
 
 typedef struct {
 	struct kt_network_stack_t network_config;
-	KT_APPLICATION_TYPE kt_application_type;
+	kt_application_type kt_application_type;
 	char *base_url;
 } kt_connconf_t;
 ```
