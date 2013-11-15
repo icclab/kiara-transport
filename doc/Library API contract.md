@@ -139,7 +139,7 @@ struct kt_network_stack {
  */
 
 // 8 bit allows 256 different application types, should be enough
-typedef kt_application_type uint8_t
+typedef uint8_t kt_application_type;
 #define KT_WEBSERVER      0
 #define KT_PUBLISHER      1
 #define KT_STREAM         2
