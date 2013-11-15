@@ -124,10 +124,10 @@ typedef uint8_t kt_application_layer;
 #define KT_NFS     5
 
 struct kt_network_stack {
-	kt_network_layer kt_network_layer;
-	kt_transport_layer kt_transport_layer;
-	kt_crypto_layer kt_crypto_layer;
-	kt_application_layer kt_application_layer;
+	kt_network_layer network_layer;
+	kt_transport_layer transport_layer;
+	kt_crypto_layer crypto_layer;
+	kt_application_layer application_layer;
 	// as defined by RFC 793 this field is 16 bit long
 	uint16_t port;
 };
@@ -148,7 +148,7 @@ typedef kt_application_type uint8_t
 
 typedef struct {
 	struct kt_network_stack_t network_config;
-	kt_application_type kt_application_type;
+	kt_application_type application_type;
 	char *base_url;
 } kt_connconf_t;
 ```
