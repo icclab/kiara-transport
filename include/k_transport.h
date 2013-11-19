@@ -16,6 +16,7 @@
 #define KT_TRANSPORT_PATCH 0
 
 // #ifdef unixoid
+#include <pthread.h>
 #define THREAD_HANDLE pthread_t
 // #endif
 
@@ -86,14 +87,7 @@ typedef struct {
   char *base_url;
 } kt_connconf_t;
 
-/* k_user_data is a pointer to an opaque data structure which is needed by the
- * upper layers of KIARA and will not be modified by the transport library.
- */
-
-typedef struct kt_conn_session {
-  kt_conn_session_info* _info;
-  void* k_user_data;
-} kt_conn_session_t;
+typedef struct kt_conn_session kt_conn_session_t;
 
 typedef struct kt_msg kt_msg_t;
 
