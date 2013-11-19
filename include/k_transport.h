@@ -5,15 +5,19 @@
  * Reference: doc/Library API contract.md
  */
 
-#ifndef K_TRANSPORT
-#define K_TRANSPORT
+#ifndef KT_TRANSPORT
+#define KT_TRANSPORT
 
 // Includes
 #include <stdint.h>
 
-#define K_TRANSPORT_MAJOR 0
-#define K_TRANSPORT_MINOR 1
-#define K_TRANSPORT_PATCH 0
+#define KT_TRANSPORT_MAJOR 0
+#define KT_TRANSPORT_MINOR 1
+#define KT_TRANSPORT_PATCH 0
+
+// #ifdef unixoid
+#define THREAD_HANDLE pthread_t
+// #endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -101,6 +105,12 @@ typedef struct kt_conn_session {
  */
 
 typedef struct kt_msg kt_msg_t;
+
+// server functions
+kt_conn_session_t* kt_init_server ( kt_connconf_t );
+void kt_register_handle ( kt_conn_session_t*, THREAD_HANDLE* );
+int kt_run_server ( kt_conn_session_t* );
+void* kt_stop_server ( kt_conn_session_t*, int );
 
 #ifdef __cplusplus
 }
