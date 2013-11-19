@@ -106,6 +106,12 @@ typedef struct kt_conn_session {
 
 typedef struct kt_msg kt_msg_t;
 
+// client functions
+kt_conn_session_t* kt_connect ( const char* );
+int kt_send ( kt_conn_session_t*, kt_msg_t*, int );
+kt_msg_t* kt_recv ( kt_conn_session_t*, int );
+void* kt_disconnect ( kt_conn_session_t* );
+
 // server functions
 kt_conn_session_t* kt_init_server ( kt_connconf_t );
 void kt_register_handle ( kt_conn_session_t*, THREAD_HANDLE* );
