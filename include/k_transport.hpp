@@ -5,8 +5,15 @@
  * Reference: doc/Library API contract.md
  */
 
+//#include <features.h>
+
 #include <map>
 #include <string>
+
+#if defined (__UNIX__) || defined (__APPLE__)
+#include <pthread.h>
+#define THREAD_HANDLE pthread_t
+#endif
 
 /* Since payload is handled as a pointer to a binary memory allocation
  * *free_payload() is responsible to destroy/deallocate the beforementioned
@@ -34,4 +41,8 @@ struct kt_msg_t {
 struct kt_conn_session_t {
   kt_conn_session_info* _info;
   void* k_user_data;
+};
+
+struct kt_thread_handle_t {
+ THREAD_HANDLE * callback;
 };

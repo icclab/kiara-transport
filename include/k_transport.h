@@ -15,11 +15,6 @@
 #define KT_TRANSPORT_MINOR 1
 #define KT_TRANSPORT_PATCH 0
 
-// #ifdef unixoid
-#include <pthread.h>
-#define THREAD_HANDLE pthread_t
-// #endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -91,6 +86,8 @@ typedef struct kt_conn_session kt_conn_session_t;
 
 typedef struct kt_msg kt_msg_t;
 
+typedef struct kt_thread_handle kt_thread_handle_t;
+
 // client functions
 kt_conn_session_t* kt_connect ( const char* );
 int kt_send ( kt_conn_session_t*, kt_msg_t*, int );
@@ -99,7 +96,7 @@ void* kt_disconnect ( kt_conn_session_t* );
 
 // server functions
 kt_conn_session_t* kt_init_server ( kt_connconf_t );
-void kt_register_handle ( kt_conn_session_t*, THREAD_HANDLE* );
+void kt_register_handle ( kt_conn_session_t*, kt_thread_handle_t* );
 int kt_run_server ( kt_conn_session_t* );
 void* kt_stop_server ( kt_conn_session_t*, int );
 
