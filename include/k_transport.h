@@ -5,8 +5,10 @@
  * Reference: doc/Library API contract.md
  */
 
-#ifndef
+#ifndef K_TRANSPORT
 #define K_TRANSPORT
+
+#include <stdint.h>
 
 #define K_TRANSPORT_MAJOR 0
 #define K_TRANSPORT_MINOR 1
@@ -70,7 +72,7 @@ typedef uint8_t kt_application_type;
 #define KT_REQUESTREPLY   4
 
 typedef struct {
-  struct kt_network_stack_t network_config;
+  struct kt_network_stack network_config;
   kt_application_type application_type;
   char *base_url;
 } kt_connconf_t;
