@@ -5,6 +5,9 @@
  * Reference: doc/Library API contract.md
  */
 
+#include <map>
+#include <string>
+
 /* Since payload is handled as a pointer to a binary memory allocation
  * *free_payload() is responsible to destroy/deallocate the beforementioned
  * memory.
@@ -24,6 +27,9 @@ struct kt_msg_t {
 /* k_user_data is a pointer to an opaque data structure which is needed by the
  * upper layers of KIARA and will not be modified by the transport library.
  */
+
+// TODO: What shoudl kt_conn_session_info actually hold?
+#define kt_conn_session_info void
 
 struct kt_conn_session_t {
   kt_conn_session_info* _info;
