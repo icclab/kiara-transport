@@ -24,7 +24,7 @@
  * same applies the other way around when receiving messages.
  */
 
-struct kt_msg_t {
+struct kt_msg {
   std::map <std::string, std::string> metadata;
   void* payload;
   std::size_t payload_size;
@@ -38,11 +38,11 @@ struct kt_msg_t {
 // TODO: What shoudl kt_conn_session_info actually hold?
 #define kt_conn_session_info void
 
-struct kt_conn_session_t {
+struct kt_conn_session {
   kt_conn_session_info* _info;
   void* k_user_data;
 };
 
-struct kt_thread_handle_t {
+struct kt_thread_handle {
  THREAD_HANDLE * callback;
 };
