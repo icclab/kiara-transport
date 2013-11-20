@@ -181,6 +181,15 @@ escape ::= "%" hex hex
 hex ::= (digit | "a" | "b" | "c" | "d" | "e" | "f" | "A" | "B" | "C" | "D" | "E" | "F")
 
 ```
+# Helper functions
+
+## kt_msg_new
+
+Creates a skeleton for a `kt_msg_t` construct.
+
+## kt_msg_destroy
+
+Destroys a `kt_msg_t` construct and calls the given `free_payload()` function if not null.
 
 # Client
 

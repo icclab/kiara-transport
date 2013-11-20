@@ -82,6 +82,11 @@ typedef struct kt_msg kt_msg_t;
 
 typedef struct kt_thread_handle kt_thread_handle_t;
 
+// generic functions
+
+kt_msg_t* kt_msg_new ();
+void kt_msg_destroy ();
+
 // client functions
 kt_conn_session_t* kt_connect ( const char* );
 int kt_send ( kt_conn_session_t*, kt_msg_t*, int );
