@@ -9,6 +9,7 @@
 
 #include <map>
 #include <string>
+#include <cassert>
 
 #if defined (__UNIX__) || defined (__APPLE__)
 #include <pthread.h>
