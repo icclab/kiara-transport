@@ -8,9 +8,6 @@
 #ifndef KT_TRANSPORT
 #define KT_TRANSPORT
 
-// Includes
-#include <stdint.h>
-
 #define KT_TRANSPORT_MAJOR 0
 #define KT_TRANSPORT_MINOR 1
 #define KT_TRANSPORT_PATCH 0
@@ -20,14 +17,13 @@ extern "C" {
 #endif
 
 // network layer
-typedef uint8_t kt_network_layer;
+typedef unsigned int kt_network_layer;
 #define KT_IPLEGACY 4
 #define KT_IPV6     6
 
 // transport layer
 // see RFC 790 for numbers
-// size defined RFC 790, 8 bit field
-typedef uint8_t kt_transport_layer;
+typedef unsigned int kt_transport_layer;
 #define KT_TCP    6
 #define KT_UDP   21
 #define KT_DCCP  33
@@ -39,13 +35,13 @@ typedef uint8_t kt_transport_layer;
  */
 
 // crypto layer
-typedef uint8_t kt_crypto_layer;
+typedef unsigned int kt_crypto_layer;
 #define KT_NONE   0
 #define KT_SSL    1
 #define KT_TLS    2
 
 // application layer
-typedef uint8_t kt_application_layer;
+typedef unsigned int kt_application_layer;
 #define KT_ZEROMQ  0
 #define KT_HTTP    1
 #define KT_RTSP    2
@@ -58,8 +54,7 @@ struct kt_network_stack {
   kt_transport_layer transport_layer;
   kt_crypto_layer crypto_layer;
   kt_application_layer application_layer;
-  // as defined by RFC 793 this field is 16 bit long
-  uint16_t port;
+  unsigned int port;
 };
 
 /* The application type directly decides the communication pattern of the
@@ -68,8 +63,7 @@ struct kt_network_stack {
  * service uses RTSP and UDP on port 554.
  */
 
-// 8 bit allows 256 different application types, should be enough
-typedef uint8_t kt_application_type;
+typedef unsigned int kt_application_type;
 #define KT_WEBSERVER      0
 #define KT_PUBLISHER      1
 #define KT_STREAM         2
