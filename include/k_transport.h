@@ -88,9 +88,52 @@ kt_msg_t* kt_msg_new ();
 void kt_msg_destroy ();
 
 // client functions
+
+/* Connect to a remote endpoint
+ *
+ * example:
+ * 
+ * kt_conn_session_t* sess = kt_connect ( "http://domain.tld" );
+ */
 kt_conn_session_t* kt_connect ( const char* );
+
+/* Send data to the remote host
+ *
+ * example: 
+ * 
+ * kt_conn_session_t* sess = kt_connect ( "tcp://127.0.0.1:5555" );
+ * kt_msg_t* msg = kt_msg_new ();
+ * char* data = "bla";
+ * msg.payload = (void*) data;
+ * msg.payload_size = 3;
+ *
+ * int rc = kt_send ( sess, msg, 0 );
+ * assert ( rc == 0 );
+ *
+ * kt_disconnect ( sess );
+ */
 int kt_send ( kt_conn_session_t*, kt_msg_t*, int );
+
+/* Receive data from remote endpoint
+ *
+ * example:
+ *
+ * kt_conn_session_t* sess = kt_connect ( "tcp://127.0.0.1:5555" );
+ * kt_msg_t* msg = kt_recv ( sess, 0 );
+ * printf ("%s\n", msg.payload );
+ * kt_msg_destroy ( msg );
+ *
+ * kt_disconnect ( sess );
+ */
 kt_msg_t* kt_recv ( kt_conn_session_t*, int );
+
+/* Disconnects from remote endpoint
+ *
+ * example:
+ *
+ * kt_conn_session_t* sess = kt_connect ( "tcp://127.0.0.1:5555" );
+ * kt_disconnect ( sess );
+ */
 void* kt_disconnect ( kt_conn_session_t* );
 
 // server functions
