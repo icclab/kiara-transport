@@ -72,13 +72,10 @@ kt_application_layer _return_transport_from_endpoint (const char* rem)
 
 kt_conn_session_t* kt_connect ( const char* rem )
 {
-  //if ( _return_transport_from_endpoint (rem) == KT_TCP )
-  if ( true )
+  if ( _return_transport_from_endpoint (rem) == KT_TCP )
   {
-    std::cout << "We have tcp, let's use 0mq" << std::endl;
-
-    kt_conn_session_info* info = new kt_conn_session_info ();
-    kt_conn_session* sess = new kt_conn_session ();
+    kt_conn_session_info *info = new kt_conn_session_info ();
+    kt_conn_session_t *sess = new kt_conn_session ();
 
     info->context = zmq_ctx_new ();
     info->socket = zmq_socket (info->context, ZMQ_REQ);
@@ -89,7 +86,7 @@ kt_conn_session_t* kt_connect ( const char* rem )
   }  
   else
   {
-    std::cout << "No tcp, no workee, failed hard!" << std::endl;
+    std::cout << "No tcp, no workee, failing hard!" << std::endl;
     return NULL;
   }
 }
