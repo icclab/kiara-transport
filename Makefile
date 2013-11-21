@@ -1,8 +1,9 @@
 #### Compiler and tool definitions shared by all build targets #####
 # CC = gcc
-CC = clang
+CC = clang-mp-3.3
+CXX = clang++-mp-3.3
 BASICOPTS = -g
-CFLAGS = $(BASICOPTS) -pedantic -Wall -std=c11
+CFLAGS = $(BASICOPTS) -pedantic -Wall
 
 
 # Define the target directories.
@@ -36,8 +37,7 @@ LDLIBS_server_0mq = $(USERLIBS_server_0mq)
 ## Target: client_0mq
 OBJS_client_0mq =  \
 	$(BUILDDIR)/main_client_0mq.o \
-	$(BUILDDIR)/ktransport.o \
-	$(BUILDDIR)/kt_client.o
+	$(BUILDDIR)/k_transport.o
 USERLIBS_client_0mq = -lzmq -lczmq
 DEPLIBS_client_0mq =
 LDLIBS_client_0mq = $(USERLIBS_client_0mq)
@@ -55,7 +55,7 @@ $(BUILDDIR)/server_0mq: $(BUILDDIR) $(OBJS_server_0mq) $(DEPLIBS_server_0mq)
 
 # Link or archive
 $(BUILDDIR)/client_0mq: $(BUILDDIR) $(OBJS_client_0mq) $(DEPLIBS_client_0mq)
-	$(LINK.c) $(CFLAGS_client_0mq) $(CPPFLAGS_client_0mq) -o $@ $(OBJS_client_0mq) $(LDLIBS_client_0mq)
+	$(LINK.cpp) $(CFLAGS_client_0mq) $(CPPFLAGS_client_0mq) -o $@ $(OBJS_client_0mq) $(LDLIBS_client_0mq)
 
 
 
@@ -63,6 +63,9 @@ $(BUILDDIR)/client_0mq: $(BUILDDIR) $(OBJS_client_0mq) $(DEPLIBS_client_0mq)
 # Compile source files into .o files
 $(BUILDDIR)/ktransport.o: $(BUILDDIR) src/core/ktransport.c
 	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/core/ktransport.c
+
+$(BUILDDIR)/k_transport.o: $(BUILDDIR) src/core/ktransport.c
+	$(COMPILE.cpp) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/k_transport.cpp
 
 $(BUILDDIR)/kt_server.o: $(BUILDDIR) src/core/kt_server.c
 	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/core/kt_server.c
