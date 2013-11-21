@@ -8,6 +8,7 @@
 #include "../include/k_transport.hpp"
 
 //#include "kt_zeromq.hpp"
+#include <cstdlib> // Dmitri requires this
 #include <zmq.h>
 
 /* Create new empty kt_msg_t
@@ -24,9 +25,11 @@ kt_msg_t* kt_msg_new ()
 
 void kt_msg_destroy ( kt_msg_t* msg )
 {
+  // Prevent working on NULL
+  assert (msg);
+
   // Empty the metadata
   msg->metadata.clear();
-  assert ( msg->metadata.empty() );
 
   // Delete the payload from the heap
   if ( msg->free_payload != NULL )
