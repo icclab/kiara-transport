@@ -85,7 +85,8 @@ typedef struct kt_thread_handle kt_thread_handle_t;
 // generic functions
 
 kt_msg_t* kt_msg_new ();
-void kt_msg_destroy ();
+void kt_msg_destroy ( kt_msg_t* );
+kt_handle_t* kt_create_handle ( void* (*callback_func)(kt_conn_session_t*, kt_msg_t*) );
 
 // client functions
 

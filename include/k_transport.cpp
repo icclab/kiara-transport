@@ -8,12 +8,16 @@
 #include "k_transport.h"
 #include "k_transport.hpp"
 
+/* Create new empty kt_msg_t
+ */
 kt_msg_t* kt_msg_new ()
 {
   kt_msg_t* msg = new kt_msg_t();
   return msg;
 }
 
+/* Destroy passed kt_msg_t*
+ */
 void kt_msg_destroy ( kt_msg_t* msg )
 {
   // Empty the metadata
