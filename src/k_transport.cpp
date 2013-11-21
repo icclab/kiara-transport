@@ -90,3 +90,23 @@ kt_conn_session_t* kt_connect ( const char* rem )
     return NULL;
   }
 }
+
+int kt_send ( kt_conn_session_t* sess, kt_msg_t* msg, int linger )
+{
+  zmq_send ( sess->_info->socket, (char*) msg->payload, msg->payload_size, 0 );
+  kt_msg_destroy (msg);
+  return 0;
+}
+
+kt_msg_t* kt_recv ( kt_conn_session_t* sess, int linger )
+{
+  void* buffer = malloc(100);
+  kt_msg_t* msg = kt_msg_new ();
+  int rc = zmq_recv ( sess->_info->socket, buffer, 100, 0 );
+  assert ( rc != -1 );
+
+  msg->payload = buffer;
+  msg->payload_size = rc;
+
+  return msg;
+}
