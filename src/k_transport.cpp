@@ -5,14 +5,14 @@
  * Reference: doc/Library API contract.md
  */
 
-#include "k_transport.h"
-#include "k_transport.hpp"
+#include "../include/k_transport.hpp"
 
 //#include "kt_zeromq.hpp"
 #include <zmq.h>
 
 /* Create new empty kt_msg_t
  */
+
 kt_msg_t* kt_msg_new ()
 {
   kt_msg_t* msg = new kt_msg_t();
@@ -21,6 +21,7 @@ kt_msg_t* kt_msg_new ()
 
 /* Destroy passed kt_msg_t*
  */
+
 void kt_msg_destroy ( kt_msg_t* msg )
 {
   // Empty the metadata
@@ -37,12 +38,26 @@ void kt_msg_destroy ( kt_msg_t* msg )
   msg = NULL;
 }
 
+void kt_msg_set_payload ( kt_msg_t* msg, void* payload, size_t payload_size, void (*free_func)(void* ) )
+{
+  msg->payload = payload;
+  msg->payload_size = payload_size;
+  msg->free_payload = free_func;
+}
+
+void* kt_msg_get_payload ( kt_msg_t* msg )
+{
+  return msg->payload;
+}
+
+/*
 kt_handle_t* kt_create_handle ( void* (*callback_func)(kt_conn_session_t*, kt_msg_t*) )
 {
   kt_handle_t* handle = new kt_handle_t();
   handle->callback = callback_func;
   return handle;
 }
+*/
 
 kt_application_layer _return_transport_from_endpoint (const char* rem)
 {
