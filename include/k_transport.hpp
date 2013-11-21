@@ -10,8 +10,13 @@
 #include <map>
 #include <string>
 #include <cassert>
+#include <iostream>
 
-#if defined (__UNIX__) || defined (__APPLE__)
+#include "k_transport.h"
+
+#include "dirty_nasty_preprocessor_hacks.h"
+
+#if defined (__UNIX__)
 #include <pthread.h>
 #define THREAD_HANDLE pthread_t
 #endif
@@ -36,14 +41,19 @@ struct kt_msg {
  * upper layers of KIARA and will not be modified by the transport library.
  */
 
-// TODO: What shoudl kt_conn_session_info actually hold?
-#define kt_conn_session_info void
+// TODO: What should kt_conn_session_info actually hold?
+struct kt_conn_session_info {
+  void* context;
+  void* socket;
+};
 
 struct kt_conn_session {
   kt_conn_session_info* _info;
   void* k_user_data;
 };
 
-struct kt_thread_handle {
- THREAD_HANDLE * callback;
+struct kt_handle {
+  void* (*callback)(kt_conn_session*, kt_msg*);
 };
+
+kt_application_layer _return_transport_from_endpoint (char*);
