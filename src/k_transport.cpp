@@ -92,6 +92,13 @@ kt_conn_session_t* kt_connect ( const char* rem )
   }
 }
 
+void* kt_disconnect ( kt_conn_session_t* sess )
+{
+  zmq_close ( sess->_info->socket );
+  zmq_ctx_destroy ( sess->_info->context );
+  return sess->k_user_data;
+}
+
 int kt_send ( kt_conn_session_t* sess, kt_msg_t* msg, int linger )
 {
   zmq_send ( sess->_info->socket, (char*) msg->payload, msg->payload_size, 0 );

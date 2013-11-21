@@ -13,5 +13,7 @@ int main()
   kt_send ( sess, msg, 0);
   msg = kt_recv ( sess, 0 );
   printf ("%s\n", (char*) kt_msg_get_payload(msg));
+
+  kt_disconnect (sess);
 	return 0;
 }
