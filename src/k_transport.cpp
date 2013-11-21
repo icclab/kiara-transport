@@ -29,7 +29,8 @@ void kt_msg_destroy ( kt_msg_t* msg )
   assert ( msg->metadata.empty() );
 
   // Delete the payload from the heap
-  (*msg->free_payload) ( msg->payload );
+  if ( msg->free_payload != NULL )
+    (*msg->free_payload) ( msg->payload );
   msg->payload = NULL;
   msg->payload_size = 0;
 
