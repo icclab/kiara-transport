@@ -8,7 +8,7 @@
 #include "../include/k_transport.hpp"
 
 //#include "kt_zeromq.hpp"
-#include <cstdlib> // Dmitri requires this
+#include <cstdlib> // for malloc
 #include <zmq.h>
 
 /* Create new empty kt_msg_t
