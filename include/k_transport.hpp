@@ -11,6 +11,7 @@
 #include <string>
 #include <cassert>
 #include <iostream>
+#include <vector>
 
 #include "k_transport.h"
 
@@ -21,6 +22,8 @@
 #define THREAD_HANDLE pthread_t
 #endif
 
+namespace KIARA_transport
+{
 /* Since payload is handled as a pointer to a binary memory allocation
  * *free_payload() is responsible to destroy/deallocate the beforementioned
  * memory.
@@ -36,6 +39,34 @@ struct kt_msg {
   std::size_t payload_size;
   void (*free_payload) (void*);
 };
+
+class KT_Msg {
+  public:
+    // Constructor, Destructor
+    KT_Msg ();
+    KT_Msg (std::vector<unsigned char> payload);
+    KT_Msg (void* payload, unsigned int payload_size);
+    ~KT_Msg ();
+
+    // **** Methods ****
+    
+    // Metadata methods
+    void add_metadata (const std::string key, const std::string value);
+    std::map <std::string, std::string>&&
+      get_metadata ();
+    std::string&& get_serialized_metadata (std::string delimiter);
+
+    // Payload methods
+    void set_payload (const std::vector<unsigned char> payload);
+    std::vector<unsigned char>&& get_payload();
+
+  private:
+    // Members
+    std::map <std::string, std::string> metadata;
+    std::vector <unsigned char> payload;
+};
+    
+    
 
 /* k_user_data is a pointer to an opaque data structure which is needed by the
  * upper layers of KIARA and will not be modified by the transport library.
@@ -57,3 +88,5 @@ struct kt_handle {
 };
 
 kt_application_layer _return_transport_from_endpoint (char*);
+
+}
