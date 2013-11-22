@@ -11,6 +11,8 @@
 #include <cstdlib> // for malloc
 #include <zmq.h>
 
+typedef void kt_msg;
+
 // KT_Msg implementation
 namespace KIARA {
   namespace Transport {
@@ -64,54 +66,31 @@ namespace KIARA {
 /* Create new empty kt_msg_t
  */
 
-kt_msg_t* kt_msg_new ()
+kt_msg* kt_msg_new ()
 {
-  kt_msg_t* msg = new kt_msg_t();
-  return msg;
+  return reinterpret_cast<kt_msg*>(new KIARA::Transport::KT_Msg());
 }
 
 /* Destroy passed kt_msg_t*
  */
 
-void kt_msg_destroy ( kt_msg_t* msg )
+void kt_msg_destroy ( kt_msg* msg )
 {
   // Prevent working on NULL
   assert (msg);
-
-  // Empty the metadata
-  msg->metadata.clear();
-
-  // Delete the payload from the heap
-  if ( msg->free_payload != NULL )
-    (*msg->free_payload) ( msg->payload );
-  msg->payload = NULL;
-  msg->payload_size = 0;
-
-  // Cleanup the kt_msg_t construct
-  delete msg;
-  msg = NULL;
+  delete (msg);
 }
 
-void kt_msg_set_payload ( kt_msg_t* msg, void* payload, size_t payload_size, void (*free_func)(void* ) )
+void kt_msg_set_payload ( kt_msg* c_msg, void* payload, size_t payload_size)
 {
-  msg->payload = payload;
-  msg->payload_size = payload_size;
-  msg->free_payload = free_func;
+  KIARA::Transport::KT_Msg *msg = reinterpret_cast<KIARA::Transport::KT_Msg *> (c_msg);
 }
 
-void* kt_msg_get_payload ( kt_msg_t* msg )
+void* kt_msg_get_payload ( kt_msg* c_msg )
 {
-  return msg->payload;
+  KIARA::Transport::KT_Msg *msg = reinterpret_cast<KIARA::Transport::KT_Msg *> (c_msg);
+  return msg->get_payload().data ();
 }
-
-/*
-kt_handle_t* kt_create_handle ( void* (*callback_func)(kt_conn_session_t*, kt_msg_t*) )
-{
-  kt_handle_t* handle = new kt_handle_t();
-  handle->callback = callback_func;
-  return handle;
-}
-*/
 
 kt_application_layer _return_transport_from_endpoint (const char* rem)
 {
@@ -152,7 +131,7 @@ void* kt_disconnect ( kt_conn_session_t* sess )
   return sess->k_user_data;
 }
 
-int kt_send ( kt_conn_session_t* sess, kt_msg_t* msg, int linger )
+int kt_send ( kt_conn_session_t* sess, kt_msg* msg, int linger )
 {
   zmq_send ( sess->_info->socket, (char*) msg->payload, msg->payload_size, 0 );
   kt_msg_destroy (msg);
@@ -162,7 +141,7 @@ int kt_send ( kt_conn_session_t* sess, kt_msg_t* msg, int linger )
 kt_msg_t* kt_recv ( kt_conn_session_t* sess, int linger )
 {
   void* buffer = malloc(100);
-  kt_msg_t* msg = kt_msg_new ();
+  kt_msg* msg = kt_msg_new ();
   int rc = zmq_recv ( sess->_info->socket, buffer, 100, 0 );
   assert ( rc != -1 );
 

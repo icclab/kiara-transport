@@ -14,7 +14,7 @@
 #include <vector>
 #include <utility>
 
-#include "k_transport.h"
+//#include "k_transport.h"
 
 #include "dirty_nasty_preprocessor_hacks.h"
 
@@ -33,13 +33,6 @@ namespace KIARA {
  * header and body structures from the metadata and payload when sent. The
  * same applies the other way around when receiving messages.
  */
-
-struct kt_msg {
-  std::map <std::string, std::string> metadata;
-  void* payload;
-  std::size_t payload_size;
-  void (*free_payload) (void*);
-};
 
 class KT_Msg {
  private:
@@ -84,10 +77,6 @@ struct kt_conn_session_info {
 struct kt_conn_session {
   kt_conn_session_info* _info;
   void* k_user_data;
-};
-
-struct kt_handle {
-  void* (*callback)(kt_conn_session*, kt_msg*);
 };
 
 kt_application_layer _return_transport_from_endpoint (char*);
