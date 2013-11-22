@@ -43,7 +43,7 @@ class KT_Msg {
  public:
     // Constructor, Destructor
     KT_Msg ();
-    KT_Msg (std::vector<unsigned char>& payload);
+    KT_Msg (std::vector<unsigned char>&);
     ~KT_Msg ();
 
     // **** Methods ****
@@ -51,35 +51,44 @@ class KT_Msg {
     // **** Accessors ****
 
     // Metadata methods
-    void add_metadata (std::string key, std::string value);
+    void add_metadata (std::string key, std::string);
     std::map <std::string, std::string>&&
       get_metadata ();
-    std::string&& get_serialized_metadata (std::string delimiter);
+    std::string&& get_serialized_metadata (std::string);
 
     // Payload methods
-    void set_payload (const std::vector<unsigned char> payload);
+    void set_payload (const std::vector<unsigned char>);
     std::vector<unsigned char>&& get_payload();
 
 };
-    
-    
 
-/* k_user_data is a pointer to an opaque data structure which is needed by the
- * upper layers of KIARA and will not be modified by the transport library.
- */
-
-// TODO: What should kt_conn_session_info actually hold?
-struct kt_conn_session_info {
-  void* context;
-  void* socket;
+class KT_Session {
+  private:
+    /* k_user_data is a pointer to an opaque data structure which is needed by the
+     * upper layers of KIARA and will not be modified by the transport library.
+     */
+    void* _k_user_data;
+    int source;
 };
 
-struct kt_conn_session {
-  kt_conn_session_info* _info;
-  void* k_user_data;
-};
+class KT_Connection {
+  private:
+    void* _context;
+    void* _socket;
+    KT_Session* _session;
 
-kt_application_layer _return_transport_from_endpoint (char*);
+  public:
+    KT_Connection ();
+    KT_Connection (std::string);
+    ~KT_Connection ();
+
+    int connect (std::string);
+    void send (KT_Msg&, int);
+    KT_Msg& recv (int);
+    void* disconnect ();
+};
+    
+    
 
   } // end of namespace Transport
 } // end of namespace KIARA
