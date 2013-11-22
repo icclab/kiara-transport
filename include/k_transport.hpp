@@ -12,6 +12,7 @@
 #include <cassert>
 #include <iostream>
 #include <vector>
+#include <utility>
 
 #include "k_transport.h"
 
@@ -22,8 +23,8 @@
 #define THREAD_HANDLE pthread_t
 #endif
 
-namespace KIARA_transport
-{
+namespace KIARA {
+  namespace Transport {
 /* Since payload is handled as a pointer to a binary memory allocation
  * *free_payload() is responsible to destroy/deallocate the beforementioned
  * memory.
@@ -41,17 +42,23 @@ struct kt_msg {
 };
 
 class KT_Msg {
-  public:
+ private:
+    // Members
+    std::map <std::string, std::string> _metadata;
+    std::vector <unsigned char> _payload;
+
+ public:
     // Constructor, Destructor
     KT_Msg ();
-    KT_Msg (std::vector<unsigned char> payload);
-    KT_Msg (void* payload, unsigned int payload_size);
+    KT_Msg (std::vector<unsigned char>& payload);
     ~KT_Msg ();
 
     // **** Methods ****
-    
+   
+    // **** Accessors ****
+
     // Metadata methods
-    void add_metadata (const std::string key, const std::string value);
+    void add_metadata (std::string key, std::string value);
     std::map <std::string, std::string>&&
       get_metadata ();
     std::string&& get_serialized_metadata (std::string delimiter);
@@ -60,10 +67,6 @@ class KT_Msg {
     void set_payload (const std::vector<unsigned char> payload);
     std::vector<unsigned char>&& get_payload();
 
-  private:
-    // Members
-    std::map <std::string, std::string> metadata;
-    std::vector <unsigned char> payload;
 };
     
     
@@ -89,4 +92,5 @@ struct kt_handle {
 
 kt_application_layer _return_transport_from_endpoint (char*);
 
-}
+  } // end of namespace Transport
+} // end of namespace KIARA

@@ -11,6 +11,56 @@
 #include <cstdlib> // for malloc
 #include <zmq.h>
 
+// KT_Msg implementation
+namespace KIARA {
+  namespace Transport {
+
+  /* KT_Msg class */
+
+  // Empty constructor
+  KT_Msg::KT_Msg () {}
+
+  // Constructor with payload
+  KT_Msg::KT_Msg (std::vector<unsigned char>& payload)
+  {
+    this->_payload = payload;
+  }
+
+  // Destructor
+  KT_Msg::~KT_Msg ()
+  {
+    // Destroy payload
+    this->_payload.clear ();
+
+    // Destroy metadata
+    this->_metadata.clear ();
+  }
+
+  // Metadata methods
+  void KT_Msg::add_metadata (std::string key, std::string value)
+  {
+    this->_metadata.insert (std::pair<std::string, std::string> (key, value));
+  }
+
+  std::map <std::string, std::string>&&
+    KT_Msg::get_metadata ()
+  {
+    return std::move (_metadata);
+  }
+
+  // Payload methods
+  void KT_Msg::set_payload (const std::vector<unsigned char> payload)
+  {
+    this->_payload = payload;
+  }
+
+  std::vector<unsigned char>&& KT_Msg::get_payload ()
+  {
+    return std::move (_payload);
+  }
+  } // end of namespace Transport
+} // end of namespace KIARA
+
 /* Create new empty kt_msg_t
  */
 
