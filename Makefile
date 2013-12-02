@@ -23,6 +23,8 @@ lib: $(BUILDDIR)/KT_Client.o \
 	 $(BUILDDIR)/KT_Msg.o \
 	 $(BUILDDIR)/KT_Session.o \
 	 $(BUILDDIR)/KT_Zeromq.o
+	 
+CPPFLAGS_library = -std=c++11 -Weverything
 
 ## Target: server_http
 OBJS_server_http =  \
