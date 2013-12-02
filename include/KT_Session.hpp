@@ -25,7 +25,7 @@ private:
   // k_user_data is a pointer to an opaque data structure which is needed by the
   // upper layers of KIARA and will not be modified by the transport library.
   void* _k_user_data;
-  KIARA::Transport::KT_Client _endpoint;
+  void* _socket;
   
 public:
 
@@ -35,6 +35,16 @@ public:
 
   KT_Session ( );
   virtual ~KT_Session ( );
+
+	void set_socket ( void* socket )
+	{
+		_socket = socket;
+	}
+
+	void* get_socket ( )
+	{
+		return _socket;
+	}
 
   /**
    * Set the value of _k_user_data
@@ -54,22 +64,6 @@ public:
    */
   void* get_k_user_data ( )   {
     return _k_user_data;
-  }
-
-  /**
-   * Set the value of _endpoint
-   * @param endpoint the new value of _endpoint
-   */
-  void set_endpoint ( KIARA::Transport::KT_Client endpoint )   {
-      _endpoint = endpoint;
-  }
-
-  /**
-   * Get the value of _endpoint
-   * @return the value of _endpoint
-   */
-  KIARA::Transport::KT_Client get_endpoint ( ) const {
-    return _endpoint;
   }
 
 };
