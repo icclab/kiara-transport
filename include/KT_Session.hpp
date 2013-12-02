@@ -26,6 +26,7 @@ private:
   // upper layers of KIARA and will not be modified by the transport library.
   void* _k_user_data;
   void* _socket;
+  std::string _endpoint;
   
 public:
 
@@ -44,6 +45,14 @@ public:
 	void* get_socket ( )
 	{
 		return _socket;
+	}
+
+	void set_endpoint ( std::string endpoint) {
+		_endpoint = endpoint;
+	}
+
+	std::string get_endpoint () {
+		return _endpoint;
 	}
 
   /**
