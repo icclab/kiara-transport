@@ -1,6 +1,6 @@
 
-#ifndef KT_CONFIGURATION_H
-#define KT_CONFIGURATION_H
+#ifndef KT_CONFIGURATION_HPP
+#define KT_CONFIGURATION_HPP
 
 #include <string>
 
@@ -120,4 +120,4 @@ public:
 } // end of Transport namespace
 } // end of KIARA namespace
 
-#endif // KT_CONFIGURATION_H
+#endif // KT_CONFIGURATION_HPP
