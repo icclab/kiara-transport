@@ -24,11 +24,10 @@ namespace Transport {
 
 class KT_Connection
 {
-private:
+protected:
 
   void* _context;
-  void* _socket;
-  std::map< std::string, KIARA::Transport::KT_Session > _session;
+  std::map< std::string*, KIARA::Transport::KT_Session* > _sessions;
   KIARA::Transport::KT_Configuration* _configuration;
   
 public:
@@ -41,7 +40,8 @@ public:
    * @return int
    * @param endpoint Where to connect to
    */
-  virtual int connect ( KIARA::Transport::KT_Client &endpoint ) = 0;
+  virtual KIARA::Transport::KT_Session*
+  connect ( KIARA::Transport::KT_Client &endpoint ) = 0;
 
   /**
    * @param message Message for the receipient
@@ -56,7 +56,8 @@ public:
    *    0 will block forever, -1 will make the call asynchronous and only
    *    return a message if there was one previously received
    */
-  virtual KIARA::Transport::KT_Msg &recv ( int linger = 0 ) = 0;
+  virtual KIARA::Transport::KT_Msg *
+  recv ( int linger = 0 ) = 0;
 
   /**
    * @return void*
@@ -97,35 +98,19 @@ public:
   }
 
   /**
-   * Set the value of _socket
-   * @param socket the new value of _socket
-   */
-  virtual void set_socket ( void* socket )   {
-      _socket = socket;
-  }
-
-  /**
-   * Get the value of _socket
-   * @return the value of _socket
-   */
-  virtual void* get_socket ( ) {
-    return _socket;
-  }
-
-  /**
    * Set the value of _session
    * @param session the new value of _session
    */
-  virtual void set_session ( std::map< std::string, KIARA::Transport::KT_Session > &session ) {
-      _session = session;
+  virtual void set_session ( std::map< std::string*, KIARA::Transport::KT_Session* > &session ) {
+      _sessions = session;
   }
 
   /**
    * Get the value of _session
    * @return the value of _session
    */
-  virtual std::map< std::string, KIARA::Transport::KT_Session > &get_session ( ) {
-    return _session;
+  virtual std::map< std::string*, KIARA::Transport::KT_Session* > &get_session ( ) {
+    return _sessions;
   }
 
   /**
