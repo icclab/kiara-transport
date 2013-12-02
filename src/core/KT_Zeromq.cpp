@@ -70,13 +70,3 @@ KIARA::Transport::KT_Zeromq::disconnect ( KIARA::Transport::KT_Session& session 
 	// the actual value rendering the erase useless or even dangerous.
 	_sessions.erase( key );
 }
-/*
-
-void* kt_disconnect ( kt_conn_session_t* sess )
-{
-  zmq_close ( sess->_info->socket );
-  zmq_ctx_destroy ( sess->_info->context );
-  return sess->k_user_data;
-}
-
- */
