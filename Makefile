@@ -16,10 +16,11 @@ server_http: $(BUILDDIR)/server_http
 server_0mq: $(BUILDDIR)/server_0mq
 client_0mq: $(BUILDDIR)/client_0mq
 
+client_0mq_pp: $(BUILDDIR)/client_0mq_pp
+
 lib: $(BUILDDIR)/KT_Client.o \
 	 $(BUILDDIR)/KT_Configuration.o \
 	 $(BUILDDIR)/KT_Connection.o \
-	 $(BUILDDIR)/KT_Configuration.o \
 	 $(BUILDDIR)/KT_Msg.o \
 	 $(BUILDDIR)/KT_Session.o \
 	 $(BUILDDIR)/KT_Zeromq.o
@@ -52,6 +53,19 @@ USERLIBS_client_0mq = -lzmq -lczmq
 DEPLIBS_client_0mq =
 LDLIBS_client_0mq = $(USERLIBS_client_0mq)
 
+## Target: client_0mq_pp
+OBJS_client_0mq_pp = \
+	$(BUILDDIR)/main_client_0mq_pp.o \
+	$(BUILDDIR)/KT_Client.o \
+	$(BUILDDIR)/KT_Configuration.o \
+	$(BUILDDIR)/KT_Connection.o \
+	$(BUILDDIR)/KT_Msg.o \
+	$(BUILDDIR)/KT_Session.o \
+	$(BUILDDIR)/KT_Zeromq.o
+USERLIBS_client_0mq_pp = -lzmq -lczmq
+DEPLIBS_client_0mq_pp = $(libs)
+LDLIBS_client_0mq_pp = $(USERLIBS_client_0mq_pp)
+
 
 
 
@@ -66,6 +80,14 @@ $(BUILDDIR)/server_0mq: $(BUILDDIR) $(OBJS_server_0mq) $(DEPLIBS_server_0mq)
 # Link or archive
 $(BUILDDIR)/client_0mq: $(BUILDDIR) $(OBJS_client_0mq) $(DEPLIBS_client_0mq)
 	$(LINK.cpp) $(CFLAGS_client_0mq) $(CPPFLAGS_client_0mq) -o $@ $(OBJS_client_0mq) $(LDLIBS_client_0mq)
+	
+$(BUILDDIR)/client_0mq_pp: $(BUILDDIR) $(OBJS_client_0mq_pp) $(DEPLIBS_client_0mq_pp)
+	$(LINK.cpp) $(CFLAGS_client_0mq_pp) $(CPPFLAGS_client_0mq_pp) -o $@ $(OBJS_client_0mq_pp) $(LDLIBS_client_0mq_pp)
+	
+	
+	
+	
+	
 	
 	
 # Compile library files into .o files
@@ -90,6 +112,12 @@ $(BUILDDIR)/KT_Session.o: $(BUILDDIR) src/core/KT_Session.cpp
 $(BUILDDIR)/KT_Zeromq.o: $(BUILDDIR) src/core/KT_Zeromq.cpp
 	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Zeromq.cpp
 
+
+
+
+
+
+
 # Compile source files into .o files
 $(BUILDDIR)/ktransport.o: $(BUILDDIR) src/core/ktransport.c
 	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/core/ktransport.c
@@ -112,6 +140,8 @@ $(BUILDDIR)/main_server_0mq.o: $(BUILDDIR) src/examples/main_server_0mq.c
 $(BUILDDIR)/main_client_0mq.o: $(BUILDDIR) src/examples/main_client_0mq.c
 	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_client_0mq.c
 
+$(BUILDDIR)/main_client_0mq_pp.o: $(BUILDDIR) src/examples/main_client_0mq_req.cpp
+	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_client_0mq_req.cpp
 
 #### Clean target deletes all generated files ####
 clean:
