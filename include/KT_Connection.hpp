@@ -35,20 +35,20 @@ public:
 
   KT_Connection ( );
   virtual ~KT_Connection ( );
-  KT_Connection (std::string host);
+  KT_Connection (const std::string &host);
 
   /**
    * @return int
    * @param endpoint Where to connect to
    */
-  int connect ( KIARA::Transport::KT_Client endpoint );
+  virtual int connect ( KIARA::Transport::KT_Client &endpoint );
 
   /**
    * @param message Message for the receipient
    * @param linger Linger time before it aborts if sending synchronous,
    *    0 will block forever, -1 will make the call asynchronous
    */
-  void send ( KIARA::Transport::KT_Msg &message, int linger = 0 );
+  virtual void send ( KIARA::Transport::KT_Msg &message, int linger = 0 );
 
   /**
    * @return KIARA::Transport::KT_Msg
@@ -56,35 +56,35 @@ public:
    *    0 will block forever, -1 will make the call asynchronous and only
    *    return a message if there was one previously received
    */
-  KIARA::Transport::KT_Msg recv ( int linger = 0 );
+  virtual KIARA::Transport::KT_Msg &recv ( int linger = 0 );
 
   /**
    * @return void*
    */
-  void* disconnect ( );
+  virtual void* disconnect ( );
 
   /**
    * callback function must accept KT_Msg* and KT_Session* object
    * @param callback Function to be called when a message arrives
    */
-  void register_callback ( void (*callback)(KT_Msg*, KT_Session) );
+  virtual void register_callback ( void (*callback)(KT_Msg&, KT_Session&) );
 
   /**
    * bind requires a valid callback handler which is called when a message is
    * received, it binds according to the set configuration
    */
-  void bind ( );
+  virtual void bind ( );
   
   /**
    * stops listening to incomming messages
    */
-  void unbind ( );
+  virtual void unbind ( );
   
   /**
    * Set the value of _context
    * @param context the new value of _context
    */
-  void set_context ( void* context ) {
+  virtual void set_context ( void* context ) {
       _context = context;
   }
 
@@ -92,7 +92,7 @@ public:
    * Get the value of _context
    * @return the value of _context
    */
-  void* get_context ( ) {
+  virtual void* get_context ( ) {
     return _context;
   }
 
@@ -100,7 +100,7 @@ public:
    * Set the value of _socket
    * @param socket the new value of _socket
    */
-  void set_socket ( void* socket )   {
+  virtual void set_socket ( void* socket )   {
       _socket = socket;
   }
 
@@ -108,7 +108,7 @@ public:
    * Get the value of _socket
    * @return the value of _socket
    */
-  void* get_socket ( ) {
+  virtual void* get_socket ( ) {
     return _socket;
   }
 
@@ -116,7 +116,7 @@ public:
    * Set the value of _session
    * @param session the new value of _session
    */
-  void set_session ( std::map< std::string, KIARA::Transport::KT_Session > session ) {
+  virtual void set_session ( std::map< std::string, KIARA::Transport::KT_Session > &session ) {
       _session = session;
   }
 
@@ -124,7 +124,7 @@ public:
    * Get the value of _session
    * @return the value of _session
    */
-  std::map< std::string, KIARA::Transport::KT_Session > get_session ( ) {
+  virtual std::map< std::string, KIARA::Transport::KT_Session > &get_session ( ) {
     return _session;
   }
 
@@ -132,7 +132,7 @@ public:
    * Set the value of _configuration
    * @param configuration the new value of _configuration
    */
-  void set_configuration ( KIARA::Transport::KT_Configuration* configuration ) {
+  virtual void set_configuration ( KIARA::Transport::KT_Configuration* configuration ) {
       _configuration = configuration;
   }
 
@@ -140,7 +140,7 @@ public:
    * Get the value of _configuration
    * @return the value of _configuration
    */
-  KIARA::Transport::KT_Configuration* get_configuration ( )   {
+  virtual KIARA::Transport::KT_Configuration* get_configuration ( )   {
     return _configuration;
   }
   
