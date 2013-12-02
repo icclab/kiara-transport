@@ -41,14 +41,14 @@ public:
    * @return int
    * @param endpoint Where to connect to
    */
-  virtual int connect ( KIARA::Transport::KT_Client &endpoint );
+  virtual int connect ( KIARA::Transport::KT_Client &endpoint ) = 0;
 
   /**
    * @param message Message for the receipient
    * @param linger Linger time before it aborts if sending synchronous,
    *    0 will block forever, -1 will make the call asynchronous
    */
-  virtual void send ( KIARA::Transport::KT_Msg &message, int linger = 0 );
+  virtual void send ( KIARA::Transport::KT_Msg &message, int linger = 0 ) = 0;
 
   /**
    * @return KIARA::Transport::KT_Msg
@@ -56,29 +56,29 @@ public:
    *    0 will block forever, -1 will make the call asynchronous and only
    *    return a message if there was one previously received
    */
-  virtual KIARA::Transport::KT_Msg &recv ( int linger = 0 );
+  virtual KIARA::Transport::KT_Msg &recv ( int linger = 0 ) = 0;
 
   /**
    * @return void*
    */
-  virtual void* disconnect ( );
+  virtual void* disconnect ( ) = 0;
 
   /**
    * callback function must accept KT_Msg* and KT_Session* object
    * @param callback Function to be called when a message arrives
    */
-  virtual void register_callback ( void (*callback)(KT_Msg&, KT_Session&) );
+  virtual void register_callback ( void (*callback)(KT_Msg&, KT_Session&) ) = 0;
 
   /**
    * bind requires a valid callback handler which is called when a message is
    * received, it binds according to the set configuration
    */
-  virtual void bind ( );
+  virtual void bind ( ) = 0;
   
   /**
    * stops listening to incomming messages
    */
-  virtual void unbind ( );
+  virtual void unbind ( ) = 0;
   
   /**
    * Set the value of _context
