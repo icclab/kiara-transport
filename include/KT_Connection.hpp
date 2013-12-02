@@ -48,7 +48,8 @@ public:
    * @param linger Linger time before it aborts if sending synchronous,
    *    0 will block forever, -1 will make the call asynchronous
    */
-  virtual void send ( KIARA::Transport::KT_Msg &message, int linger = 0 ) = 0;
+  virtual void
+  send ( KIARA::Transport::KT_Msg &message, KIARA::Transport::KT_Session &session, int linger = 0 ) = 0;
 
   /**
    * @return KIARA::Transport::KT_Msg
@@ -57,12 +58,13 @@ public:
    *    return a message if there was one previously received
    */
   virtual KIARA::Transport::KT_Msg *
-  recv ( int linger = 0 ) = 0;
+  recv ( KIARA::Transport::KT_Session& session, int linger = 0 ) = 0;
 
   /**
    * @return void*
    */
-  virtual void* disconnect ( ) = 0;
+  virtual void
+  disconnect ( KIARA::Transport::KT_Session& session ) = 0;
 
   /**
    * callback function must accept KT_Msg* and KT_Session* object
