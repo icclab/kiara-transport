@@ -16,6 +16,14 @@ server_http: $(BUILDDIR)/server_http
 server_0mq: $(BUILDDIR)/server_0mq
 client_0mq: $(BUILDDIR)/client_0mq
 
+lib: $(BUILDDIR)/KT_Client.o \
+	 $(BUILDDIR)/KT_Configuration.o \
+	 $(BUILDDIR)/KT_Connection.o \
+	 $(BUILDDIR)/KT_Configuration.o \
+	 $(BUILDDIR)/KT_Msg.o \
+	 $(BUILDDIR)/KT_Session.o \
+	 $(BUILDDIR)/KT_Zeromq.o
+
 ## Target: server_http
 OBJS_server_http =  \
 	$(BUILDDIR)/main_server_http.o \
@@ -56,9 +64,29 @@ $(BUILDDIR)/server_0mq: $(BUILDDIR) $(OBJS_server_0mq) $(DEPLIBS_server_0mq)
 # Link or archive
 $(BUILDDIR)/client_0mq: $(BUILDDIR) $(OBJS_client_0mq) $(DEPLIBS_client_0mq)
 	$(LINK.cpp) $(CFLAGS_client_0mq) $(CPPFLAGS_client_0mq) -o $@ $(OBJS_client_0mq) $(LDLIBS_client_0mq)
+	
+	
+# Compile library files into .o files
+$(BUILDDIR)/KT_Client.o: $(BUILDDIR) src/core/KT_Client.cpp
+	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Client.cpp
 
+$(BUILDDIR)/KT_Configuration.o: $(BUILDDIR) src/core/KT_Configuration.cpp
+	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Configuration.cpp
+	
+$(BUILDDIR)/KT_Connection.o: $(BUILDDIR) src/core/KT_Connection.cpp
+	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Connection.cpp
 
+$(BUILDDIR)/KT_Configuration.o: $(BUILDDIR) src/core/KT_Configuration.cpp
+	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Configuration.cpp
 
+$(BUILDDIR)/KT_Msg.o: $(BUILDDIR) src/core/KT_Msg.cpp
+	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Msg.cpp
+
+$(BUILDDIR)/KT_Session.o: $(BUILDDIR) src/core/KT_Session.cpp
+	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Session.cpp
+
+$(BUILDDIR)/KT_Zeromq.o: $(BUILDDIR) src/core/KT_Zeromq.cpp
+	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Zeromq.cpp
 
 # Compile source files into .o files
 $(BUILDDIR)/ktransport.o: $(BUILDDIR) src/core/ktransport.c
