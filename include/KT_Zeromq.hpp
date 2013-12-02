@@ -66,18 +66,18 @@ public:
    * callback function must accept KT_Msg* and KT_Session* object
    * @param callback Function to be called when a message arrives
    */
-  virtual void register_callback ( void (*callback)(KT_Msg&, KT_Session&) );
+  void register_callback ( void (*callback)(KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session& session) );
 
   /**
    * bind requires a valid callback handler which is called when a message is
    * received, it binds according to the set configuration
    */
-  virtual void bind ( );
+  void bind ( );
   
   /**
    * stops listening to incomming messages
    */
-  virtual void unbind ( );
+  void unbind ( );
   
 
 }; // end of KT_Connection class

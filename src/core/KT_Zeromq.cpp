@@ -70,3 +70,25 @@ KIARA::Transport::KT_Zeromq::disconnect ( KIARA::Transport::KT_Session& session 
 	// the actual value rendering the erase useless or even dangerous.
 	_sessions.erase( key );
 }
+
+void
+KIARA::Transport::KT_Zeromq::register_callback ( void (*callback)(KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session& session) ) {
+
+}
+
+/**
+ * bind requires a valid callback handler which is called when a message is
+ * received, it binds according to the set configuration
+ */
+void
+KIARA::Transport::KT_Zeromq::bind ( ) {
+
+}
+
+/**
+ * stops listening to incomming messages
+ */
+void
+KIARA::Transport::KT_Zeromq::unbind ( ) {
+
+}
