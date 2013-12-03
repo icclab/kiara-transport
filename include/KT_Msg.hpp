@@ -69,8 +69,8 @@ public:
   }
 
   void set_payload ( std::string &payload) {
-	  //_payload->assign (payload.begin(), payload.end());
-	  _payload->assign (5, 'c');
+	  _payload->resize (payload.size());
+	  _payload->assign (payload.begin(), payload.end());
   }
 
   /**
