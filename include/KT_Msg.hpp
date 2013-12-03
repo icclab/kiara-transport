@@ -30,12 +30,12 @@ class KT_Msg
 {
 private:
   std::map< std::string, std::string > _metadata;
-  std::vector< unsigned char > *_payload;
+  std::vector< char > *_payload;
 
 public:
   KT_Msg ( );
   virtual ~KT_Msg ( );
-  KT_Msg ( std::vector< unsigned char >* payload);
+  KT_Msg ( std::vector< char >* payload);
 
   void add_metadata ( std::string &key, std::string &value );
   std::string get_serialized_metadata ( const std::string delim );
@@ -64,15 +64,20 @@ public:
    * Set the value of _payload
    * @param payload the new value of _payload
    */
-  void set_payload ( std::vector< unsigned char > *payload ) {
+  void set_payload ( std::vector< char > *payload ) {
     _payload = payload;
+  }
+
+  void set_payload ( std::string &payload) {
+	  //_payload->assign (payload.begin(), payload.end());
+	  _payload->assign (5, 'c');
   }
 
   /**
    * Get the value of _payload
    * @return the value of _payload
    */
-  std::vector< unsigned char > *get_payload ( ) {
+  std::vector< char > *get_payload ( ) {
     return _payload;
   }
 

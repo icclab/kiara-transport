@@ -16,7 +16,7 @@ namespace Transport {
 KT_Msg::KT_Msg ( ) { }
 KT_Msg::~KT_Msg ( ) { }
 
-KT_Msg::KT_Msg ( std::vector< unsigned char > *payload) {
+KT_Msg::KT_Msg ( std::vector< char > *payload) {
     _payload = payload;
 }
 

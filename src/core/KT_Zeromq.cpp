@@ -49,7 +49,7 @@ KIARA::Transport::KT_Zeromq::send ( KIARA::Transport::KT_Msg &message, KIARA::Tr
 KIARA::Transport::KT_Msg*
 KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, int linger ) {
 	// TODO: Remove magic number
-	std::vector< unsigned char > *buffer = new std::vector< unsigned char >(1024);
+	std::vector< char > *buffer = new std::vector< char >(1024);
 	int rc = zmq_recv ( session.get_socket(), &buffer[0], 1024, linger);
 	if ( -1 == rc )
 		return NULL;
