@@ -17,7 +17,9 @@ KT_Msg::KT_Msg ( ) {
     _payload = new std::vector < char >;
     //_metadata = new std::map < std::string, std::string >; 
 }
-KT_Msg::~KT_Msg ( ) { }
+KT_Msg::~KT_Msg ( ) {
+	delete (_payload);
+}
 
 KT_Msg::KT_Msg ( std::vector< char > *payload) {
     _payload = payload;
