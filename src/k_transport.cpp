@@ -63,16 +63,12 @@ namespace KIARA {
   } // end of namespace Transport
 } // end of namespace KIARA
 
-/* Create new empty kt_msg_t
- */
+/* KIARA::Transport::KT_Msg C wrapper */
 
 kt_msg* kt_msg_new ()
 {
   return reinterpret_cast<kt_msg*>(new KIARA::Transport::KT_Msg());
 }
-
-/* Destroy passed kt_msg_t*
- */
 
 void kt_msg_destroy ( kt_msg* msg )
 {
