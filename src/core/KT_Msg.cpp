@@ -13,7 +13,10 @@ namespace Transport {
 // Constructors/Destructors
 //  
 
-KT_Msg::KT_Msg ( ) { }
+KT_Msg::KT_Msg ( ) { 
+    _payload = new std::vector < char >;
+    //_metadata = new std::map < std::string, std::string >; 
+}
 KT_Msg::~KT_Msg ( ) { }
 
 KT_Msg::KT_Msg ( std::vector< char > *payload) {
