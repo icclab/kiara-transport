@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <cstdlib> // for malloc
+#include <cstring> // for memcpys
 #include <zmq.h>
 
 KIARA::Transport::KT_Zeromq::KT_Zeromq() {
