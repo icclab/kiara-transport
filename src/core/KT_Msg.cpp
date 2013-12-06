@@ -39,7 +39,7 @@ void KT_Msg::add_metadata ( std::string &key, std::string &value ) {
  * @param delim A delimiter, standard is ':'
  * @return A std::string with a serialized variant
  */
-std::string KT_Msg::get_serialized_metadata ( const std::string delim = ":" ) {
+std::string KT_Msg::get_serialized_metadata ( const std::string delim) {
     std::map < std::string, std::string >::iterator metadata_iter;
     std::string result;
     

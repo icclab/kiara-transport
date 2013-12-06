@@ -38,7 +38,7 @@ public:
   KT_Msg ( std::vector< char >& payload);
 
   void add_metadata ( std::string &key, std::string &value );
-  std::string get_serialized_metadata ( const std::string delim );
+  std::string get_serialized_metadata ( const std::string delim = ":");
   
   //
   // Simple getter/setter methods
