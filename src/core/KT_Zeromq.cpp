@@ -19,7 +19,7 @@ KIARA::Transport::KT_Zeromq::~KT_Zeromq() {
 }
 
 KIARA::Transport::KT_Session*
-KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client &endpoint ) {
+KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint ) {
 	void* socket = zmq_socket ( _context, ZMQ_REQ );
 	const char* host = endpoint.get_endpoint().c_str();
 	int rc = zmq_connect ( socket, host );
@@ -38,16 +38,16 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client &endpoint ) {
 }
 
 void
-KIARA::Transport::KT_Zeromq::send ( KIARA::Transport::KT_Msg &message, KIARA::Transport::KT_Session &session, int linger) {
-	zmq_send ( session.get_socket(), message.get_payload()->data(), message.get_payload()->size() + 1, linger );
+KIARA::Transport::KT_Zeromq::send ( KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session& session, int linger) {
+	zmq_send ( session.get_socket(), message.get_payload().data(), message.get_payload().size() + 1, linger );
 }
 
 KIARA::Transport::KT_Msg*
 KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, int linger ) {
 	// TODO: Remove magic number
-	std::vector< char > *buffer = new std::vector< char >;
-	buffer->resize(1024);
-	int rc = zmq_recv ( session.get_socket(), buffer->data(), buffer->size(), linger);
+	std::vector< char > buffer;
+	buffer.resize(1024);
+	int rc = zmq_recv ( session.get_socket(), buffer.data(), buffer.size(), linger);
 	if ( -1 == rc )
 		return NULL;
 
