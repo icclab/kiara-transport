@@ -21,12 +21,19 @@ KIARA::Transport::KT_Zeromq::~KT_Zeromq() {
 
 void
 KIARA::Transport::KT_Zeromq::poller (void* socket) {
+	KIARA::Transport::KT_Msg msg;
+	KIARA::Transport::KT_Session sess;
 	while (1)
 	{
-		char buffer[10];
-		zmq_recv (socket, buffer, 10, 0);
-		printf ("Received: %s\n", buffer);
-		zmq_send (socket, "Reply", 5, 0);
+		std::vector< char > buffer;
+		buffer.resize ( 1024 );
+		int rc = zmq_recv ( socket, buffer.data(), buffer.size(), 0);
+		if ( -1 == rc )
+			break;
+
+		msg.set_payload ( buffer );
+		_callback ( msg, sess );
+		zmq_send ( socket, "World", 5, 0 );
 	}
 }
 
@@ -85,8 +92,7 @@ void
 KIARA::Transport::KT_Zeromq::bind ( std::string endpoint ) {
 	void* socket = zmq_socket ( _context, ZMQ_REP );
 	zmq_bind ( socket, endpoint.c_str() );
-
-	std::thread t1 ( poller, socket );
+	std::thread t1 ( &KT_Zeromq::poller, this, socket );
 	t1.join();
 
 }

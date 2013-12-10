@@ -26,7 +26,7 @@ namespace Transport {
 class KT_Zeromq : public KT_Connection
 {
 private:
-	static void poller (void* socket);
+	void poller (void* socket);
 
 public:
 
