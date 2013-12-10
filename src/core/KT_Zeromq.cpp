@@ -30,9 +30,7 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint ) {
 	KIARA::Transport::KT_Session *session = new KIARA::Transport::KT_Session ();
 	session->set_socket ( socket );
 	session->set_endpoint ( endpoint.get_endpoint() );
-
-	std::string *identifier = new std::string (endpoint.get_endpoint());
-	_sessions.insert ( std::pair<std::string*, KIARA::Transport::KT_Session*>(identifier, session) );
+	_sessions.insert ( std::pair<std::string, KIARA::Transport::KT_Session*>(endpoint.get_endpoint(), session) );
 
 	return session;
 }
@@ -46,7 +44,7 @@ KIARA::Transport::KT_Msg*
 KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, int linger ) {
 	// TODO: Remove magic number
 	std::vector< char > buffer;
-	buffer.resize(1024);
+	buffer.resize ( 1024 );
 	int rc = zmq_recv ( session.get_socket(), buffer.data(), buffer.size(), linger);
 	if ( -1 == rc )
 		return NULL;
@@ -59,12 +57,7 @@ KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, int l
 void
 KIARA::Transport::KT_Zeromq::disconnect ( KIARA::Transport::KT_Session& session ) {
 	zmq_close ( session.get_socket() );
-	std::string *key = new std::string ( session.get_endpoint() );
-
-	// something bugs me … does it then compare the address of the key or the value?
-	// since this is a pointer it might not get dereferenced and the address used instead
-	// the actual value rendering the erase useless or even dangerous.
-	_sessions.erase( key );
+	_sessions.erase( session.get_endpoint() );
 }
 
 void
