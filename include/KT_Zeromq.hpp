@@ -30,14 +30,14 @@ public:
 
   KT_Zeromq ( );
   virtual ~KT_Zeromq ( );
-  KT_Zeromq (const std::string &host);
+  KT_Zeromq ( std::string const& host);
 
   /**
    * @return int
    * @param endpoint Where to connect to
    */
-  KIARA::Transport::KT_Session*
-  connect ( KIARA::Transport::KT_Client &endpoint );
+  KT_Session*
+  connect ( KT_Client& endpoint );
 
   /**
    * @param message Message for the receipient
@@ -45,7 +45,7 @@ public:
    *    0 will block forever, -1 will make the call asynchronous
    */
   void
-  send ( KIARA::Transport::KT_Msg &message, KIARA::Transport::KT_Session &session, int linger = 0 );
+  send ( KT_Msg& message, KT_Session& session, int linger = 0 );
 
   /**
    * @return KIARA::Transport::KT_Msg
@@ -53,20 +53,20 @@ public:
    *    0 will block forever, -1 will make the call asynchronous and only
    *    return a message if there was one previously received
    */
-  KIARA::Transport::KT_Msg*
-  recv ( KIARA::Transport::KT_Session& session, int linger = 0 );
+  KT_Msg*
+  recv ( KT_Session& session, int linger = 0 );
 
   /**
    * @return void*
    */
   void
-  disconnect ( KIARA::Transport::KT_Session& session );
+  disconnect ( KT_Session& session );
 
   /**
    * callback function must accept KT_Msg* and KT_Session* object
    * @param callback Function to be called when a message arrives
    */
-  void register_callback ( void (*callback)(KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session& session) );
+  void register_callback ( void (*callback)(KT_Msg& message, KT_Session& session) );
 
   /**
    * bind requires a valid callback handler which is called when a message is
