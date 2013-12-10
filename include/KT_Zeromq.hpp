@@ -72,7 +72,7 @@ public:
    * bind requires a valid callback handler which is called when a message is
    * received, it binds according to the set configuration
    */
-  void bind ( );
+  void bind ( std::string endpoint );
   
   /**
    * stops listening to incomming messages

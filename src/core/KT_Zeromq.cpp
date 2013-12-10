@@ -70,8 +70,17 @@ KIARA::Transport::KT_Zeromq::register_callback ( void (*callback)(KIARA::Transpo
  * received, it binds according to the set configuration
  */
 void
-KIARA::Transport::KT_Zeromq::bind ( ) {
+KIARA::Transport::KT_Zeromq::bind ( std::string endpoint ) {
+	void* socket = zmq_socket ( _context, ZMQ_REP );
+	zmq_bind ( socket, endpoint.c_str() );
 
+	while (1)
+	{
+		char buffer[10];
+		zmq_recv (socket, buffer, 10, 0);
+		printf ("Received: %s\n", buffer);
+		zmq_send (socket, "Reply", 5, 0);
+	}
 }
 
 /**

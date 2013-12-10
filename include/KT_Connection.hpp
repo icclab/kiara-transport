@@ -76,7 +76,7 @@ public:
    * bind requires a valid callback handler which is called when a message is
    * received, it binds according to the set configuration
    */
-  virtual void bind ( ) = 0;
+  virtual void bind ( std::string ) = 0;
   
   /**
    * stops listening to incomming messages
