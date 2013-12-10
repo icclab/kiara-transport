@@ -29,6 +29,7 @@ protected:
   void* _context;
   std::map< std::string, KT_Session* > _sessions;
   KT_Configuration _configuration;
+  void (*_callback)(KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session& session);
   
 public:
 
