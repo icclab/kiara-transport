@@ -9,6 +9,7 @@
 
 #include <string>
 #include <map>
+#include <thread>
 
 #include "KT_Connection.hpp"
 #include "KT_Configuration.hpp"
@@ -26,6 +27,8 @@ namespace Transport {
 class KT_Zeromq : public KT_Connection
 {
 private:
+	std::thread* poller_thread;
+	bool interupted = false;
 	void poller ( void* socket, std::string endpoint );
 
 public:

@@ -9,7 +9,6 @@
 
 #include <algorithm>
 #include <zmq.h>
-#include <thread>
 
 KIARA::Transport::KT_Zeromq::KT_Zeromq() {
 	_context = zmq_ctx_new ();
@@ -23,15 +22,15 @@ void
 KIARA::Transport::KT_Zeromq::poller ( void* socket, std::string endpoint ) {
 	KIARA::Transport::KT_Msg msg;
 	KIARA::Transport::KT_Session* sess = _sessions.find ( endpoint )->second;
-	while (1)
+	std::vector< char > buffer;
+	while (!interupted)
 	{
-		std::vector< char > buffer;
 		buffer.resize ( 1024 );
 		int rc = zmq_recv ( socket, buffer.data(), buffer.size(), 0);
 		if ( -1 == rc )
 			break;
 
-		msg.set_payload ( buffer );
+		msg.set_payload ( std::move(buffer) );
 		_callback ( msg, sess, this );
 		zmq_send ( socket, "World", 5, 0 );
 	}
@@ -40,6 +39,7 @@ KIARA::Transport::KT_Zeromq::poller ( void* socket, std::string endpoint ) {
 KIARA::Transport::KT_Session*
 KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint ) {
 	void* socket = zmq_socket ( _context, ZMQ_REQ );
+	// TODO: fix dangerous pointer to underlying data structure
 	const char* host = endpoint.get_endpoint().c_str();
 	int rc = zmq_connect ( socket, host );
 
@@ -101,8 +101,8 @@ KIARA::Transport::KT_Zeromq::bind ( std::string endpoint ) {
 	session->set_endpoint ( endpoint );
 	_sessions.insert ( std::make_pair ( endpoint, session ) );
 
-	std::thread t1 ( &KT_Zeromq::poller, this, socket, endpoint );
-	t1.join();
+	poller_thread = new std::thread ( &KT_Zeromq::poller, this, socket, endpoint );
+
 
 }
 
@@ -111,5 +111,6 @@ KIARA::Transport::KT_Zeromq::bind ( std::string endpoint ) {
  */
 void
 KIARA::Transport::KT_Zeromq::unbind ( ) {
-
+	interupted = true;
+	poller_thread->join();
 }
