@@ -20,7 +20,7 @@ int main ()
 	endpoint.set_endpoint ( "tcp://localhost:5555" );
 	KT_Session *session = connection->connect ( endpoint );
 
-	std::string payload ( "Hello" );
+	std::string payload ( "Hello World, here you can store up to 1024bytes of payload" );
 	KT_Msg message;
 	message.set_payload ( payload );
 
