@@ -26,7 +26,7 @@ namespace Transport {
 class KT_Zeromq : public KT_Connection
 {
 private:
-	void poller (void* socket);
+	void poller ( void* socket, std::string endpoint );
 
 public:
 
@@ -68,7 +68,7 @@ public:
    * callback function must accept KT_Msg* and KT_Session* object
    * @param callback Function to be called when a message arrives
    */
-  void register_callback ( void (*callback)(KT_Msg& message, KT_Session& session) );
+  void register_callback ( void (*callback)(KT_Msg& message, KT_Session* session, KIARA::Transport::KT_Connection* obj) );
 
   /**
    * bind requires a valid callback handler which is called when a message is

@@ -29,7 +29,7 @@ protected:
   void* _context;
   std::map< std::string, KT_Session* > _sessions;
   KT_Configuration _configuration;
-  void (*_callback)(KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session& session);
+  void (*_callback)(KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session* session, KIARA::Transport::KT_Connection* obj);
   
 public:
 
@@ -71,7 +71,7 @@ public:
    * callback function must accept KT_Msg* and KT_Session* object
    * @param callback Function to be called when a message arrives
    */
-  virtual void register_callback ( void (*callback)(KT_Msg&, KT_Session&) ) = 0;
+  virtual void register_callback ( void (*callback)(KT_Msg&, KT_Session*, KIARA::Transport::KT_Connection*) ) = 0;
 
   /**
    * bind requires a valid callback handler which is called when a message is
