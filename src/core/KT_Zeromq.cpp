@@ -25,6 +25,7 @@ KIARA::Transport::KT_Zeromq::poller ( void* socket, std::string endpoint ) {
 	std::vector< char > buffer;
 	while (!interupted)
 	{
+		// TODO: Remove magic number
 		buffer.resize ( 1024 );
 		int rc = zmq_recv ( socket, buffer.data(), buffer.size(), 0);
 		if ( -1 == rc )
@@ -61,7 +62,7 @@ KIARA::Transport::KT_Zeromq::send ( KIARA::Transport::KT_Msg& message, KIARA::Tr
 
 KIARA::Transport::KT_Msg*
 KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, int linger ) {
-	// TODO: Remove magic number
+	// TODO Remove magic number
 	std::vector< char > buffer;
 	buffer.resize ( 1024 );
 	int rc = zmq_recv ( session.get_socket(), buffer.data(), buffer.size(), linger);
@@ -101,6 +102,7 @@ KIARA::Transport::KT_Zeromq::bind ( std::string endpoint ) {
 	session->set_endpoint ( endpoint );
 	_sessions.insert ( std::make_pair ( endpoint, session ) );
 
+	interupted = false;
 	poller_thread = new std::thread ( &KT_Zeromq::poller, this, socket, endpoint );
 
 

@@ -28,7 +28,7 @@ class KT_Zeromq : public KT_Connection
 {
 private:
 	std::thread* poller_thread;
-	bool interupted = false;
+	bool interupted;
 	void poller ( void* socket, std::string endpoint );
 
 public:
@@ -62,7 +62,7 @@ public:
   recv ( KT_Session& session, int linger = 0 );
 
   /**
-   * @return void*
+   *
    */
   void
   disconnect ( KT_Session& session );

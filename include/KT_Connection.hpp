@@ -62,7 +62,7 @@ public:
   recv ( KT_Session& session, int linger = 0 ) = 0;
 
   /**
-   * @return void*
+   *
    */
   virtual void
   disconnect ( KT_Session& session ) = 0;

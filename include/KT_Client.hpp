@@ -39,7 +39,7 @@ public:
 	/**
 	 * @return string
 	 */
-	std::string get_endpoint ( )
+	std::string& get_endpoint ( )
 	{
 		return _endpoint_identifier;
 	}
@@ -60,6 +60,13 @@ public:
 		return _endpoint_identifier;
 	}
 
+	void* get_socket() const	{
+		return _socket;
+	}
+
+	void set_socket(void* socket) {
+		_socket = socket;
+	}
 };
 } // end of Transport namespace
 } // end of KIARA namespace

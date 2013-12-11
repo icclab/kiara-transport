@@ -1,9 +1,10 @@
 #### Compiler and tool definitions shared by all build targets #####
 # CC = gcc
-CC = clang-mp-3.3
-CXX = clang++-mp-3.3
-BASICOPTS = -g
-CFLAGS = $(BASICOPTS) -pedantic -Wall
+CC = clang
+CXX = clang++
+BASICOPTS = -g  -pedantic -Wall -Weverything -Wno-padded
+CFLAGS = $(BASICOPTS)
+CPPFLAGS = $(BASICOPTS) -std=c++11
 
 
 # Define the target directories.
@@ -26,7 +27,7 @@ lib: $(BUILDDIR)/KT_Client.o \
 	 $(BUILDDIR)/KT_Session.o \
 	 $(BUILDDIR)/KT_Zeromq.o
 	 
-CPPFLAGS_library = -std=c++11 -Weverything
+CPPFLAGS_library = $(CPPFLAGS)
 
 ## Target: server_http
 OBJS_server_http =  \
@@ -108,9 +109,6 @@ $(BUILDDIR)/server_0mq_pp: $(BUILDDIR) $(OBJS_server_0mq_pp) $(DEPLIBS_server_0m
 $(BUILDDIR)/KT_Client.o: $(BUILDDIR) src/core/KT_Client.cpp
 	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Client.cpp
 
-$(BUILDDIR)/KT_Configuration.o: $(BUILDDIR) src/core/KT_Configuration.cpp
-	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Configuration.cpp
-	
 $(BUILDDIR)/KT_Connection.o: $(BUILDDIR) src/core/KT_Connection.cpp
 	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Connection.cpp
 

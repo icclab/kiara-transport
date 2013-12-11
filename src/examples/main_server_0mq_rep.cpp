@@ -12,15 +12,7 @@
 
 using namespace KIARA::Transport;
 
-void callback_handler ( KIARA::Transport::KT_Msg& msg, KIARA::Transport::KT_Session* sess, KIARA::Transport::KT_Connection* obj) {
-	std::cout << "Callback called ...";
-	std::cout << msg.get_payload().data() << std::endl;
-	std::string payload ( "Hello" );
-	KT_Msg message;
-	message.set_payload ( payload );
-
-	obj->send ( message, (*sess), 0 );
-}
+void callback_handler ( KT_Msg&, KT_Session*, KT_Connection* );
 
 int main ()
 {
@@ -34,4 +26,14 @@ int main ()
 	connection->unbind();
 
 	exit ( 0 );
+}
+
+void callback_handler ( KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
+	std::cout << "Callback called ...";
+	std::cout << msg.get_payload().data() << std::endl;
+	std::string payload ( "Hello" );
+	KT_Msg message;
+	message.set_payload ( payload );
+
+	obj->send ( message, (*sess), 0 );
 }
