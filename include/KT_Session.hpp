@@ -8,6 +8,7 @@
 #define KT_SESSION_HPP
 
 #include <string>
+#include <vector>
 
 #include "KT_Client.hpp"
 
@@ -27,6 +28,7 @@ private:
   void* _k_user_data;
   void* _socket;
   std::string _endpoint;
+  std::vector< char > _zeromq_identifier;
   
 public:
 
@@ -75,6 +77,15 @@ public:
     return _k_user_data;
   }
 
+	const std::vector< char >& get_zeromq_identifier() const
+	{
+		return _zeromq_identifier;
+	}
+
+	void set_zeromq_identifier(const std::vector< char >& zeromqIdentifier)
+	{
+		_zeromq_identifier = zeromqIdentifier;
+	}
 };
 } // end of Transport namespace
 } // end of KIARA namespace

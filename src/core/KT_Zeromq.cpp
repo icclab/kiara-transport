@@ -6,8 +6,9 @@
  */
 
 #include "../../include/KT_Zeromq.hpp"
-
 #include <algorithm>
+#include <cassert>
+#include <iostream>
 #include <zmq.h>
 
 KIARA::Transport::KT_Zeromq::KT_Zeromq() {
@@ -20,20 +21,11 @@ KIARA::Transport::KT_Zeromq::~KT_Zeromq() {
 
 void
 KIARA::Transport::KT_Zeromq::poller ( void* socket, std::string endpoint ) {
-	KIARA::Transport::KT_Msg msg;
 	KIARA::Transport::KT_Session* sess = _sessions.find ( endpoint )->second;
-	std::vector< char > buffer;
 	while (!interupted)
 	{
-		// TODO: Remove magic number
-		buffer.resize ( 1024 );
-		int rc = zmq_recv ( socket, buffer.data(), buffer.size(), 0);
-		if ( -1 == rc )
-			break;
-
-		msg.set_payload ( std::move(buffer) );
+		KT_Msg msg = recv (*sess, 0);
 		_callback ( msg, sess, this );
-		zmq_send ( socket, "World", 5, 0 );
 	}
 }
 
@@ -54,24 +46,43 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint ) {
 
 	return session;
 }
-
+// Zeromq has no synchronous send. Thus linger is correctly throwing a -Wunused warning
 void
 KIARA::Transport::KT_Zeromq::send ( KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session& session, int linger) {
-	zmq_send ( session.get_socket(), message.get_payload().data(), message.get_payload().size() + 1, linger );
+	if ( KT_STREAM == _configuration.get_application_type() )
+	{
+		zmq_send ( session.get_socket(), session.get_zeromq_identifier().data(), session.get_zeromq_identifier().size(), ZMQ_SNDMORE );
+	}
+	zmq_send ( session.get_socket(), message.get_payload().data(), message.get_payload().size() + 1, 0 );
 }
 
-KIARA::Transport::KT_Msg*
+// Zeromq has no asynchronous recv. Thus linger is correctly throwing a -Wunused warning
+// zmq_recv will block until a message arrived
+KIARA::Transport::KT_Msg
 KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, int linger ) {
-	// TODO Remove magic number
+	KIARA::Transport::KT_Msg message;
 	std::vector< char > buffer;
-	buffer.resize ( 1024 );
-	int rc = zmq_recv ( session.get_socket(), buffer.data(), buffer.size(), linger);
-	if ( -1 == rc )
-		return NULL;
+	std::vector< char > identifier;
 
-	KIARA::Transport::KT_Msg* message = new KIARA::Transport::KT_Msg();
-	message->set_payload(buffer);
-	return message;
+	// TODO: Remove magic number
+	if ( KT_STREAM == _configuration.get_application_type() )
+	{
+		identifier.resize ( 1024 );
+		int size = zmq_recv ( session.get_socket(), identifier.data(), identifier.size(), 0);
+		identifier.resize ( (size_t)size );
+		session.set_zeromq_identifier ( std::move(identifier) );
+	}
+
+	// TODO Remove magic number
+	buffer.resize ( 1024 );
+	int rc = zmq_recv ( session.get_socket(), buffer.data(), buffer.size(), 0);
+	if ( -1 == rc )
+		return std::move ( message );
+
+	buffer.resize ( (size_t)rc );
+
+	message.set_payload ( std::move(buffer) );
+	return std::move ( message );
 }
 
 void
@@ -91,7 +102,18 @@ KIARA::Transport::KT_Zeromq::register_callback ( void (*callback)(KIARA::Transpo
  */
 void
 KIARA::Transport::KT_Zeromq::bind ( std::string endpoint ) {
-	void* socket = zmq_socket ( _context, ZMQ_REP );
+	void* socket = NULL;
+
+	if ( KT_STREAM == _configuration.get_application_type() )
+	{
+		socket = zmq_socket ( _context, ZMQ_STREAM );
+	}
+	else if ( KT_REQUESTREPLY == _configuration.get_application_type() )
+	{
+		socket = zmq_socket ( _context, ZMQ_REP);
+	}
+
+	assert ( socket );
 	int rc = zmq_bind ( socket, endpoint.c_str() );
 
 	if ( 0 != rc )
@@ -104,8 +126,6 @@ KIARA::Transport::KT_Zeromq::bind ( std::string endpoint ) {
 
 	interupted = false;
 	poller_thread = new std::thread ( &KT_Zeromq::poller, this, socket, endpoint );
-
-
 }
 
 /**

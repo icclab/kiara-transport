@@ -58,7 +58,7 @@ public:
    *    0 will block forever, -1 will make the call asynchronous and only
    *    return a message if there was one previously received
    */
-  virtual KT_Msg*
+  virtual KT_Msg
   recv ( KT_Session& session, int linger = 0 ) = 0;
 
   /**

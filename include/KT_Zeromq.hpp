@@ -11,6 +11,8 @@
 #include <map>
 #include <thread>
 
+#include "k_transport.h"
+
 #include "KT_Connection.hpp"
 #include "KT_Configuration.hpp"
 #include "KT_Msg.hpp"
@@ -58,7 +60,7 @@ public:
    *    0 will block forever, -1 will make the call asynchronous and only
    *    return a message if there was one previously received
    */
-  KT_Msg*
+  KT_Msg
   recv ( KT_Session& session, int linger = 0 );
 
   /**
@@ -83,7 +85,6 @@ public:
    * stops listening to incomming messages
    */
   void unbind ( );
-  
 
 }; // end of KT_Connection class
 } // end of Transport namespace
