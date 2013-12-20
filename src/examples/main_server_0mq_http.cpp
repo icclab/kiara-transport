@@ -7,7 +7,6 @@
 
 
 #include "../../include/KT_Zeromq.hpp"
-#include "../core/Debug.hpp"
 #include <iostream>
 #include <iomanip>
 #include <unistd.h>
@@ -21,7 +20,7 @@ int main ()
 {
 
 	KT_Configuration config;
-	config.set_application_type ( KT_REQUESTREPLY );
+	config.set_application_type ( KT_STREAM );
 
 	KT_Connection* connection = new KT_Zeromq ();
 	connection->set_configuration (config);
@@ -38,10 +37,7 @@ int main ()
 
 void callback_handler ( KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	std::cout << msg.get_payload().data() << std::endl;
-	std::cout << "Memory hex dump:" << std::endl << std::endl;
-	Dump ( msg.get_payload().data(), msg.get_payload().size() );
-
-	std::string payload ( "Here comes the answer" );
+	std::string payload ( "HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 11\r\n\r\nHello World\r\n" );
 	KT_Msg message;
 	message.set_payload ( payload );
 

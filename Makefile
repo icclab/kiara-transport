@@ -17,8 +17,9 @@ server_http: $(BUILDDIR)/server_http
 server_0mq: $(BUILDDIR)/server_0mq
 client_0mq: $(BUILDDIR)/client_0mq
 
-client_0mq_pp: $(BUILDDIR)/client_0mq_pp
-server_0mq_pp: $(BUILDDIR)/server_0mq_pp
+client_0mq_req_pp: $(BUILDDIR)/client_0mq_req_pp
+server_0mq_rep_pp: $(BUILDDIR)/server_0mq_rep_pp
+server_0mq_http_pp: $(BUILDDIR)/server_0mq_http_pp 
 
 lib: $(BUILDDIR)/KT_Client.o \
 	 $(BUILDDIR)/KT_Configuration.o \
@@ -55,33 +56,44 @@ USERLIBS_client_0mq = -lzmq -lczmq
 DEPLIBS_client_0mq =
 LDLIBS_client_0mq = $(USERLIBS_client_0mq)
 
-## Target: client_0mq_pp
-OBJS_client_0mq_pp = \
-	$(BUILDDIR)/main_client_0mq_pp.o \
+## Target: client_0mq_req_pp
+OBJS_client_0mq_req_pp = \
+	$(BUILDDIR)/main_client_0mq_req_pp.o \
 	$(BUILDDIR)/KT_Client.o \
 	$(BUILDDIR)/KT_Configuration.o \
 	$(BUILDDIR)/KT_Connection.o \
 	$(BUILDDIR)/KT_Msg.o \
 	$(BUILDDIR)/KT_Session.o \
 	$(BUILDDIR)/KT_Zeromq.o
-USERLIBS_client_0mq_pp = -lzmq -lczmq
-DEPLIBS_client_0mq_pp = $(libs)
-LDLIBS_client_0mq_pp = $(USERLIBS_client_0mq_pp)
+USERLIBS_client_0mq_req_pp = -lzmq -lczmq
+DEPLIBS_client_0mq_req_pp = $(libs)
+LDLIBS_client_0mq_req_pp = $(USERLIBS_client_0mq_req_pp)
 
-## Target: server_0mq_pp
-OBJS_server_0mq_pp = \
-	$(BUILDDIR)/main_server_0mq_pp.o \
+## Target: server_0mq_rep_pp
+OBJS_server_0mq_rep_pp = \
+	$(BUILDDIR)/main_server_0mq_rep_pp.o \
 	$(BUILDDIR)/KT_Client.o \
 	$(BUILDDIR)/KT_Configuration.o \
 	$(BUILDDIR)/KT_Connection.o \
 	$(BUILDDIR)/KT_Msg.o \
 	$(BUILDDIR)/KT_Session.o \
 	$(BUILDDIR)/KT_Zeromq.o
-USERLIBS_server_0mq_pp = -lzmq -lczmq
-DEPLIBS_server_0mq_pp = $(libs)
-LDLIBS_server_0mq_pp = $(USERLIBS_server_0mq_pp)
+USERLIBS_server_0mq_rep_pp = -lzmq -lczmq
+DEPLIBS_server_0mq_rep_pp = $(libs)
+LDLIBS_server_0mq_rep_pp = $(USERLIBS_server_0mq_rep_pp)
 
-
+## Target: server_0mq_http_pp
+OBJS_server_0mq_http_pp = \
+	$(BUILDDIR)/main_server_0mq_http_pp.o \
+	$(BUILDDIR)/KT_Client.o \
+	$(BUILDDIR)/KT_Configuration.o \
+	$(BUILDDIR)/KT_Connection.o \
+	$(BUILDDIR)/KT_Msg.o \
+	$(BUILDDIR)/KT_Session.o \
+	$(BUILDDIR)/KT_Zeromq.o
+USERLIBS_server_0mq_http_pp = -lzmq -lczmq
+DEPLIBS_server_0mq_http_pp = $(libs)
+LDLIBS_server_0mq_http_pp = $(USERLIBS_server_0mq_http_pp)
 
 # Link or archive
 $(BUILDDIR)/server_http: $(BUILDDIR) $(OBJS_server_http) $(DEPLIBS_server_http)
@@ -95,13 +107,14 @@ $(BUILDDIR)/server_0mq: $(BUILDDIR) $(OBJS_server_0mq) $(DEPLIBS_server_0mq)
 $(BUILDDIR)/client_0mq: $(BUILDDIR) $(OBJS_client_0mq) $(DEPLIBS_client_0mq)
 	$(LINK.cpp) $(CFLAGS_client_0mq) $(CPPFLAGS_client_0mq) -o $@ $(OBJS_client_0mq) $(LDLIBS_client_0mq)
 	
-$(BUILDDIR)/client_0mq_pp: $(BUILDDIR) $(OBJS_client_0mq_pp) $(DEPLIBS_client_0mq_pp)
-	$(LINK.cpp) $(CFLAGS_client_0mq_pp) $(CPPFLAGS_client_0mq_pp) -o $@ $(OBJS_client_0mq_pp) $(LDLIBS_client_0mq_pp)
+$(BUILDDIR)/client_0mq_req_pp: $(BUILDDIR) $(OBJS_client_0mq_req_pp) $(DEPLIBS_client_0mq_req_pp)
+	$(LINK.cpp) $(CFLAGS_client_0mq_req_pp) $(CPPFLAGS_client_0mq_req_pp) -o $@ $(OBJS_client_0mq_req_pp) $(LDLIBS_client_0mq_req_pp)
 	
-$(BUILDDIR)/server_0mq_pp: $(BUILDDIR) $(OBJS_server_0mq_pp) $(DEPLIBS_server_0mq_pp)
-	$(LINK.cpp) $(CFLAGS_server_0mq_pp) $(CPPFLAGS_server_0mq_pp) -o $@ $(OBJS_server_0mq_pp) $(LDLIBS_server_0mq_pp)	
+$(BUILDDIR)/server_0mq_rep_pp: $(BUILDDIR) $(OBJS_server_0mq_rep_pp) $(DEPLIBS_server_0mq_rep_pp)
+	$(LINK.cpp) $(CFLAGS_server_0mq_rep_pp) $(CPPFLAGS_server_0mq_rep_pp) -o $@ $(OBJS_server_0mq_rep_pp) $(LDLIBS_server_0mq_rep_pp)	
 	
-	
+$(BUILDDIR)/server_0mq_http_pp: $(BUILDDIR) $(OBJS_server_0mq_http_pp) $(DEPLIBS_server_0mq_http_pp)
+	$(LINK.cpp) $(CFLAGS_server_0mq_http_pp) $(CPPFLAGS_server_0mq_http_pp) -o $@ $(OBJS_server_0mq_http_pp) $(LDLIBS_server_0mq_http_pp)	
 	
 	
 	
@@ -152,11 +165,14 @@ $(BUILDDIR)/main_server_0mq.o: $(BUILDDIR) src/examples/main_server_0mq.c
 $(BUILDDIR)/main_client_0mq.o: $(BUILDDIR) src/examples/main_client_0mq.c
 	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_client_0mq.c
 
-$(BUILDDIR)/main_client_0mq_pp.o: $(BUILDDIR) src/examples/main_client_0mq_req.cpp
+$(BUILDDIR)/main_client_0mq_req_pp.o: $(BUILDDIR) src/examples/main_client_0mq_req.cpp
 	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_client_0mq_req.cpp
 
-$(BUILDDIR)/main_server_0mq_pp.o: $(BUILDDIR) src/examples/main_server_0mq_rep.cpp
+$(BUILDDIR)/main_server_0mq_rep_pp.o: $(BUILDDIR) src/examples/main_server_0mq_rep.cpp
 	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_server_0mq_rep.cpp
+	
+$(BUILDDIR)/main_server_0mq_http_pp.o: $(BUILDDIR) src/examples/main_server_0mq_http.cpp
+	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_server_0mq_http.cpp
 
 #### Clean target deletes all generated files ####
 clean:
