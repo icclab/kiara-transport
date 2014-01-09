@@ -85,6 +85,7 @@ LDLIBS_server_0mq_rep_pp = $(USERLIBS_server_0mq_rep_pp)
 ## Target: server_0mq_http_pp
 OBJS_server_0mq_http_pp = \
 	$(BUILDDIR)/main_server_0mq_http_pp.o \
+    $(BUILDDIR)/http_parser.o \
 	$(BUILDDIR)/KT_Client.o \
 	$(BUILDDIR)/KT_Configuration.o \
 	$(BUILDDIR)/KT_Connection.o \
@@ -157,7 +158,7 @@ $(BUILDDIR)/kt_client.o: $(BUILDDIR) src/core/kt_client.c
 	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/core/kt_client.c
 
 $(BUILDDIR)/main_server_http.o: $(BUILDDIR) src/examples/main_server_http.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/examples/main_server_http.c
+	$(CC) -o $@ src/examples/main_server_http.c
 
 $(BUILDDIR)/main_server_0mq.o: $(BUILDDIR) src/examples/main_server_0mq.c
 	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/examples/main_server_0mq.c
@@ -173,6 +174,9 @@ $(BUILDDIR)/main_server_0mq_rep_pp.o: $(BUILDDIR) src/examples/main_server_0mq_r
 	
 $(BUILDDIR)/main_server_0mq_http_pp.o: $(BUILDDIR) src/examples/main_server_0mq_http.cpp
 	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_server_0mq_http.cpp
+
+$(BUILDDIR)/http_parser.o: $(BUILDDIR) src/examples/http_parser.c
+	$(CC) -c -o $@ src/examples/http_parser.c
 
 #### Clean target deletes all generated files ####
 clean:
