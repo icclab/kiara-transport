@@ -53,7 +53,7 @@ KIARA::Transport::KT_Zeromq::send ( KIARA::Transport::KT_Msg& message, KIARA::Tr
 	{
 		zmq_send ( session.get_socket(), session.get_zeromq_identifier().data(), session.get_zeromq_identifier().size(), ZMQ_SNDMORE );
 	}
-	zmq_send ( session.get_socket(), message.get_payload().data(), message.get_payload().size() + 1, 0 );
+	zmq_send ( session.get_socket(), message.get_payload().data(), message.get_payload().size(), 0 );
 }
 
 // Zeromq has no asynchronous recv. Thus linger is correctly throwing a -Wunused warning
