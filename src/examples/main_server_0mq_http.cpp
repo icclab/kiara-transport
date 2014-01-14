@@ -64,7 +64,13 @@ void callback_handler ( KT_Msg& msg, KT_Session* sess, KT_Connection* obj ) {
     // use the length variable/parameter/value and stick to it! Or you'll
     // probably run into a case of memory corruption due to incorrect
     // boundaries.
-	std::cout << msg.get_payload().data() << std::endl;
+    // BAD way of doing it:
+	// std::cout << msg.get_payload().data() << std::endl;
+    std::string s;
+    s.resize (msg.get_payload().size());
+    s.insert (0, msg.get_payload().data(), msg.get_payload().size());
+    std::cout << s << std::endl;
+
 	std::string payload ( "HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 11\r\n\r\nHello World\r\n" );
 	KT_Msg message;
 	message.set_payload ( payload );
