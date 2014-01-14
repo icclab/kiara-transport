@@ -1,10 +1,10 @@
 #### Compiler and tool definitions shared by all build targets #####
 # CC = gcc
-CC = clang
-CXX = clang++
-BASICOPTS = -g  -pedantic -Wall -Weverything -Wno-padded
+CC = clang-mp-3.4
+CXX = clang++-mp-3.4
+BASICOPTS = -v -g -O1 -pedantic -Wall -Weverything -Wno-padded -fsanitize=address -O1 -fno-omit-frame-pointer 
 CFLAGS = $(BASICOPTS)
-CPPFLAGS = $(BASICOPTS) -std=c++11
+CPPFLAGS = $(BASICOPTS) -std=c++11 
 
 
 # Define the target directories.
@@ -28,7 +28,7 @@ lib: $(BUILDDIR)/KT_Client.o \
 	 $(BUILDDIR)/KT_Session.o \
 	 $(BUILDDIR)/KT_Zeromq.o
 	 
-CPPFLAGS_library = $(CPPFLAGS)
+CPPFLAGS_library = $(CPPFLAGS) -c
 
 ## Target: server_http
 OBJS_server_http =  \
@@ -121,22 +121,22 @@ $(BUILDDIR)/server_0mq_http_pp: $(BUILDDIR) $(OBJS_server_0mq_http_pp) $(DEPLIBS
 	
 # Compile library files into .o files
 $(BUILDDIR)/KT_Client.o: $(BUILDDIR) src/core/KT_Client.cpp
-	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Client.cpp
+	$(CXX) $(CPPFLAGS_library) -o $@ src/core/KT_Client.cpp
 
 $(BUILDDIR)/KT_Connection.o: $(BUILDDIR) src/core/KT_Connection.cpp
-	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Connection.cpp
+	$(CXX) $(CPPFLAGS_library) -o $@ src/core/KT_Connection.cpp
 
 $(BUILDDIR)/KT_Configuration.o: $(BUILDDIR) src/core/KT_Configuration.cpp
-	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Configuration.cpp
+	$(CXX) $(CPPFLAGS_library) -o $@ src/core/KT_Configuration.cpp
 
 $(BUILDDIR)/KT_Msg.o: $(BUILDDIR) src/core/KT_Msg.cpp
-	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Msg.cpp
+	$(CXX) $(CPPFLAGS_library) -o $@ src/core/KT_Msg.cpp
 
 $(BUILDDIR)/KT_Session.o: $(BUILDDIR) src/core/KT_Session.cpp
-	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Session.cpp
+	$(CXX) $(CPPFLAGS_library) -o $@ src/core/KT_Session.cpp
 
 $(BUILDDIR)/KT_Zeromq.o: $(BUILDDIR) src/core/KT_Zeromq.cpp
-	$(COMPILE.cpp) $(CPPFLAGS_library) -o $@ src/core/KT_Zeromq.cpp
+	$(CXX) $(CPPFLAGS_library) -o $@ src/core/KT_Zeromq.cpp
 
 
 
@@ -146,34 +146,34 @@ $(BUILDDIR)/KT_Zeromq.o: $(BUILDDIR) src/core/KT_Zeromq.cpp
 
 # Compile source files into .o files
 $(BUILDDIR)/ktransport.o: $(BUILDDIR) src/core/ktransport.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/core/ktransport.c
+	$(CC) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/core/ktransport.c
 
 $(BUILDDIR)/k_transport.o: $(BUILDDIR) src/core/ktransport.c
-	$(COMPILE.cpp) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/k_transport.cpp
+	$(CC) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/k_transport.cpp
 
 $(BUILDDIR)/kt_server.o: $(BUILDDIR) src/core/kt_server.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/core/kt_server.c
+	$(CC) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/core/kt_server.c
 
 $(BUILDDIR)/kt_client.o: $(BUILDDIR) src/core/kt_client.c
-	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/core/kt_client.c
+	$(CC) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/core/kt_client.c
 
 $(BUILDDIR)/main_server_http.o: $(BUILDDIR) src/examples/main_server_http.c
 	$(CC) -o $@ src/examples/main_server_http.c
 
 $(BUILDDIR)/main_server_0mq.o: $(BUILDDIR) src/examples/main_server_0mq.c
-	$(COMPILE.c) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/examples/main_server_0mq.c
+	$(CC) $(CFLAGS_server) $(CPPFLAGS_server) -o $@ src/examples/main_server_0mq.c
 	
 $(BUILDDIR)/main_client_0mq.o: $(BUILDDIR) src/examples/main_client_0mq.c
-	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_client_0mq.c
+	$(CC) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_client_0mq.c
 
 $(BUILDDIR)/main_client_0mq_req_pp.o: $(BUILDDIR) src/examples/main_client_0mq_req.cpp
-	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_client_0mq_req.cpp
+	$(CXX) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_client_0mq_req.cpp
 
 $(BUILDDIR)/main_server_0mq_rep_pp.o: $(BUILDDIR) src/examples/main_server_0mq_rep.cpp
-	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_server_0mq_rep.cpp
+	$(CXX) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_server_0mq_rep.cpp
 	
 $(BUILDDIR)/main_server_0mq_http_pp.o: $(BUILDDIR) src/examples/main_server_0mq_http.cpp
-	$(COMPILE.c) $(CFLAGS_client) $(CPPFLAGS_client) -o $@ src/examples/main_server_0mq_http.cpp
+	$(CXX) -c $(CPPFLAGS) -o $@ src/examples/main_server_0mq_http.cpp
 
 $(BUILDDIR)/http_parser.o: $(BUILDDIR) src/examples/http_parser.c
 	$(CC) -c -o $@ src/examples/http_parser.c
