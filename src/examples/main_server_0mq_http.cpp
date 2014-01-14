@@ -57,7 +57,13 @@ void callback_handler ( KT_Msg& msg, KT_Session* sess, KT_Connection* obj ) {
 
     http_parser_execute ( parser, &settings, msg.get_payload().data(), \
         512 );
-
+    
+    // DANGER!!
+    // The data does not seem to be properly NULL-terminated!
+    // Be careful what you do with the memory, you are well advised to
+    // use the length variable/parameter/value and stick to it! Or you'll
+    // probably run into a case of memory corruption due to incorrect
+    // boundaries.
 	std::cout << msg.get_payload().data() << std::endl;
 	std::string payload ( "HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 11\r\n\r\nHello World\r\n" );
 	KT_Msg message;
@@ -70,7 +76,10 @@ int body_cb ( http_parser* p, char const* at, size_t len ) {
     std::cout << "HTTP Body CB hook" << std::endl << std::endl << std::endl;
     
     std::cout << "------ CONTENT ------" << std::endl;
-    std::cout << at;
+    std::string s;
+    s.resize (len);
+    s.insert (0, at, len);
+    std::cout << s;
     std::cout << "------ END OF CONTENT ------" << std::endl;
 
     std::cout << std::endl << std::endl << std::endl;
