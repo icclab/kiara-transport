@@ -56,7 +56,7 @@ void callback_handler ( KT_Msg& msg, KT_Session* sess, KT_Connection* obj ) {
     http_parser_init ( parser, HTTP_REQUEST );    
 
     http_parser_execute ( parser, &settings, msg.get_payload().data(), \
-        512 );
+        msg.get_payload().size() );
     
     // DANGER!!
     // The data does not seem to be properly NULL-terminated!
@@ -66,10 +66,13 @@ void callback_handler ( KT_Msg& msg, KT_Session* sess, KT_Connection* obj ) {
     // boundaries.
     // BAD way of doing it:
 	// std::cout << msg.get_payload().data() << std::endl;
-    std::string s;
-    s.resize (msg.get_payload().size());
-    s.insert (0, msg.get_payload().data(), msg.get_payload().size());
-    std::cout << s << std::endl;
+
+    for (unsigned long i = 0; i < msg.get_payload().size(); ++i)
+    {
+        printf ("%c", msg.get_payload().data()[i]);
+    }
+    fflush (stdout);
+    printf ("\n");
 
 	std::string payload ( "HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 11\r\n\r\nHello World\r\n" );
 	KT_Msg message;
@@ -86,7 +89,7 @@ int body_cb ( http_parser* p, char const* at, size_t len ) {
     s.resize (len);
     s.insert (0, at, len);
     std::cout << s;
-    std::cout << "------ END OF CONTENT ------" << std::endl;
+    std::cout << std::endl << "------ END OF CONTENT ------" << std::endl;
 
     std::cout << std::endl << std::endl << std::endl;
     return 0;
