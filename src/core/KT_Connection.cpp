@@ -1,4 +1,4 @@
-#include "../../include/KT_Connection.hpp"
+#include "KT_Connection.hpp"
 
 KIARA::Transport::KT_Connection::KT_Connection ( ) { }
 

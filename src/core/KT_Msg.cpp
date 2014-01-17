@@ -4,7 +4,7 @@
  * Author: Mathias Hablützel <habl@zhaw.ch>
  */
 
-#include "../../include/KT_Msg.hpp"
+#include "KT_Msg.hpp"
 
 namespace KIARA {
 namespace Transport {

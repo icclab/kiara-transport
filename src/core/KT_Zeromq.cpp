@@ -5,7 +5,7 @@
  * Reference: doc/Library API contract.md
  */
 
-#include "../../include/KT_Zeromq.hpp"
+#include "KT_Zeromq.hpp"
 #include <algorithm>
 #include <cassert>
 #include <iostream>

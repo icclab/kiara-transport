@@ -1,4 +1,4 @@
-#include "../../include/KT_Client.hpp"
+#include "KT_Client.hpp"
 
 KIARA::Transport::KT_Client::KT_Client ( ) { }
 

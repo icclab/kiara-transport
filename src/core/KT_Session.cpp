@@ -4,7 +4,7 @@
  * Author: Mathias Hablützel <habl@zhaw.ch>
  */
 
-#include "../../include/KT_Session.hpp"
+#include "KT_Session.hpp"
 
 // Constructors/Destructors
 //  
