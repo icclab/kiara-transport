@@ -33,7 +33,7 @@ KT_HTTP_Parser::KT_HTTP_Parser (KT_Msg& msg)
 
     http_parser_execute ( parser, &settings, msg.get_payload().data(), \
         msg.get_payload().size() );
-    payload = (std::string*) parser->data;
+    payload = static_cast<std::string*> (parser->data);
 }
 
 KT_HTTP_Parser::~KT_HTTP_Parser()
@@ -57,7 +57,7 @@ int body_cb (http_parser* p, char const* at, size_t len)
 	std::string* s = new std::string;
     s->resize (len);
     s->insert (0, at, len);
-    p->data = (void*) s;
+    p->data = static_cast<void*> (s);
     return 0;
 }
 
