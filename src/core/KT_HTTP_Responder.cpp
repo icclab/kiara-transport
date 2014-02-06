@@ -44,7 +44,7 @@ std::string KT_HTTP_Responder::generate_418_IM_A_TEAPOT()
 			"  `. :           :    /        MMM\n"
 			"    `.            :.,'        ZHAW\n"
 			"      `-.________,-'          KIARA\n");
-	return std::string("HTTP/1.0 418 IM A TEAPOT\r\nContent-Type: text/plain\r\nContent-Length: 301\r\n\r\n" + response);
+	return std::string("HTTP/1.0 418 IM A TEAPOT\r\nContent-Type: text/plain\r\nContent-Length: 300\r\n\r\n" + response);
 }
 
 } /* namespace Transport */
