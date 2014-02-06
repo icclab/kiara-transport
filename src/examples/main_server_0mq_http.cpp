@@ -8,6 +8,7 @@
 
 #include "../core/KT_Zeromq.hpp"
 #include "../core/KT_HTTP_Parser.hpp"
+#include "../core/KT_HTTP_Responder.hpp"
 //#include "http_parser.h"
 #include <iostream>
 #include <iomanip>
@@ -39,17 +40,10 @@ int main ()
 void callback_handler ( KT_Msg& msg, KT_Session* sess, KT_Connection* obj ) {
 	KT_HTTP_Parser parser (msg);
 	std::cout << parser << std::endl;
-    
-    // DANGER!!
-    // The data does not seem to be properly NULL-terminated!
-    // Be careful what you do with the memory, you are well advised to
-    // use the length variable/parameter/value and stick to it! Or you'll
-    // probably run into a case of memory corruption due to incorrect
-    // boundaries.
-    // BAD way of doing it:
-	// std::cout << msg.get_payload().data() << std::endl;
 
-	std::string payload ( "HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 11\r\n\r\nHello World\r\n" );
+	std::string payload ( "Hello World" );
+	//payload = KT_HTTP_Responder::generate_200_OK( std::vector<char>(payload.begin(), payload.end()) );
+	payload = KT_HTTP_Responder::generate_418_IM_A_TEAPOT();
 	KT_Msg message;
 	message.set_payload ( payload );
 
