@@ -1,6 +1,7 @@
 CC = clang-mp-3.4
 CXX = clang++-mp-3.4
-FLAGS = -std=c++11 -O0 -g -fsanitize=address -fno-omit-frame-pointer -v
+FLAGS = -std=c++11 -O0 -g -fsanitize=address -fno-omit-frame-pointer -v \
+	-fsanitize-memory-track-origins
 LDFLAGS = -lzmq -lczmq -fsanitize=address
 
 DEST=build
@@ -17,6 +18,7 @@ server_0mq_http_pp: $(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/KT_Configuration.o \
 										$(BUILDDIR)/KT_Connection.o \
 										$(BUILDDIR)/KT_HTTP_Parser.o \
+										$(BUILDDIR)/KT_HTTP_Responder.o \
 										$(BUILDDIR)/KT_Msg.o \
 										$(BUILDDIR)/KT_Session.o \
 										$(BUILDDIR)/KT_Zeromq.o \
@@ -24,10 +26,11 @@ server_0mq_http_pp: $(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/main_server_0mq_http_pp.o  \
 										$(BUILDDIR)/server_0mq_http_pp
 
-SERVER_0MQ_DEPS =		$(BUILDDIR)/KT_Client.o \
+SERVER_0MQ_DEPS = 	$(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/KT_Configuration.o \
 										$(BUILDDIR)/KT_Connection.o \
 										$(BUILDDIR)/KT_HTTP_Parser.o \
+										$(BUILDDIR)/KT_HTTP_Responder.o \
 										$(BUILDDIR)/KT_Msg.o \
 										$(BUILDDIR)/KT_Session.o \
 										$(BUILDDIR)/KT_Zeromq.o \
@@ -47,6 +50,9 @@ $(BUILDDIR)/KT_Configuration.o: $(BUILDDIR) src/core/KT_Configuration.cpp
 $(BUILDDIR)/KT_HTTP_Parser.o: $(BUILDDIR) src/core/KT_HTTP_Parser.cpp
 		$(CXX) -c $(FLAGS) -o $@ src/core/KT_HTTP_Parser.cpp
 
+$(BUILDDIR)/KT_HTTP_Responder.o: $(BUILDDIR) src/core/KT_HTTP_Responder.cpp
+		$(CXX) -c $(FLAGS) -o $@ src/core/KT_HTTP_Responder.cpp
+
 $(BUILDDIR)/KT_Msg.o: $(BUILDDIR) src/core/KT_Msg.cpp
 		$(CXX) -c $(FLAGS) -o $@ src/core/KT_Msg.cpp
 
@@ -56,8 +62,8 @@ $(BUILDDIR)/KT_Session.o: $(BUILDDIR) src/core/KT_Session.cpp
 $(BUILDDIR)/KT_Zeromq.o: $(BUILDDIR) src/core/KT_Zeromq.cpp
 		$(CXX) -c $(FLAGS) -o $@ src/core/KT_Zeromq.cpp
 
-$(BUILDDIR)/http_parser.o: $(BUILDDIR) src/examples/http_parser.c
-		$(CXX) -c $(FLAGS) -o $@ src/examples/http_parser.c
+$(BUILDDIR)/http_parser.o: $(BUILDDIR) src/core/http_parser.c
+		$(CXX) -c $(FLAGS) -o $@ src/core/http_parser.c
 
 $(BUILDDIR)/main_server_0mq_http_pp.o: $(BUILDDIR) src/examples/main_server_0mq_http.cpp
 		$(CXX) -c $(FLAGS) -o $@ src/examples/main_server_0mq_http.cpp
