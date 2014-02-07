@@ -9,7 +9,6 @@
 #include "../core/KT_Zeromq.hpp"
 #include "../core/KT_HTTP_Parser.hpp"
 #include "../core/KT_HTTP_Responder.hpp"
-//#include "http_parser.h"
 #include <iostream>
 #include <iomanip>
 #include <unistd.h>
@@ -41,9 +40,8 @@ void callback_handler ( KT_Msg& msg, KT_Session* sess, KT_Connection* obj ) {
 	KT_HTTP_Parser parser (msg);
 	std::cout << parser << std::endl;
 
-	std::string payload ( "Hello World" );
-	//payload = KT_HTTP_Responder::generate_200_OK( std::vector<char>(payload.begin(), payload.end()) );
-	payload = KT_HTTP_Responder::generate_418_IM_A_TEAPOT();
+	std::string payload ( "Hello World, welcome to KIARA::Transport" );
+	payload = KT_HTTP_Responder::generate_200_OK( std::vector<char>(payload.begin(), payload.end()) );
 	KT_Msg message;
 	message.set_payload ( payload );
 
