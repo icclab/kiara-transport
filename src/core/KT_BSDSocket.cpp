@@ -27,22 +27,9 @@ KT_BSDSocket::KT_BSDSocket(const std::string& host)
 {
 }
 
-void KT_BSDSocket::poller(int sock_desc)
+void KT_BSDSocket::poller(KT_Session* sess)
 {
-	char buf[1024];
-	std::vector<char> buffer;
-	int k;
-	struct sockaddr_in client;
-	memset (&client, 0, sizeof(client));
-	socklen_t len = sizeof(client);
-	int temp_sock_desc = ::accept(sock_desc,(struct sockaddr*)&client,&len);
-	    while(1)
-	    {
-	        k = ::recv(temp_sock_desc,buf,1024,0);
-	        if(k>0)
-	            printf("%s",buf);
-	    }
-	    close(temp_sock_desc);
+	recv(*sess, 0);
 }
 
 KT_Session* KT_BSDSocket::connect(KT_Client& endpoint)
@@ -55,6 +42,21 @@ void KT_BSDSocket::send(KT_Msg& message, KT_Session& session, int linger)
 
 KT_Msg KT_BSDSocket::recv(KT_Session& session, int linger)
 {
+	int socket = *reinterpret_cast<int*>(session.get_socket());
+	char buf[1024];
+	std::vector<char> buffer;
+	int k;
+	struct sockaddr_in client;
+	memset (&client, 0, sizeof(client));
+	socklen_t len = sizeof(client);
+	int temp_sock_desc = ::accept(socket,(struct sockaddr*)&client,&len);
+	    while(1)
+	    {
+	        k = ::recv(temp_sock_desc,buf,1024,0);
+	        if(k>0)
+	            printf("%s",buf);
+	    }
+	close(temp_sock_desc);
 }
 
 void KT_BSDSocket::disconnect(KT_Session& session)
@@ -84,16 +86,16 @@ void KT_BSDSocket::bind (std::string endpoint)
     if (k != 0)
     	printf("bumm");
 
-//    void* socket = new int;
-//    socket = reinterpret_cast<void*>(sock_desc);
-//    printf("int: %d, void* %d\n", sock_desc, reinterpret_cast<int>(socket));
-//	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session();
-//	session->set_socket ( socket ); // <-- put sock_desc on heap and cast to void*
-//	session->set_endpoint ( endpoint );
-//	_sessions.insert ( std::make_pair ( endpoint, session ) );
+    int* socket = new int;
+    *socket = sock_desc;
+
+	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session();
+	session->set_socket ( reinterpret_cast<void*>(socket) );
+	session->set_endpoint ( endpoint );
+	_sessions.insert ( std::make_pair ( endpoint, session ) );
 
     interupted = false;
-    poller_thread = new std::thread ( &KT_BSDSocket::poller, this, sock_desc );
+    poller_thread = new std::thread ( &KT_BSDSocket::poller, this, session );
 
 }
 

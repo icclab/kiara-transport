@@ -23,7 +23,7 @@ private:
 	int sock_desc;
 	std::thread* poller_thread;
 	bool interupted;
-	void poller ( int sock_desc );
+	void poller ( KT_Session* session );
 
 public:
 	KT_BSDSocket();
