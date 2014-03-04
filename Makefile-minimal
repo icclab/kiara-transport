@@ -22,6 +22,7 @@ clean:
 		rm -f -r $(BUILDDIR)
 
 server_0mq_http_pp: $(BUILDDIR)/KT_Client.o \
+										$(BUILDDIR)/KT_BSDSocket.o \
 										$(BUILDDIR)/KT_Configuration.o \
 										$(BUILDDIR)/KT_Connection.o \
 										$(BUILDDIR)/KT_HTTP_Parser.o \
@@ -33,7 +34,8 @@ server_0mq_http_pp: $(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/main_server_0mq_http_pp.o  \
 										$(BUILDDIR)/server_0mq_http_pp
 
-SERVER_0MQ_DEPS = 	$(BUILDDIR)/KT_Client.o \
+SERVER_0MQ_DEPS =	$(BUILDDIR)/KT_Client.o \
+										$(BUILDDIR)/KT_BSDSocket.o \
 										$(BUILDDIR)/KT_Configuration.o \
 										$(BUILDDIR)/KT_Connection.o \
 										$(BUILDDIR)/KT_HTTP_Parser.o \
@@ -44,6 +46,9 @@ SERVER_0MQ_DEPS = 	$(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/http_parser.o \
 										$(BUILDDIR)/main_server_0mq_http_pp.o
 
+
+$(BUILDDIR)/KT_BSDSocket.o: $(BUILDDIR) src/core/KT_BSDSocket.cpp
+		$(CXX) -c $(FLAGS) -o $@ src/core/KT_BSDSocket.cpp
 
 $(BUILDDIR)/KT_Client.o: $(BUILDDIR) src/core/KT_Client.cpp
 		$(CXX) -c $(FLAGS) -o $@ src/core/KT_Client.cpp
