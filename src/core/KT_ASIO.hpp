@@ -23,14 +23,14 @@ namespace Transport {
   * 
   */
 
-class KT_Zeromq : public KT_Connection
+class KT_ASIO : public KT_Connection
 {
 
 public:
 
-  KT_Zeromq ( );
-  virtual ~KT_Zeromq ( );
-  KT_Zeromq ( std::string const& host);
+  KT_ASIO ( );
+  virtual ~KT_ASIO ( );
+  KT_ASIO ( std::string const& host);
 
   /**
    * @return int
@@ -53,7 +53,7 @@ public:
    *    0 will block forever, -1 will make the call asynchronous and only
    *    return a message if there was one previously received
    */
-  KT_Msg*
+  KT_Msg
   recv ( KT_Session& session, int linger = 0 );
 
   /**
@@ -83,5 +83,6 @@ public:
 }; // end of KT_ASIO class
 } // end of Transport namespace
 } // end of KIARA namespace
+
 
 #endif // KT_ASIO_HPP
