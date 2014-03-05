@@ -38,51 +38,61 @@ public:
   KT_Connection (std::string const& host);
 
   /**
-   * @return int
+   * @return int 0 if successful
    * @param endpoint Where to connect to
+   * @param ret Return a KT_Session pointer when successful
    */
-  virtual KT_Session*
-  connect ( KT_Client& endpoint ) = 0;
+
+  virtual int
+  connect (KT_Client& endpoint, KT_Session* ret) = 0;
 
   /**
+   * @return int 0 if successful
    * @param message Message for the receipient
    * @param linger Linger time before it aborts if sending synchronous,
    *    0 will block forever, -1 will make the call asynchronous
    */
-  virtual void
-  send ( KT_Msg& message, KT_Session& session, int linger = 0 ) = 0;
+
+  virtual int
+  send (KT_Msg& message, KT_Session& session, int linger = 0) = 0;
 
   /**
-   * @return KIARA::Transport::KT_Msg
+   * @return int 0 if successful
    * @param linger Linger time before it aborts if receiving synchronous,
    *    0 will block forever, -1 will make the call asynchronous and only
    *    return a message if there was one previously received
    */
-  virtual KT_Msg
-  recv ( KT_Session& session, int linger = 0 ) = 0;
+
+  virtual int
+  recv (KT_Session& session,  KT_Msg& ret, int linger = 0) = 0;
 
   /**
    *
    */
-  virtual void
-  disconnect ( KT_Session& session ) = 0;
+
+  virtual int
+  disconnect (KT_Session& session) = 0;
 
   /**
    * callback function must accept KT_Msg* and KT_Session* object
    * @param callback Function to be called when a message arrives
    */
-  virtual void register_callback ( void (*callback)(KT_Msg&, KT_Session*, KIARA::Transport::KT_Connection*) ) = 0;
+
+  virtual int
+  register_callback (void (*callback)(KT_Msg&, KT_Session*, KIARA::Transport::KT_Connection*)) = 0;
 
   /**
    * bind requires a valid callback handler which is called when a message is
    * received, it binds according to the set configuration
    */
-  virtual void bind ( std::string ) = 0;
+  virtual int
+  bind (std::string) = 0;
   
   /**
    * stops listening to incomming messages
    */
-  virtual void unbind ( ) = 0;
+  virtual int
+  unbind () = 0;
   
   /**
    * Set the value of _context

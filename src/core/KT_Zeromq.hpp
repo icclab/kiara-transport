@@ -43,15 +43,15 @@ public:
    * @return int
    * @param endpoint Where to connect to
    */
-  KT_Session*
-  connect ( KT_Client& endpoint );
+  int
+  connect (KT_Client& endpoint, KT_Session* ret);
 
   /**
    * @param message Message for the receipient
    * @param linger Linger time before it aborts if sending synchronous,
    *    0 will block forever, -1 will make the call asynchronous
    */
-  void
+  int
   send ( KT_Msg& message, KT_Session& session, int linger = 0 );
 
   /**
@@ -60,31 +60,31 @@ public:
    *    0 will block forever, -1 will make the call asynchronous and only
    *    return a message if there was one previously received
    */
-  KT_Msg
-  recv ( KT_Session& session, int linger = 0 );
+  int
+  recv ( KT_Session& session, KT_Msg& ret, int linger = 0 );
 
   /**
    *
    */
-  void
+  int
   disconnect ( KT_Session& session );
 
   /**
    * callback function must accept KT_Msg* and KT_Session* object
    * @param callback Function to be called when a message arrives
    */
-  void register_callback ( void (*callback)(KT_Msg& message, KT_Session* session, KIARA::Transport::KT_Connection* obj) );
+  int register_callback ( void (*callback)(KT_Msg& message, KT_Session* session, KIARA::Transport::KT_Connection* obj) );
 
   /**
    * bind requires a valid callback handler which is called when a message is
    * received, it binds according to the set configuration
    */
-  void bind ( std::string endpoint );
+  int bind ( std::string endpoint );
   
   /**
    * stops listening to incomming messages
    */
-  void unbind ( );
+  int unbind ( );
 
 }; // end of KT_Connection class
 } // end of Transport namespace
