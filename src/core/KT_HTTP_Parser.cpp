@@ -31,6 +31,7 @@ KT_HTTP_Parser::KT_HTTP_Parser (KT_Msg& msg)
     parser = (http_parser*) malloc ( sizeof ( http_parser ) );
     http_parser_init ( parser, HTTP_REQUEST );
 
+    parser->data = static_cast<void*>(new std::string);
     http_parser_execute ( parser, &settings, msg.get_payload().data(), \
         msg.get_payload().size() );
     payload = static_cast<std::string*> (parser->data);
@@ -43,7 +44,7 @@ KT_HTTP_Parser::~KT_HTTP_Parser()
 
 std::string KT_HTTP_Parser::get_payload()
 {
-	return *payload;
+	return NULL != payload ? *payload : std::string("");
 }
 
 std::ostream& operator<< (std::ostream& lhs, KT_HTTP_Parser& rhs)
@@ -54,10 +55,9 @@ std::ostream& operator<< (std::ostream& lhs, KT_HTTP_Parser& rhs)
 
 int body_cb (http_parser* p, char const* at, size_t len)
 {
-	std::string* s = new std::string;
+	std::string* s = static_cast<std::string*>(p->data);
     s->resize (len);
     s->insert (0, at, len);
-    p->data = static_cast<void*> (s);
     return 0;
 }
 
