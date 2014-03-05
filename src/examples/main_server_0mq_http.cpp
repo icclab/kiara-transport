@@ -7,7 +7,6 @@
 
 
 #include "../core/KT_Zeromq.hpp"
-#include "../core/KT_BSDSocket.hpp"
 #include "../core/KT_HTTP_Parser.hpp"
 #include "../core/KT_HTTP_Responder.hpp"
 #include <iostream>
@@ -24,7 +23,7 @@ int main ()
 	KT_Configuration config;
 	config.set_application_type ( KT_STREAM );
 
-	KT_Connection* connection = new KT_BSDSocket ();
+	KT_Connection* connection = new KT_Zeromq ();
 	connection->set_configuration (config);
 
 	connection->register_callback( &callback_handler );
