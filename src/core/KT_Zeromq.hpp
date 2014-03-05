@@ -7,14 +7,16 @@
 #ifndef KT_ZEROMQ_HPP
 #define KT_ZEROMQ_HPP
 
+#include <zmq.h>
+#include <cassert>
+#include <cerrno>
 #include <string>
-#include <map>
 #include <thread>
+#include <vector>
 
 #include "../../include/k_transport.h"
-
-#include "KT_Connection.hpp"
 #include "KT_Configuration.hpp"
+#include "KT_Connection.hpp"
 #include "KT_Msg.hpp"
 #include "KT_Session.hpp"
 

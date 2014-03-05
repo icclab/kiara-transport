@@ -6,10 +6,7 @@
  */
 
 #include "KT_Zeromq.hpp"
-#include <algorithm>
-#include <cassert>
 #include <iostream>
-#include <zmq.h>
 
 KIARA::Transport::KT_Zeromq::KT_Zeromq() {
 	_context = zmq_ctx_new ();
@@ -36,9 +33,13 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint, KI
 	// TODO: fix dangerous pointer to underlying data structure
 	const char* host = endpoint.get_endpoint().c_str();
 	int rc = zmq_connect ( socket, host );
+	int errcode = errno;
 
 	if ( 0 != rc )
-		return NULL;
+	{
+		errno = errcode;
+		return -1;
+	}
 
 	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session ();
 	session->set_socket ( socket );
@@ -48,14 +49,28 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint, KI
 	ret = session;
 	return 0;
 }
+
 // Zeromq has no synchronous send. Thus linger is correctly throwing a -Wunused warning
 int
 KIARA::Transport::KT_Zeromq::send ( KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session& session, int linger) {
 	if ( KT_STREAM == _configuration.get_application_type() )
 	{
-		zmq_send ( session.get_socket(), session.get_zeromq_identifier().data(), session.get_zeromq_identifier().size(), ZMQ_SNDMORE );
+		int rc = zmq_send ( session.get_socket(), session.get_zeromq_identifier().data(), session.get_zeromq_identifier().size(), ZMQ_SNDMORE );
+		int errcode = errno;
+		if (session.get_zeromq_identifier().size() != static_cast<std::vector<char>::size_type>(rc) )
+		{
+			errno = errcode;
+			return -1;
+		}
 	}
-	zmq_send ( session.get_socket(), message.get_payload().data(), message.get_payload().size(), 0 );
+
+	int rc = zmq_send ( session.get_socket(), message.get_payload().data(), message.get_payload().size(), 0 );
+	int errcode = errno;
+	if (message.get_payload().size() != static_cast<std::vector<char>::size_type>(rc))
+	{
+		errno = errcode;
+		return -1;
+	}
 
 	return 0;
 }
@@ -83,10 +98,10 @@ KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, KIARA
 	if ( -1 == rc )
 	{
 		ret = std::move (message);
-		return 0;
+		return -1;
 	}
 
-	buffer.resize ( (size_t)rc );
+	buffer.resize ( static_cast<size_t>(rc) );
 
 	message.set_payload ( std::move(buffer) );
 	ret = std::move (message);
@@ -113,21 +128,32 @@ KIARA::Transport::KT_Zeromq::register_callback ( void (*callback)(KIARA::Transpo
 int
 KIARA::Transport::KT_Zeromq::bind ( std::string endpoint ) {
 	void* socket = NULL;
+	int errcode;
 
 	if ( KT_STREAM == _configuration.get_application_type() )
 	{
 		socket = zmq_socket ( _context, ZMQ_STREAM );
+		errcode = errno;
 	}
 	else if ( KT_REQUESTREPLY == _configuration.get_application_type() )
 	{
 		socket = zmq_socket ( _context, ZMQ_REP);
+		errcode = errno;
 	}
 
-	assert ( socket );
-	int rc = zmq_bind ( socket, endpoint.c_str() );
-
-	if ( 0 != rc )
+	if (NULL == socket)
+	{
+		errno = errcode;
 		return -1;
+	}
+
+	int rc = zmq_bind ( socket, endpoint.c_str() );
+	errcode = errno;
+	if ( 0 != rc )
+	{
+		errno = errcode;
+		return -1;
+	}
 
 	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session();
 	session->set_socket ( socket );
