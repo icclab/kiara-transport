@@ -8,6 +8,7 @@
 #define KT_ZEROMQ_HPP
 
 #include <zmq.h>
+#include <cstring>
 #include <cassert>
 #include <cerrno>
 #include <string>
