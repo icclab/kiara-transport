@@ -44,7 +44,7 @@ public:
    */
 
   virtual int
-  connect (KT_Client& endpoint, KT_Session* ret) = 0;
+  connect (KT_Client& endpoint, KT_Session** ret) = 0;
 
   /**
    * @return int 0 if successful

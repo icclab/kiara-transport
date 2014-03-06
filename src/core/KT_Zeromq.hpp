@@ -46,7 +46,7 @@ public:
    * @param endpoint Where to connect to
    */
   int
-  connect (KT_Client& endpoint, KT_Session* ret);
+  connect (KT_Client& endpoint, KT_Session** ret);
 
   /**
    * @param message Message for the receipient

@@ -28,12 +28,28 @@ KIARA::Transport::KT_Zeromq::poller ( void* socket, std::string endpoint ) {
 }
 
 int
-KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint, KIARA::Transport::KT_Session* ret ) {
-	void* socket = zmq_socket ( _context, ZMQ_REQ );
+KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint, KIARA::Transport::KT_Session** ret ) {
+	void* socket = NULL;
+	int errcode;
+	if ( KT_STREAM == _configuration.get_application_type() )
+	{
+		socket = zmq_socket ( _context, ZMQ_STREAM );
+		errcode = errno;
+	}
+	else if ( KT_REQUESTREPLY == _configuration.get_application_type() )
+	{
+		socket = zmq_socket ( _context, ZMQ_REP);
+		errcode = errno;
+	}
+
+	if (NULL == socket)
+	{
+		errno = errcode;
+		return -1;
+	}
 	// TODO: fix dangerous pointer to underlying data structure
 	const char* host = endpoint.get_endpoint().c_str();
 	int rc = zmq_connect ( socket, host );
-	int errcode = errno;
 
 	if ( 0 != rc )
 	{
@@ -41,12 +57,19 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint, KI
 		return -1;
 	}
 
+	uint8_t id [256];
+	size_t id_size = 256;
+	zmq_getsockopt(socket, ZMQ_IDENTITY, id, &id_size);
+
 	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session ();
 	session->set_socket ( socket );
 	session->set_endpoint ( endpoint.get_endpoint() );
+	std::vector<char> identifier (id, id + id_size);
+	session->set_zeromq_identifier( std::move(identifier));
 	_sessions.insert ( std::make_pair ( endpoint.get_endpoint(), session ) );
 
-	ret = session;
+	*ret = session;
+
 	return 0;
 }
 
@@ -59,6 +82,7 @@ KIARA::Transport::KT_Zeromq::send ( KIARA::Transport::KT_Msg& message, KIARA::Tr
 		int errcode = errno;
 		if (session.get_zeromq_identifier().size() != static_cast<std::vector<char>::size_type>(rc) )
 		{
+			std::cerr << "Failed to send identity to 0mq socket: " << std::strerror(errcode) << std::endl;
 			errno = errcode;
 			return -1;
 		}
@@ -82,29 +106,35 @@ KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, KIARA
 	KIARA::Transport::KT_Msg message;
 	std::vector< char > buffer;
 	std::vector< char > identifier;
+	int size;
 
-	// TODO: Remove magic number
 	if ( KT_STREAM == _configuration.get_application_type() )
 	{
-		identifier.resize ( 1024 );
-		int size = zmq_recv ( session.get_socket(), identifier.data(), identifier.size(), 0);
-		identifier.resize ( (size_t)size );
+		zmq_msg_t id;
+		zmq_msg_init (&id);
+		size = zmq_msg_recv (&id, session.get_socket(), 0);
+		identifier.resize(size_t(size));
+		char* id_ptr = (char*)zmq_msg_data(&id);
+		identifier = std::vector<char>(id_ptr, id_ptr + size);
 		session.set_zeromq_identifier ( std::move(identifier) );
+		zmq_msg_close(&id);
 	}
 
-	// TODO Remove magic number
-	buffer.resize ( 1024 );
-	int rc = zmq_recv ( session.get_socket(), buffer.data(), buffer.size(), 0);
-	if ( -1 == rc )
+	zmq_msg_t msg;
+	zmq_msg_init (&msg);
+	size = zmq_msg_recv (&msg, session.get_socket(), 0);
+	if ( -1 == size )
 	{
 		ret = std::move (message);
 		return -1;
 	}
 
-	buffer.resize ( static_cast<size_t>(rc) );
+	char* msg_ptr = (char*)zmq_msg_data(&msg);
+	buffer = std::vector<char>(msg_ptr, msg_ptr + size);
 
-	message.set_payload ( std::move(buffer) );
-	ret = std::move (message);
+	ret.set_payload ( buffer );
+	zmq_msg_close(&msg);
+
 	return 0;
 }
 
