@@ -88,7 +88,7 @@ typedef struct kt_handle kt_handle_t;
 
 kt_msg_t* kt_msg_new ();
 void kt_msg_destroy ( kt_msg_t* );
-void kt_msg_set_payload ( kt_msg_t*, void*, size_t, void (*)(void*) );
+void kt_msg_set_payload ( kt_msg_t*, void*, size_t);
 void* kt_msg_get_payload ( kt_msg_t* );
 kt_handle_t* kt_create_handle ( void* (*)(kt_conn_session_t*, kt_msg_t*) );
 
