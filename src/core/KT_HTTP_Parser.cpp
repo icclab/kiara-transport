@@ -29,7 +29,7 @@ KT_HTTP_Parser::KT_HTTP_Parser (KT_Msg& msg)
     settings.on_body = body_cb;
 
     parser = (http_parser*) malloc ( sizeof ( http_parser ) );
-    http_parser_init ( parser, HTTP_REQUEST );
+    http_parser_init ( parser, HTTP_BOTH );
 
     parser->data = static_cast<void*>(new std::string);
     http_parser_execute ( parser, &settings, msg.get_payload().data(), \
