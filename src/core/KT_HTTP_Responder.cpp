@@ -90,7 +90,7 @@ std::string generate_418_IM_A_TEAPOT()
 
 std::string content_length(std::vector<char> payload)
 {
-	return std::string ("Content-length: " + std::to_string(payload.size()));
+	return std::string ("Content-Length: " + std::to_string(payload.size()));
 }
 
 const char* header_delimiter = "\r\n\r\n";
