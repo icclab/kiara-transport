@@ -43,6 +43,7 @@ void callback_handler ( KT_Msg& msg, KT_Session* sess, KT_Connection* obj ) {
 	//std::string payload ( "Hello World, welcome to KIARA::Transport" );
 	//payload = KT_HTTP_Responder::generate_200_OK( std::vector<char>(payload.begin(), payload.end()) );
 	std::string payload = KT_HTTP_Responder::generate_418_IM_A_TEAPOT();
+
 	KT_Msg message;
 	message.set_payload ( payload );
 

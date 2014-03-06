@@ -16,70 +16,70 @@ namespace Transport {
 
 
 /**
-  * class KT_Msg
-  * Since payload is handled as a pointer to a binary memory allocation
-  * *free_payload() is responsible to destroy/deallocate the beforementioned
-  * memory.
-  * 
-  * According to settings in kt_conn_session_t defined it will generate valid
-  * header and body structures from the metadata and payload when sent. The
-  * same applies the other way around when receiving messages.
-  */
+ * class KT_Msg
+ * Since payload is handled as a pointer to a binary memory allocation
+ * *free_payload() is responsible to destroy/deallocate the beforementioned
+ * memory.
+ *
+ * According to settings in kt_conn_session_t defined it will generate valid
+ * header and body structures from the metadata and payload when sent. The
+ * same applies the other way around when receiving messages.
+ */
 
 class KT_Msg
 {
 private:
-  std::map< std::string, std::string > _metadata;
-  std::vector< char > _payload;
+	std::map< std::string, std::string > _metadata;
+	std::vector< char > _payload;
 
 public:
-  KT_Msg ( );
-  virtual ~KT_Msg ( );
-  KT_Msg ( std::vector< char >& payload);
+	KT_Msg ( );
+	virtual ~KT_Msg ( );
+	KT_Msg ( std::vector< char >& payload);
 
-  void add_metadata ( std::string &key, std::string &value );
-  std::string get_serialized_metadata ( const std::string delim = ":");
-  
-  //
-  // Simple getter/setter methods
-  //
+	void add_metadata ( std::string &key, std::string &value );
+	std::string get_serialized_metadata ( const std::string delim = ":");
 
-  /**
-   * Set the value of _metadata
-   * @param metadata the new value of _metadata
-   */
-  void set_metadata ( std::map< std::string, std::string > &metadata ) {
-      _metadata = metadata;
-  }
+	//
+	// Simple getter/setter methods
+	//
 
-  /**
-   * Get the value of _metadata
-   * @return the value of _metadata
-   */
-  std::map< std :: string, std :: string > get_metadata ( ) {
-    return _metadata;
-  }
+	/**
+	 * Set the value of _metadata
+	 * @param metadata the new value of _metadata
+	 */
+	void set_metadata ( std::map< std::string, std::string > &metadata ) {
+		_metadata = metadata;
+	}
 
-  /**
-   * Set the value of _payload
-   * @param payload the new value of _payload
-   */
-  void set_payload ( std::vector< char > payload ) {
-    _payload = payload;
-  }
+	/**
+	 * Get the value of _metadata
+	 * @return the value of _metadata
+	 */
+	std::map< std :: string, std :: string > get_metadata ( ) {
+		return _metadata;
+	}
 
-  void set_payload ( std::string &payload) {
-	  _payload.resize (payload.size());
-	  _payload.assign (payload.begin(), payload.end());
-  }
+	/**
+	 * Set the value of _payload
+	 * @param payload the new value of _payload
+	 */
+	void set_payload ( std::vector< char > payload ) {
+		_payload = payload;
+	}
 
-  /**
-   * Get the value of _payload
-   * @return the value of _payload
-   */
-  std::vector< char > get_payload ( ) {
-    return _payload;
-  }
+	void set_payload ( std::string &payload) {
+		_payload.resize (payload.size());
+		_payload.assign (payload.begin(), payload.end());
+	}
+
+	/**
+	 * Get the value of _payload
+	 * @return the value of _payload
+	 */
+	std::vector< char > get_payload ( ) {
+		return _payload;
+	}
 
 
 };
