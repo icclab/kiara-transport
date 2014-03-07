@@ -38,7 +38,7 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint, KI
 	}
 	else if ( KT_REQUESTREPLY == _configuration.get_application_type() )
 	{
-		socket = zmq_socket ( _context, ZMQ_REP);
+		socket = zmq_socket ( _context, ZMQ_REQ);
 		errcode = errno;
 	}
 
