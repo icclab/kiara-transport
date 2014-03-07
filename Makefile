@@ -1,7 +1,8 @@
 CC = clang
 CXX = clang++
-FLAGS = -v \
-		-Weverything \
+FLAGS =	-Weverything \
+		-Wno-padded \
+		-Wno-c++98-compat-pedantic \
 		-pedantic \
 		-std=c++11 \
 		-O0 \
