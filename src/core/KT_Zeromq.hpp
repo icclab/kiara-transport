@@ -47,7 +47,7 @@ public:
    * @param endpoint Where to connect to
    */
   int
-  connect (KT_Client& endpoint, KT_Session** ret);
+  connect ( KT_Session** ret);
 
   /**
    * @param message Message for the receipient
@@ -82,7 +82,7 @@ public:
    * bind requires a valid callback handler which is called when a message is
    * received, it binds according to the set configuration
    */
-  int bind ( std::string endpoint );
+  int bind ( );
   
   /**
    * stops listening to incomming messages
