@@ -139,6 +139,7 @@ public:
     return _application_type;
   }
 
+  void set_host (unsigned int transport_layer, std::string hostname, unsigned int port_number);
 
 };
 } // end of Transport namespace
