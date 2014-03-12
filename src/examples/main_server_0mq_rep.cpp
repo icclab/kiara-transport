@@ -40,8 +40,8 @@ void callback_handler ( KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	std::vector<char> answer_vector = msg.get_payload();
 	std::string answer(answer_vector.begin(), answer_vector.end());
 	std::cout << answer << std::endl;
-	//std::cout << "Memory hex dump:" << std::endl << std::endl;
-	//Dump ( msg.get_payload().data(), msg.get_payload().size() );
+	std::cout << "Memory hex dump:" << std::endl << std::endl;
+	Dump ( msg.get_payload().data(), msg.get_payload().size() );
 
 	std::string payload ( "Here comes the answer" );
 	KT_Msg message;
