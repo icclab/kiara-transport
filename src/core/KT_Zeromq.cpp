@@ -28,7 +28,7 @@ KIARA::Transport::KT_Zeromq::poller ( void* socket, std::string endpoint ) {
 }
 
 int
-KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint, KIARA::Transport::KT_Session** ret ) {
+KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Session** ret ) {
 	void* socket = NULL;
 	int errcode;
 	if ( KT_STREAM == _configuration.get_application_type() )
@@ -47,8 +47,22 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint, KI
 		errno = errcode;
 		return -1;
 	}
+
+	KT_Configuration config = get_configuration();
+	std::string binding_name;
+	if (KT_TCP == config.get_transport_layer())
+	{
+		binding_name += "tcp://";
+	} else {
+		return -1;
+	}
+
+	binding_name += config.get_hostname();
+	binding_name += ":";
+	binding_name += std::to_string(config.get_port_number());
+
 	// TODO: fix dangerous pointer to underlying data structure
-	const char* host = endpoint.get_endpoint().c_str();
+	const char* host = binding_name.c_str();
 	int rc = zmq_connect ( socket, host );
 
 	if ( 0 != rc )
@@ -63,10 +77,10 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Client& endpoint, KI
 
 	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session ();
 	session->set_socket ( socket );
-	session->set_endpoint ( endpoint.get_endpoint() );
+	session->set_endpoint ( binding_name );
 	std::vector<char> identifier (id, id + id_size);
 	session->set_zeromq_identifier( std::move(identifier));
-	_sessions.insert ( std::make_pair ( endpoint.get_endpoint(), session ) );
+	_sessions.insert ( std::make_pair ( binding_name, session ) );
 
 	*ret = session;
 
@@ -156,7 +170,7 @@ KIARA::Transport::KT_Zeromq::register_callback ( void (*callback)(KIARA::Transpo
  * received, it binds according to the set configuration
  */
 int
-KIARA::Transport::KT_Zeromq::bind ( std::string endpoint ) {
+KIARA::Transport::KT_Zeromq::bind ( ) {
 	void* socket = NULL;
 	int errcode;
 
@@ -177,7 +191,20 @@ KIARA::Transport::KT_Zeromq::bind ( std::string endpoint ) {
 		return -1;
 	}
 
-	int rc = zmq_bind ( socket, endpoint.c_str() );
+	KT_Configuration config = get_configuration();
+	std::string binding_name;
+	if (KT_TCP == config.get_transport_layer())
+	{
+		binding_name += "tcp://";
+	} else {
+		return -1;
+	}
+
+	binding_name += config.get_hostname();
+	binding_name += ":";
+	binding_name += std::to_string(config.get_port_number());
+
+	int rc = zmq_bind ( socket, binding_name.c_str() );
 	errcode = errno;
 	if ( 0 != rc )
 	{
@@ -187,11 +214,11 @@ KIARA::Transport::KT_Zeromq::bind ( std::string endpoint ) {
 
 	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session();
 	session->set_socket ( socket );
-	session->set_endpoint ( endpoint );
-	_sessions.insert ( std::make_pair ( endpoint, session ) );
+	session->set_endpoint ( binding_name.c_str() );
+	_sessions.insert ( std::make_pair ( binding_name.c_str(), session ) );
 
 	interupted = false;
-	poller_thread = new std::thread ( &KT_Zeromq::poller, this, socket, endpoint );
+	poller_thread = new std::thread ( &KT_Zeromq::poller, this, socket, binding_name.c_str() );
 	return 0;
 }
 

@@ -1,4 +1,10 @@
-
+/*
+ * KT_Configuration.cpp
+ *
+ *  Created on: Mar 13, 2014
+ *      Author: habl
+ *   Copyright: 2014 ZHAW
+ */
 /**
  * Lazy way to have C99 wrapper and C++ class implementation in one file
  */
@@ -7,7 +13,6 @@
 
 namespace KIARA {
 namespace Transport {
-
 
 KT_Configuration::KT_Configuration ( ) { }
 
@@ -52,6 +57,16 @@ void KT_Configuration::set_application_type ( unsigned int application_type )   
 unsigned int KT_Configuration::get_application_type ( )   {
   return _application_type;
 }
+
+void KIARA::Transport::KT_Configuration::set_host(unsigned int transport_layer,
+		std::string hostname, unsigned int port_number)
+{
+
+	this->set_transport_layer( transport_layer );
+	this->set_hostname( hostname );
+	this->set_port_number( port_number );
+}
+
 
 } // end of namespace Transport
 } // end of namespace KIARA

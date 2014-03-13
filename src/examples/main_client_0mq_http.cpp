@@ -21,13 +21,19 @@ int main ()
 	KT_Configuration config;
 	config.set_application_type ( KT_STREAM );
 
+	config.set_host( KT_TCP, "localhost", 5555);
+
+	// Or alternatively:
+	// config.set_transport_layer( KT_TCP );
+	// config.set_hostname("localhost");
+	// config.set_port_number( 5555 );
+
 	KT_Connection* connection = new KT_Zeromq ();
 	connection->set_configuration (config);
 
 	KT_Session* session = nullptr;
-	KT_Client endpoint;
-	endpoint.set_endpoint("tcp://localhost:5555");
-	if (0 != connection->connect(endpoint, &session))
+
+	if ( 0 != connection->connect(&session) )
 	{
 		std::cerr << "Failed to connect" << std::endl;
 	}

@@ -3,10 +3,11 @@
  *
  *  Created on: Mar 13, 2014
  *      Author: habl
+ *   Copyright: 2014 ZHAW
  */
 
-#ifndef KT_CONFIGURATION_H_
-#define KT_CONFIGURATION_H_
+#ifndef SRC_CORE_KT_CONFIGURATION_H_
+#define SRC_CORE_KT_CONFIGURATION_H_
 
 #include "KT_Configuration_glob.h"
 
@@ -17,22 +18,27 @@ extern "C" {
 typedef struct kt_configuration kt_configuration_t;
 
 kt_network_layer kt_configuration_get_network_layer (kt_configuration_t* config);
-void kt_configuration_set_network_layer (kt_configuration_t* config, kt_network_layer network_layer);
+void kt_configuration_set_network_layer (kt_configuration_t* config,
+        kt_network_layer network_layer);
 
 kt_transport_layer kt_configuration_get_transport_layer (kt_configuration_t* config);
-void kt_configuration_set_transport_layer (kt_configuration_t* config, kt_transport_layer transport_layer);
+void kt_configuration_set_transport_layer (kt_configuration_t* config,
+        kt_transport_layer transport_layer);
 
 kt_crypto_layer kt_configuration_get_crypto_layer (kt_configuration_t* config);
-void kt_configuration_set_crypto_layer (kt_configuration_t* config, kt_crypto_layer crypto_layer);
+void kt_configuration_set_crypto_layer (kt_configuration_t* config,
+        kt_crypto_layer crypto_layer);
 
 kt_application_layer kt_configuration_get_application_layer (kt_configuration_t* config);
-void kt_configuration_set_application_layer (kt_configuration_t* config, kt_application_layer application_layer);
+void kt_configuration_set_application_layer (kt_configuration_t* config,
+        kt_application_layer application_layer);
 
 kt_application_type kt_configuration_get_application_type (kt_configuration_t* config);
-void kt_configuration_set_application_type (kt_configuration_t* config, kt_application_type application_type);
+void kt_configuration_set_application_type (kt_configuration_t* config,
+        kt_application_type application_type);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* KT_CONFIGURATION_H_ */
+#endif  // SRC_CORE_KT_CONFIGURATION_H_

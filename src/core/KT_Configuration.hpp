@@ -22,6 +22,8 @@ private:
   unsigned int _network_layer;
   // Layer 4 in the networking stack
   unsigned int _transport_layer;
+  std::string _hostname;
+  unsigned int _port_number;
   // Optional crypto layer, based on OpenSSL
   unsigned int _crypto_layer;
   unsigned int _application_layer;
@@ -60,6 +62,26 @@ public:
    */
   kt_transport_layer get_transport_layer ( );
 
+  const std::string& get_hostname() const
+  {
+	  return _hostname;
+  }
+
+  void set_hostname(const std::string& hostname)
+  {
+	  _hostname = hostname;
+  }
+
+  unsigned int get_port_number() const
+  {
+	  return _port_number;
+  }
+
+  void set_port_number(unsigned int portNumber)
+  {
+	  _port_number = portNumber;
+  }
+
   /**
    * Set the value of _crypto_layer
    * Optional crypto layer, based on OpenSSL
@@ -96,6 +118,9 @@ public:
    * @return the value of _application_type
    */
   kt_application_type get_application_type ( );
+
+  void set_host (kt_transport_layer transport_layer, std::string hostname, unsigned int port_number);
+
 };
 } // end of Transport namespace
 } // end of KIARA namespace

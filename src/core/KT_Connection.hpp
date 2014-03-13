@@ -44,7 +44,7 @@ public:
    */
 
   virtual int
-  connect (KT_Client& endpoint, KT_Session** ret) = 0;
+  connect ( KT_Session** ret) = 0;
 
   /**
    * @return int 0 if successful
@@ -86,7 +86,7 @@ public:
    * received, it binds according to the set configuration
    */
   virtual int
-  bind (std::string) = 0;
+  bind () = 0;
   
   /**
    * stops listening to incomming messages
