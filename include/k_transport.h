@@ -22,6 +22,7 @@ extern "C" {
 typedef struct kt_conn_session kt_conn_session_t;
 typedef struct kt_msg kt_msg_t;
 typedef struct kt_handle kt_handle_t;
+typedef struct kt_configuration kt_configuration_t;
 
 // generic functions
 
@@ -39,7 +40,7 @@ kt_handle_t* kt_create_handle ( void* (*)(kt_conn_session_t*, kt_msg_t*) );
  * 
  * kt_conn_session_t* sess = kt_connect ( "http://domain.tld" );
  */
-kt_conn_session_t* kt_connect ( const char* );
+kt_conn_session_t* kt_connect ( const kt_configuration_t* );
 
 /* Send data to the remote host
  *
@@ -81,7 +82,7 @@ kt_msg_t* kt_recv ( kt_conn_session_t*, int );
 void* kt_disconnect ( kt_conn_session_t* );
 
 // server functions
-kt_conn_session_t* kt_init_server ( kt_connconf_t );
+kt_conn_session_t* kt_init_server ( kt_configuration_t );
 void kt_register_handle ( kt_conn_session_t*, kt_handle_t* );
 int kt_run_server ( kt_conn_session_t* );
 void* kt_stop_server ( kt_conn_session_t*, int );

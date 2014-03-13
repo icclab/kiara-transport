@@ -39,7 +39,6 @@ public:
 
   /**
    * @return int 0 if successful
-   * @param endpoint Where to connect to
    * @param ret Return a KT_Session pointer when successful
    */
 

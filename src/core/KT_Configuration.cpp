@@ -22,7 +22,7 @@ void KT_Configuration::set_network_layer ( unsigned int network_layer )   {
     _network_layer = network_layer;
 }
 
-unsigned int KT_Configuration::get_network_layer ( )   {
+unsigned int KT_Configuration::get_network_layer ( ) const {
   return _network_layer;
 }
 
@@ -30,7 +30,7 @@ void KT_Configuration::set_transport_layer ( unsigned int transport_layer )   {
     _transport_layer = transport_layer;
 }
 
-unsigned int KT_Configuration::get_transport_layer ( )   {
+unsigned int KT_Configuration::get_transport_layer ( ) const {
   return _transport_layer;
 }
 
@@ -38,7 +38,7 @@ void KT_Configuration::set_crypto_layer ( unsigned int crypto_layer )   {
     _crypto_layer = crypto_layer;
 }
 
-unsigned int KT_Configuration::get_crypto_layer ( )   {
+unsigned int KT_Configuration::get_crypto_layer ( ) const {
   return _crypto_layer;
 }
 
@@ -46,7 +46,7 @@ void KT_Configuration::set_application_layer ( unsigned int application_layer ) 
     _application_layer = application_layer;
 }
 
-unsigned int KT_Configuration::get_application_layer ( )   {
+unsigned int KT_Configuration::get_application_layer ( ) const {
   return _application_layer;
 }
 
@@ -54,7 +54,7 @@ void KT_Configuration::set_application_type ( unsigned int application_type )   
     _application_type = application_type;
 }
 
-unsigned int KT_Configuration::get_application_type ( )   {
+unsigned int KT_Configuration::get_application_type ( ) const {
   return _application_type;
 }
 

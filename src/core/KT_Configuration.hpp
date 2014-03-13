@@ -46,7 +46,7 @@ public:
    * Layer 3 in the networking stack
    * @return the value of _network_layer
    */
-  kt_network_layer get_network_layer ( );
+  kt_network_layer get_network_layer ( ) const;
 
   /**
    * Set the value of _transport_layer
@@ -60,7 +60,7 @@ public:
    * Layer 4 in the networking stack
    * @return the value of _transport_layer
    */
-  kt_transport_layer get_transport_layer ( );
+  kt_transport_layer get_transport_layer ( ) const;
 
   const std::string& get_hostname() const
   {
@@ -94,7 +94,7 @@ public:
    * Optional crypto layer, based on OpenSSL
    * @return the value of _crypto_layer
    */
-  kt_crypto_layer get_crypto_layer ( );
+  kt_crypto_layer get_crypto_layer ( ) const;
 
   /**
    * Set the value of _application_layer
@@ -106,7 +106,7 @@ public:
    * Get the value of _application_layer
    * @return the value of _application_layer
    */
-  kt_application_layer get_application_layer ( );
+  kt_application_layer get_application_layer ( ) const;
 
   /**
    * Set the value of _application_type
@@ -117,7 +117,7 @@ public:
    * Get the value of _application_type
    * @return the value of _application_type
    */
-  kt_application_type get_application_type ( );
+  kt_application_type get_application_type ( ) const;
 
   void set_host (kt_transport_layer transport_layer, std::string hostname, unsigned int port_number);
 

@@ -44,7 +44,7 @@ public:
 
   /**
    * @return int
-   * @param endpoint Where to connect to
+   * @param ret Return a KT_Session pointer when successful
    */
   int
   connect ( KT_Session** ret);
