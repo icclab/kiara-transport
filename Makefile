@@ -173,7 +173,7 @@ $(BUILDDIR)/KT_Zeromq.o: $(BUILDDIR) src/core/KT_Zeromq.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/core/KT_Zeromq.cpp
 
 $(BUILDDIR)/http_parser.o: $(BUILDDIR) src/core/http_parser.c
-		$(CXX) -c $(CXXFLAGS) -Wno-everything -o $@ src/core/http_parser.c
+		$(CC) -c $(CFLAGS) -Wno-everything -o $@ src/core/http_parser.c
 
 $(BUILDDIR)/main_server_0mq_http_pp.o: $(BUILDDIR) src/examples/main_server_0mq_http.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/examples/main_server_0mq_http.cpp
