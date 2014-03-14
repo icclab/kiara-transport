@@ -90,6 +90,11 @@ client_0mq_req_pp: $(BUILDDIR)/KT_Client.o \
                    $(BUILDDIR)/client_0mq_req_pp
 
 client_0mq_req_c:	$(BUILDDIR)/k_transport.o \
+					$(BUILDDIR)/KT_Configuration.o \
+					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_Msg.o \
+					$(BUILDDIR)/KT_Session.o \
+					$(BUILDDIR)/KT_Zeromq.o \
 					$(BUILDDIR)/main_client_0mq_req_c.o \
 					$(BUILDDIR)/client_0mq_req_c
 
@@ -131,7 +136,13 @@ CLIENT_0MQ_REQ_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
                     		$(BUILDDIR)/KT_Zeromq.o \
                     		$(BUILDDIR)/main_client_0mq_req_pp.o
 
-CLIENT_0MQ_REQ_CC_DEPS =	$(BUILDDIR)/main_client_0mq_req_c.o
+CLIENT_0MQ_REQ_CC_DEPS =	$(BUILDDIR)/main_client_0mq_req_c.o \
+							$(BUILDDIR)/k_transport.o \
+							$(BUILDDIR)/KT_Configuration.o \
+							$(BUILDDIR)/KT_Connection.o \
+							$(BUILDDIR)/KT_Msg.o \
+							$(BUILDDIR)/KT_Session.o \
+							$(BUILDDIR)/KT_Zeromq.o
 
 
 $(BUILDDIR)/k_transport.o: $(BUILDDIR) src/core/k_transport.cpp

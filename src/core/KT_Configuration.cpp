@@ -87,6 +87,10 @@ using namespace KIARA::Transport;
  */
 #define CASTER(obj) KT_Configuration* config_obj = reinterpret_cast<KT_Configuration*> (obj);
 
+kt_configuration_t* kt_configuration_create () {
+    return reinterpret_cast<kt_configuration_t*> (new KT_Configuration());
+}
+
 kt_network_layer kt_configuration_get_network_layer (kt_configuration_t* config) {
 	CASTER(config)
 	return config_obj->get_network_layer ();
@@ -130,6 +134,24 @@ kt_application_type kt_configuration_get_application_type (kt_configuration_t* c
 void kt_configuration_set_application_type (kt_configuration_t* config, kt_application_type application_type) {
 	CASTER(config)
 	config_obj->set_application_type (application_type);
+}
+
+char* kt_configuration_get_hostname (kt_configuration_t* config) {
+    // TODO: implement kt_configuration_get_hostname
+    return nullptr;
+}
+void kt_configuration_set_hostname (kt_configuration_t* config, char* hostname) {
+    CASTER(config)
+    config_obj->set_hostname(hostname);
+}
+
+unsigned int kt_configuration_get_port (kt_configuration_t* config) {
+    // TODO: implement kt_configuration_get_port
+    return 0;
+}
+void kt_configuration_set_port (kt_configuration_t* config, unsigned int port) {
+    CASTER(config)
+    config_obj->set_port_number(port);
 }
 
 /*

@@ -17,6 +17,8 @@ extern "C" {
 
 typedef struct kt_configuration kt_configuration_t;
 
+kt_configuration_t* kt_configuration_create ();
+
 kt_network_layer kt_configuration_get_network_layer (kt_configuration_t* config);
 void kt_configuration_set_network_layer (kt_configuration_t* config,
         kt_network_layer network_layer);
@@ -36,6 +38,12 @@ void kt_configuration_set_application_layer (kt_configuration_t* config,
 kt_application_type kt_configuration_get_application_type (kt_configuration_t* config);
 void kt_configuration_set_application_type (kt_configuration_t* config,
         kt_application_type application_type);
+
+char* kt_configuration_get_hostname (kt_configuration_t* config);
+void kt_configuration_set_hostname (kt_configuration_t* config, char* hostname);
+
+unsigned int kt_configuration_get_port (kt_configuration_t* config);
+void kt_configuration_set_port (kt_configuration_t* config, unsigned int port);
 
 #ifdef __cplusplus
 }

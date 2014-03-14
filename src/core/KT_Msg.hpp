@@ -81,6 +81,14 @@ public:
 		return _payload;
 	}
 
+	std::vector< char >* get_payload_ptr () {
+	    return &_payload;
+	}
+
+	std::string get_payload_as_string () {
+	    return std::string(_payload.begin(), _payload.end());
+	}
+
 
 };
 } // end of Transport namespace
