@@ -48,11 +48,26 @@ int RecoServer::RunServer() {
 
 void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	KT_HTTP_Parser parser(msg);
-	std::cout << parser << std::endl;
-
-	//std::string payload ( "Hello World, welcome to KIARA::Transport" );
-	//payload = KT_HTTP_Responder::generate_200_OK( std::vector<char>(payload.begin(), payload.end()) );
-	std::string payload = KT_HTTP_Responder::generate_418_IM_A_TEAPOT();
+	std::string payload("");
+	switch (parser.method) {
+		//GET Request
+		case 1:
+			payload.append ( "POST request are currently not enabled" );
+			payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
+			break;
+		//POST Request
+		case 3:
+			payload.append ( "POST request are currently not enabled" );
+			payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
+			break;
+		//Anything else
+		default:
+			payload.append ( "Request type is not supported" );
+			payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
+	}
+	//DEBUG Only
+	std::cout << parser.get_payload() << std::endl;
+	std::cout << parser.get_url() << std::endl;	
 
 	KT_Msg message;
 	message.set_payload(payload);
