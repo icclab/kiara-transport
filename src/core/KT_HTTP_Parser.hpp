@@ -19,6 +19,7 @@ namespace Transport
 {
 
 int body_cb (http_parser* p, char const* at, size_t len);
+int url_cb (http_parser* p, char const* at, size_t len);
 
 class KT_HTTP_Parser
 {
@@ -26,11 +27,18 @@ public:
 	KT_HTTP_Parser (KT_Msg& msg);
 	virtual ~KT_HTTP_Parser();
 	std::string get_payload();
+	std::string get_url();
 private:
 	friend std::ostream& operator<< (std::ostream& lhs, KT_HTTP_Parser& rhs);
 	http_parser* parser;
 	std::string* payload;
+	std::string* query_string;
 };
+
+typedef struct {
+	std::string* query_string;
+	std::string* body;
+} tmp_parser_fields;
 
 } /* namespace Transport */
 } /* namespace KIARA */
