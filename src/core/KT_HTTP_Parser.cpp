@@ -42,6 +42,7 @@ KT_HTTP_Parser::KT_HTTP_Parser (KT_Msg& msg)
 	
     payload = ((tmp_parser_fields*)parser->data)->body;
 	query_string = ((tmp_parser_fields*)parser->data)->query_string;
+	method = parser->method;
 }
 
 KT_HTTP_Parser::~KT_HTTP_Parser()

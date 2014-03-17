@@ -28,6 +28,7 @@ public:
 	virtual ~KT_HTTP_Parser();
 	std::string get_payload();
 	std::string get_url();
+	int method;
 private:
 	friend std::ostream& operator<< (std::ostream& lhs, KT_HTTP_Parser& rhs);
 	http_parser* parser;
