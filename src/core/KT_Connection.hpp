@@ -9,6 +9,7 @@
 
 #include <string>
 #include <map>
+#include <functional>
 
 #include "KT_Configuration.hpp"
 #include "KT_Msg.hpp"
@@ -29,7 +30,7 @@ protected:
   void* _context;
   std::map< std::string, KT_Session* > _sessions;
   KT_Configuration _configuration;
-  void (*_callback)(KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session* session, KIARA::Transport::KT_Connection* obj);
+  std::function<void(KT_Msg&, KT_Session*, KT_Connection*)> _std_callback;
   
 public:
 
@@ -78,7 +79,7 @@ public:
    */
 
   virtual int
-  register_callback (void (*callback)(KT_Msg&, KT_Session*, KIARA::Transport::KT_Connection*)) = 0;
+  register_callback (std::function<void(KT_Msg&, KT_Session*, KT_Connection*)>) = 0;
 
   /**
    * bind requires a valid callback handler which is called when a message is

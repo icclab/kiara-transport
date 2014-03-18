@@ -25,8 +25,8 @@ class KT_Session
 private:
   // k_user_data is a pointer to an opaque data structure which is needed by the
   // upper layers of KIARA and will not be modified by the transport library.
-  void* _k_user_data;
-  void* _socket;
+  void* _k_user_data = nullptr;
+  void* _socket = nullptr;
   std::string _endpoint;
   std::vector< char > _zeromq_identifier;
   

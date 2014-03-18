@@ -23,7 +23,7 @@ KIARA::Transport::KT_Zeromq::poller ( void* socket, std::string endpoint ) {
 	{
 		KT_Msg msg;
 		int error = recv (*sess, msg, 0);
-		_callback ( msg, sess, this );
+		_std_callback ( msg, sess, this );
 	}
 }
 
@@ -160,8 +160,8 @@ KIARA::Transport::KT_Zeromq::disconnect ( KIARA::Transport::KT_Session& session 
 }
 
 int
-KIARA::Transport::KT_Zeromq::register_callback ( void (*callback)(KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session* session, KIARA::Transport::KT_Connection* obj) ) {
-	_callback = callback;
+KIARA::Transport::KT_Zeromq::register_callback ( std::function<void(KT_Msg&, KT_Session*, KT_Connection*)> callback ) {
+	_std_callback = callback;
 	return 0;
 }
 

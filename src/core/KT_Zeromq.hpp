@@ -76,7 +76,7 @@ public:
    * callback function must accept KT_Msg* and KT_Session* object
    * @param callback Function to be called when a message arrives
    */
-  int register_callback ( void (*callback)(KT_Msg& message, KT_Session* session, KIARA::Transport::KT_Connection* obj) );
+  int register_callback ( std::function<void(KT_Msg&, KT_Session*, KT_Connection*)> );
 
   /**
    * bind requires a valid callback handler which is called when a message is
