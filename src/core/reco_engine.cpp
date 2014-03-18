@@ -75,8 +75,8 @@ void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	obj->send(message, (*sess), 0);
 }
 
-RecoClient::RecoClient(char* endpoint) {
-	host = endpoint;
+RecoClient::RecoClient(char* serverhost) {
+	host = serverhost;
 	KT_Configuration config;
 	config.set_application_type ( KT_STREAM );
 
@@ -113,8 +113,6 @@ RecoClient::RecoClient(char* endpoint) {
 	KT_HTTP_Parser parser (reply);
 	std::cout << "Parser found in body:" << std::endl;
 	std::cout << parser << std::endl;
-
-	return 0;
 }
 
 #ifdef	__cplusplus
@@ -131,7 +129,7 @@ void reco_run_server(void *reco_server){
 	tmp_reco_server->RunServer();
 }
 
-int reco_send_offer (char *endpoint) {
+void* reco_send_offer (char *endpoint) {
 	RecoClient *out = new RecoClient(endpoint);
 	return ((void*)out);
 }
