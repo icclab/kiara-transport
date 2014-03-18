@@ -31,7 +31,7 @@ $(BUILDDIR):
 clean:
 		rm -f -r $(BUILDDIR)
 
-all: server_0mq_http_pp client_0mq_http_pp server_0mq_http_nego_pp
+all: server_0mq_http_pp client_0mq_http_pp server_0mq_http_nego_pp server_0mq_http_nego
 nego: server_0mq_http_nego_pp
 negoc: server_0mq_http_nego
 

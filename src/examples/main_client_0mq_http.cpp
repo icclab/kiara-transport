@@ -26,7 +26,7 @@ int main ()
 
 	KT_Session* session = nullptr;
 	KT_Client endpoint;
-	endpoint.set_endpoint("tcp://localhost:5555");
+	endpoint.set_endpoint("tcp://localhost:81/negotiation");
 	if (0 != connection->connect(endpoint, &session))
 	{
 		std::cerr << "Failed to connect" << std::endl;

@@ -22,6 +22,14 @@ public:
 private:
 	std::string host;
 };
+
+class RecoClient {
+public:
+	RecoClient(char *endpoint);
+	~RecoClient();
+private:
+	std::string host;
+};
 #endif
 
 #ifdef	__cplusplus
