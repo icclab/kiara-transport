@@ -16,11 +16,12 @@
 #ifdef	__cplusplus
 class RecoServer {
 public:
-	RecoServer(char *endpoint);
+	RecoServer(char *endpoint, neg_ctx_t* neg_ctx);
 	~RecoServer();
 	int RunServer();
 private:
 	std::string host;
+	neg_ctx_t* ctx;
 };
 
 class RecoClient {
@@ -36,7 +37,7 @@ private:
 extern "C" {
 #endif
 	
-void* init_reco_server(char* endpoint);
+void* init_reco_server(char* endpoint, neg_ctx_t *neg_ctx);
 void reco_run_server(void *reco_server);
 void* reco_send_offer (char* endpoint);
 

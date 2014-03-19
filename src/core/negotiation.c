@@ -32,7 +32,7 @@ int neg_send_offer(neg_ctx_t *neg_ctx){
 }
 
 int neg_run_server(neg_ctx_t *neg_ctx) {
-	void* server = init_reco_server(neg_ctx->host);
+	void* server = init_reco_server(neg_ctx->host, neg_ctx);
 	reco_run_server(server);
 	return 1;
 }

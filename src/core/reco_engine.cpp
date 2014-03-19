@@ -10,6 +10,7 @@
 #include "KT_HTTP_Parser.hpp"
 #include "KT_HTTP_Responder.hpp"
 #include "reco_engine.h"
+#include "registry.h"
 #include <iostream>
 #include <iomanip>
 #include <unistd.h>
@@ -20,8 +21,9 @@ using namespace KIARA::Transport;
 
 void callback_handler(KT_Msg&, KT_Session*, KT_Connection*);
 
-RecoServer::RecoServer(char* endpoint) {
+RecoServer::RecoServer(char* endpoint, neg_ctx_t* neg_ctx) {
 	host = endpoint;
+	ctx = neg_ctx;
 	//url = std::string(endpoint);
 }
 
@@ -35,10 +37,12 @@ int RecoServer::RunServer() {
 
 	KT_Connection* connection = new KT_Zeromq();
 	connection->set_configuration(config);
-
+	
 	connection->register_callback(&callback_handler);
 	connection->bind(host);
-
+	
+	connection->get_session().find(ctx->host)->second->set_k_user_data(ctx);
+	
 	sleep(300);
 
 	connection->unbind();
@@ -48,12 +52,14 @@ int RecoServer::RunServer() {
 
 void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	KT_HTTP_Parser parser(msg);
+	neg_ctx_t *neg_ctx = (neg_ctx_t*) sess->get_k_user_data();
+	std::cout << neg_ctx->host << std::endl;
 	std::string payload("");
 	switch (parser.method) {
 		//GET Request
 		case 1:
-			payload.append ( "POST request are currently not enabled" );
-			payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
+			payload.append (reg_get_local_capability_json(neg_ctx));
+			payload = KT_HTTP_Responder::generate_200_OK( std::vector<char>(payload.begin(), payload.end()) );
 			break;
 		//POST Request
 		case 3:
@@ -119,8 +125,8 @@ RecoClient::RecoClient(char* serverhost) {
 extern "C" {
 #endif
 
-void* init_reco_server(char *endpoint) {
-	RecoServer *out = new RecoServer(endpoint);
+void* init_reco_server(char *endpoint, neg_ctx_t *neg_ctx) {
+	RecoServer *out = new RecoServer(endpoint, neg_ctx);
 	return ((void*)out);
 }
 
