@@ -31,11 +31,10 @@ $(BUILDDIR):
 clean:
 		rm -f -r $(BUILDDIR)
 
-all: server_0mq_http_pp client_0mq_http_pp server_0mq_http_nego_pp server_0mq_http_nego
-nego: server_0mq_http_nego_pp
-negoc: server_0mq_http_nego
+all: server_0mq_http_pp client_0mq_http_pp server_0mq_http_nego
+negoc: server_0mq_http_nego client_0mq_http_nego
 
-server_0mq_http_pp: $(BUILDDIR)/KT_Client.o \
+server_0mq_http_pp:								$(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/KT_Configuration.o \
 										$(BUILDDIR)/KT_Connection.o \
 										$(BUILDDIR)/KT_HTTP_Parser.o \
@@ -46,21 +45,6 @@ server_0mq_http_pp: $(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/http_parser.o \
 										$(BUILDDIR)/main_server_0mq_http_pp.o  \
 										$(BUILDDIR)/server_0mq_http_pp
-	
-server_0mq_http_nego_pp:							$(BUILDDIR)/KT_Client.o \
-										$(BUILDDIR)/KT_Configuration.o \
-										$(BUILDDIR)/KT_Connection.o \
-										$(BUILDDIR)/KT_HTTP_Parser.o \
-										$(BUILDDIR)/KT_HTTP_Responder.o \
-										$(BUILDDIR)/KT_Msg.o \
-										$(BUILDDIR)/KT_Session.o \
-										$(BUILDDIR)/KT_Zeromq.o \
-										$(BUILDDIR)/http_parser.o \
-										$(BUILDDIR)/negotiation.o \
-										$(BUILDDIR)/reco_engine.o \
-										$(BUILDDIR)/registry.o \
-										$(BUILDDIR)/main_server_0mq_http_nego_pp.o  \
-										$(BUILDDIR)/server_0mq_http_nego_pp
 
 server_0mq_http_nego:								$(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/KT_Configuration.o \
@@ -77,7 +61,22 @@ server_0mq_http_nego:								$(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/main_nego.o  \
 										$(BUILDDIR)/server_0mq_http_nego
 
-client_0mq_http_pp: $(BUILDDIR)/KT_Client.o \
+client_0mq_http_nego:			$(BUILDDIR)/KT_Client.o \
+					$(BUILDDIR)/KT_Configuration.o \
+					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_HTTP_Parser.o \
+					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_Msg.o \
+					$(BUILDDIR)/KT_Session.o \
+					$(BUILDDIR)/KT_Zeromq.o \
+					$(BUILDDIR)/http_parser.o \
+					$(BUILDDIR)/negotiation.o \
+					$(BUILDDIR)/reco_engine.o \
+					$(BUILDDIR)/registry.o \
+					$(BUILDDIR)/main_nego_client.o  \
+					$(BUILDDIR)/client_0mq_http_nego
+
+client_0mq_http_pp:			$(BUILDDIR)/KT_Client.o \
                                         $(BUILDDIR)/KT_Configuration.o \
                                         $(BUILDDIR)/KT_Connection.o \
                                         $(BUILDDIR)/KT_HTTP_Parser.o \
@@ -100,20 +99,6 @@ SERVER_0MQ_DEPS =								$(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/KT_Zeromq.o \
 										$(BUILDDIR)/http_parser.o \
 										$(BUILDDIR)/main_server_0mq_http_pp.o
-
-SERVER_0MQ_NEGO_DEPS =								$(BUILDDIR)/KT_Client.o \
-										$(BUILDDIR)/KT_Configuration.o \
-										$(BUILDDIR)/KT_Connection.o \
-										$(BUILDDIR)/KT_HTTP_Parser.o \
-										$(BUILDDIR)/KT_HTTP_Responder.o \
-										$(BUILDDIR)/KT_Msg.o \
-										$(BUILDDIR)/KT_Session.o \
-										$(BUILDDIR)/KT_Zeromq.o \
-										$(BUILDDIR)/http_parser.o \
-										$(BUILDDIR)/negotiation.o \
-										$(BUILDDIR)/reco_engine.o \
-										$(BUILDDIR)/registry.o \
-										$(BUILDDIR)/main_server_0mq_http_nego_pp.o
 	
 SERVER_0MQ_C_NEGO_DEPS =							$(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/KT_Configuration.o \
@@ -128,6 +113,20 @@ SERVER_0MQ_C_NEGO_DEPS =							$(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/reco_engine.o \
 										$(BUILDDIR)/registry.o \
 										$(BUILDDIR)/main_nego.o
+	
+CLIENT_0MQ_C_NEGO_DEPS =		$(BUILDDIR)/KT_Client.o \
+					$(BUILDDIR)/KT_Configuration.o \
+					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_HTTP_Parser.o \
+					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_Msg.o \
+					$(BUILDDIR)/KT_Session.o \
+					$(BUILDDIR)/KT_Zeromq.o \
+					$(BUILDDIR)/http_parser.o \
+					$(BUILDDIR)/negotiation.o \
+					$(BUILDDIR)/reco_engine.o \
+					$(BUILDDIR)/registry.o \
+					$(BUILDDIR)/main_nego_client.o
 
 CLIENT_0MQ_DEPS =   $(BUILDDIR)/KT_Client.o \
                                         $(BUILDDIR)/KT_Configuration.o \
@@ -182,8 +181,8 @@ $(BUILDDIR)/main_server_0mq_http_pp.o: $(BUILDDIR) src/examples/main_server_0mq_
 $(BUILDDIR)/main_nego.o: $(BUILDDIR) src/examples/main_nego.c
 		$(CC) -c $(CFLAGS) -o $@ src/examples/main_nego.c
 	
-$(BUILDDIR)/main_server_0mq_http_nego_pp.o: $(BUILDDIR) src/examples/main_server_0mq_http_nego.cpp
-		$(CXX) -c $(CXXFLAGS) -o $@ src/examples/main_server_0mq_http_nego.cpp
+$(BUILDDIR)/main_nego_client.o: $(BUILDDIR) src/examples/main_nego_client.c
+		$(CC) -c $(CFLAGS) -o $@ src/examples/main_nego_client.c
 
 $(BUILDDIR)/server_0mq_http_pp: $(BUILDDIR) $(SERVER_0MQ_DEPS)
 		$(CXX) $(LDFLAGS) $(FLAGS) -o $@ $(SERVER_0MQ_DEPS)
@@ -193,9 +192,9 @@ $(BUILDDIR)/main_client_0mq_http_pp.o: $(BUILDDIR) src/examples/main_client_0mq_
 
 $(BUILDDIR)/client_0mq_http_pp: $(BUILDDIR) $(CLIENT_0MQ_DEPS)
 		$(CXX) $(LDFLAGS) $(FLAGS) -o $@ $(CLIENT_0MQ_DEPS)
-
-$(BUILDDIR)/server_0mq_http_nego_pp: $(BUILDDIR) $(SERVER_0MQ_NEGO_DEPS)
-		$(CXX) $(LDFLAGS) $(FLAGS) -o $@ $(SERVER_0MQ_NEGO_DEPS)
 	
 $(BUILDDIR)/server_0mq_http_nego: $(BUILDDIR) $(SERVER_0MQ_C_NEGO_DEPS)
 		$(CXX) $(LDFLAGS) $(FLAGS) -o $@ $(SERVER_0MQ_C_NEGO_DEPS)
+	
+$(BUILDDIR)/client_0mq_http_nego: $(BUILDDIR) $(CLIENT_0MQ_C_NEGO_DEPS)
+		$(CXX) $(LDFLAGS) $(FLAGS) -o $@ $(CLIENT_0MQ_C_NEGO_DEPS)
