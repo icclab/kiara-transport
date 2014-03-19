@@ -89,7 +89,7 @@ void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	obj->send(message, (*sess), 0);
 }
 
-RecoClient::RecoClient(char* serverhost) {
+RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 	host = serverhost;
 	KT_Configuration config;
 	config.set_application_type ( KT_STREAM );
@@ -111,9 +111,10 @@ RecoClient::RecoClient(char* serverhost) {
 	}
 
 	KT_Msg request;
-	std::string payload("some body");
-	payload = KT_HTTP_Requester::generate_request("GET", "localhost:81", "/egotiation",  std::vector<char>(payload.begin(), payload.end()));
-
+	std::string payload(reg_get_local_capability_json(neg_ctx));
+	std::cout << payload << std::endl;
+	payload = KT_HTTP_Requester::generate_request("POST", "localhost:81", "/negotiation",  std::vector<char>(payload.begin(), payload.end()));
+	
 	request.set_payload(payload);
 
 	if (0 != connection->send(request, *session, 0))
@@ -144,8 +145,8 @@ void reco_run_server(void *reco_server){
 	tmp_reco_server->RunServer();
 }
 
-void* reco_send_offer (char *endpoint) {
-	RecoClient *out = new RecoClient(endpoint);
+void* reco_send_offer (char *endpoint, neg_ctx_t* neg_ctx) {
+	RecoClient *out = new RecoClient(endpoint, neg_ctx);
 	return ((void*)out);
 }
 
