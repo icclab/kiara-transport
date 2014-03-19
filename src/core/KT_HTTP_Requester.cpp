@@ -16,10 +16,16 @@ namespace KT_HTTP_Requester
 std::string generate_request(std::string method, std::string host, std::string path, std::vector<char> payload)
 {
 	std::string request(make_header(method, path));
+	if(method.compare("GET") != 0 && method.compare("DELETE")){
+		request += content_length(payload);
+		request += "\r\n";
+	}
 	request += "User-Agent: KIARA\r\n";
 	request += "Host: ";
 	request += host;
 	request += "\r\n\r\n";
+	request.append(payload.data(), payload.size());
+	request += "\r\n";
 	return request;
 }
 
@@ -36,10 +42,6 @@ std::string content_length(std::vector<char> payload)
 {
 	return std::string ("Content-Length: " + std::to_string(payload.size()));
 }
-
-/*namespace Content_Type {
-	const char* _text_plain  = "Content-Type: text/plain\r\n";
-}*/
 
 } /* namespace KT_HTTP_Requester */
 } /* namespace Transport */
