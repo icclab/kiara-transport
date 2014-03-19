@@ -9,6 +9,7 @@
 #include "KT_Zeromq.hpp"
 #include "KT_HTTP_Parser.hpp"
 #include "KT_HTTP_Responder.hpp"
+#include "KT_HTTP_Requester.hpp"
 #include "reco_engine.h"
 #include "registry.h"
 #include <iostream>
@@ -58,8 +59,14 @@ void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	switch (parser.method) {
 		//GET Request
 		case 1:
-			payload.append (reg_get_local_capability_json(neg_ctx));
-			payload = KT_HTTP_Responder::generate_200_OK( std::vector<char>(payload.begin(), payload.end()) );
+			if(parser.get_url().compare(0, 12, "/negotiation") == 0){
+				payload.append (reg_get_local_capability_json(neg_ctx));
+				payload = KT_HTTP_Responder::generate_200_OK( std::vector<char>(payload.begin(), payload.end()) );
+			}
+			else {
+				payload.append ( "Not a negotiation endpoint!" );
+				payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
+			}
 			break;
 		//POST Request
 		case 3:
@@ -73,7 +80,8 @@ void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	}
 	//DEBUG Only
 	std::cout << parser.get_payload() << std::endl;
-	std::cout << parser.get_url() << std::endl;	
+	std::cout << parser.get_url() << std::endl;
+	std::cout << "/negotiation" << std::endl;	
 
 	KT_Msg message;
 	message.set_payload(payload);
@@ -103,7 +111,8 @@ RecoClient::RecoClient(char* serverhost) {
 	}
 
 	KT_Msg request;
-	std::string payload ( "PUT / HTTP/1.1\r\nUser-Agent: KIARA\r\nHost: localhost:5555\r\nContent-Length: 41\r\n\r\nHello World, welcome to KIARA::Transport" );
+	std::string payload("some body");
+	payload = KT_HTTP_Requester::generate_request("GET", "localhost:81", "/egotiation",  std::vector<char>(payload.begin(), payload.end()));
 
 	request.set_payload(payload);
 

@@ -27,7 +27,7 @@ neg_dict_t *neg_get_capability(neg_ctx_t* neg_ctx, char* key){
 }
 
 int neg_send_offer(neg_ctx_t *neg_ctx){
-	reco_send_offer(neg_ctx);
+	reco_send_offer(neg_ctx->host);
 	return 1;
 }
 

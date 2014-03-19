@@ -51,6 +51,7 @@ server_0mq_http_nego:								$(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/KT_Connection.o \
 										$(BUILDDIR)/KT_HTTP_Parser.o \
 										$(BUILDDIR)/KT_HTTP_Responder.o \
+										$(BUILDDIR)/KT_HTTP_Requester.o \
 										$(BUILDDIR)/KT_Msg.o \
 										$(BUILDDIR)/KT_Session.o \
 										$(BUILDDIR)/KT_Zeromq.o \
@@ -66,6 +67,7 @@ client_0mq_http_nego:			$(BUILDDIR)/KT_Client.o \
 					$(BUILDDIR)/KT_Connection.o \
 					$(BUILDDIR)/KT_HTTP_Parser.o \
 					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_HTTP_Requester.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
 					$(BUILDDIR)/KT_Zeromq.o \
@@ -105,6 +107,7 @@ SERVER_0MQ_C_NEGO_DEPS =							$(BUILDDIR)/KT_Client.o \
 										$(BUILDDIR)/KT_Connection.o \
 										$(BUILDDIR)/KT_HTTP_Parser.o \
 										$(BUILDDIR)/KT_HTTP_Responder.o \
+										$(BUILDDIR)/KT_HTTP_Requester.o \
 										$(BUILDDIR)/KT_Msg.o \
 										$(BUILDDIR)/KT_Session.o \
 										$(BUILDDIR)/KT_Zeromq.o \
@@ -119,6 +122,7 @@ CLIENT_0MQ_C_NEGO_DEPS =		$(BUILDDIR)/KT_Client.o \
 					$(BUILDDIR)/KT_Connection.o \
 					$(BUILDDIR)/KT_HTTP_Parser.o \
 					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_HTTP_Requester.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
 					$(BUILDDIR)/KT_Zeromq.o \
@@ -153,6 +157,9 @@ $(BUILDDIR)/KT_HTTP_Parser.o: $(BUILDDIR) src/core/KT_HTTP_Parser.cpp
 
 $(BUILDDIR)/KT_HTTP_Responder.o: $(BUILDDIR) src/core/KT_HTTP_Responder.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/core/KT_HTTP_Responder.cpp
+	
+$(BUILDDIR)/KT_HTTP_Requester.o: $(BUILDDIR) src/core/KT_HTTP_Requester.cpp
+		$(CXX) -c $(CXXFLAGS) -o $@ src/core/KT_HTTP_Requester.cpp
 
 $(BUILDDIR)/KT_Msg.o: $(BUILDDIR) src/core/KT_Msg.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/core/KT_Msg.cpp
