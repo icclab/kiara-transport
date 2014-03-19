@@ -41,69 +41,58 @@ neg_dict_t* reg_get_capability(neg_ctx_t* neg_ctx, char* key) {
 
 char* reg_get_local_capability_json(neg_ctx_t* neg_ctx) {
 	struct neg_dict_t *tmp;
-	json_t *category = json_object();
-	json_t *group = json_object();
-	json_t *type = json_object();
-	json_t *value = json_object();
+	json_t *category;
+	json_t *group;
+	json_t *type;
+	json_t *value;
 	
 	for (tmp = neg_ctx->hash; tmp != NULL; tmp = (struct neg_dict_t *) tmp->hh.next) {
-		char** tokens;
 		int i;
 		char id[strlen(tmp->id)];
-		
 		strncpy(id, tmp->id, sizeof(id));
-		tokens = _reg_str_split(id, '.');
-		for (i = 0; *(tokens + i); i++) {
-			
+		char delimiter[] = ".";
+		char *ptr;
+
+		// initialisieren und ersten Abschnitt erstellen
+		ptr = strtok(id, delimiter);
+		i = 0;
+		while(ptr != NULL) {
 			switch(i) {
 				case CATEGORY:
-					json_object_set(category, *(tokens + i), group);
-					json_object_update(neg_ctx->root, category);
+					category = json_object_get(neg_ctx->root, ptr);
+					if(category == NULL) {
+						category = json_object();
+						json_object_set(neg_ctx->root, ptr, category);	
+					}
 					break;
 				case GROUP:
-					json_object_set(group, *(tokens + i), type);
+					group = json_object_get(category, ptr);
+					if(group == NULL) {
+						group = json_object();
+						json_object_set(category, ptr, group);	
+					}
 					break;
 				case TYPE:
-					json_object_set(type, *(tokens + i), value);
+					type = json_object_get(group, ptr);
+					if(type == NULL) {
+						type = json_object();
+						json_object_set(group, ptr, type);	
+					}
 					break;
 				case VALUE:
-					json_object_set(value, *(tokens + i), json_string(tmp->value));
+					value = json_object_get(type, ptr);
+					if(value == NULL) {
+						value = json_object();
+						json_object_set(type, ptr, json_string(tmp->value));
+					}
+					else {
+						json_object_update(value, json_string(tmp->value));
+					}
 					break;
 			}
-			free(*(tokens + i));
+			ptr = strtok(NULL, delimiter);
+			i++;
 		}
 	}
-	return json_dumps(neg_ctx->root, JSON_ENCODE_ANY);;
-}
-
-char** _reg_str_split(char* a_str, const char a_delim) {
-	char** result = 0;
-	size_t count = 0;
-	char* tmp = a_str;
-	char* last_comma = 0;
-
-	while (*tmp) {
-		if (a_delim == *tmp) {
-			count++;
-			last_comma = tmp;
-		}
-		tmp++;
-	}
-
-	count += last_comma < (a_str + strlen(a_str) - 1);
-	count++;
-	result = (char **) malloc(sizeof (char*) * count);
-	if (result) {
-		size_t idx = 0;
-		char* token = strtok((char *)a_str, ".");
-
-		while (token) {
-			assert(idx < count);
-			*(result + idx++) = strdup(token);
-			token = strtok(0, ".");
-		}
-		assert(idx == count - 1);
-		*(result + idx) = 0;
-	}
-	return result;
+	return json_dumps(neg_ctx->root, JSON_ENCODE_ANY);
 }
