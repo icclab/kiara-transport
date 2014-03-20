@@ -20,6 +20,8 @@ namespace Transport
 
 int body_cb (http_parser* p, char const* at, size_t len);
 int url_cb (http_parser* p, char const* at, size_t len);
+int header_field_cb (http_parser* p, char const* at, size_t len);
+int header_value_cb (http_parser* p, char const* at, size_t len);
 
 class KT_HTTP_Parser
 {
@@ -28,15 +30,20 @@ public:
 	virtual ~KT_HTTP_Parser();
 	std::string get_payload();
 	std::string get_url();
+	std::string get_host();
+	std::string get_identifier();
 	int method;
 private:
 	friend std::ostream& operator<< (std::ostream& lhs, KT_HTTP_Parser& rhs);
 	http_parser* parser;
-	std::string* payload;
+	std::string* identifier;
+	std::string* host;
 	std::string* query_string;
+	std::string* payload;
 };
 
 typedef struct {
+	std::string* host;
 	std::string* query_string;
 	std::string* body;
 } tmp_parser_fields;
