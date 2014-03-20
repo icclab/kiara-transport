@@ -23,6 +23,8 @@ enum dict_struct {
 };
 
 neg_ctx_t *reg_create_context();
+int reg_set_remote_capability(neg_ctx_t *neg_ctx, const char *endpoint, const char *remote_body);
+neg_dict_remote_collection_t* reg_get_remote_dict(neg_ctx_t *neg_ctx, const char *endpoint);
 int reg_set_capability(neg_ctx_t *neg_ctx, char *key, char *value);
 neg_dict_t *reg_get_capability(neg_ctx_t* neg_ctx, char* key);
 char** _reg_str_split(char* a_str, const char a_delim);

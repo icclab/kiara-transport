@@ -56,31 +56,33 @@ void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	neg_ctx_t *neg_ctx = (neg_ctx_t*) sess->get_k_user_data();
 	std::cout << neg_ctx->host << std::endl;
 	std::string payload("");
-	switch (parser.method) {
-		//GET Request
-		case 1:
-			if(parser.get_url().compare(0, 12, "/negotiation") == 0){
+	if(parser.get_url().compare(0, 12, "/negotiation") != 0){
+		payload.append ( "Not a negotiation endpoint!" );
+		payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
+	}
+	else {
+		switch (parser.method) {
+			//GET Request
+			case 1:
 				payload.append (reg_get_local_capability_json(neg_ctx));
 				payload = KT_HTTP_Responder::generate_200_OK( std::vector<char>(payload.begin(), payload.end()) );
-			}
-			else {
-				payload.append ( "Not a negotiation endpoint!" );
+				break;
+			//POST Request
+			case 3:
+				reg_set_remote_capability(neg_ctx, parser.get_identifier().c_str(), parser.get_payload().c_str());
+				payload.append ( "POST request are currently not enabled" );
 				payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
-			}
-			break;
-		//POST Request
-		case 3:
-			payload.append ( "POST request are currently not enabled" );
-			payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
-			break;
-		//Anything else
-		default:
-			payload.append ( "Request type is not supported" );
-			payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
+				break;
+			//Anything else
+			default:
+				payload.append ( "Request type is not supported" );
+				payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
+		}
 	}
 	//DEBUG Only
 	std::cout << parser.get_payload() << std::endl;
 	std::cout << parser.get_url() << std::endl;
+	std::cout << parser.get_identifier() << std::endl;
 	std::cout << "/negotiation" << std::endl;	
 
 	KT_Msg message;

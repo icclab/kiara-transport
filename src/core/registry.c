@@ -22,8 +22,36 @@ neg_ctx_t *reg_create_context() {
 	neg_ctx_t *neg_ctx;
 	neg_ctx = (neg_ctx_t *) malloc(sizeof (struct neg_ctx_t));
 	neg_ctx->hash = NULL;
+	neg_ctx->dict_collection = NULL;
 	neg_ctx->root = json_object();
 	return neg_ctx;
+}
+
+int reg_set_remote_capability(neg_ctx_t *neg_ctx, const char *endpoint, const char *remote_body){
+	neg_dict_remote_collection_t *remote_dict = reg_get_remote_dict(neg_ctx, endpoint);
+	neg_dict_remote_collection_t *tmp, *current_dict;
+	neg_dict_remote_collection_t *s = malloc(sizeof(*s));
+	strcpy(s->id, "some.negotiation.id");
+	s->sub = NULL;
+	s->value = "MUST";
+	HASH_ADD_KEYPTR(hh, remote_dict->sub, s->id, strlen(s->id), s);
+	HASH_ITER(hh, neg_ctx->dict_collection, current_dict, tmp) {
+		HASH_FIND_STR(current_dict->sub, "some.negotiation.id", out);
+	}
+	return 0;
+}
+
+neg_dict_remote_collection_t* reg_get_remote_dict(neg_ctx_t *neg_ctx, const char *endpoint){
+	neg_dict_remote_collection_t *s = malloc(sizeof(*s));
+	HASH_FIND_STR(neg_ctx->dict_collection, endpoint, s);
+	if(!s) {
+		s = malloc(sizeof(*s));
+		strcpy(s->id, &endpoint);
+		s->sub = NULL;
+		s->value = "";
+		HASH_ADD_KEYPTR(hh, neg_ctx->dict_collection, s->id, strlen(s->id), s);
+	}
+	return s;
 }
 
 int reg_set_capability(neg_ctx_t *neg_ctx, char *key, char *value) {

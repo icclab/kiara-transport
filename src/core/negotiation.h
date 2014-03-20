@@ -18,11 +18,19 @@ typedef struct neg_dict_t {
     const char *id;
     char *value;             
     UT_hash_handle hh;
-}neg_dict_t;
+} neg_dict_t;
+
+typedef struct neg_dict_remote_collection_t {
+    const char *id;
+    struct neg_dict_remote_collection_t *sub;
+	char *value;
+    UT_hash_handle hh;
+} neg_dict_remote_collection_t;
 	
 typedef struct neg_ctx_t {
     neg_dict_t *neg_dict;
 	neg_dict_t *hash;
+	neg_dict_remote_collection_t *dict_collection;
 	char* host;
 	char* server_repsonse;
 	char* server_repsonse_body;
