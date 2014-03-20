@@ -51,46 +51,46 @@ char* reg_get_local_capability_json(neg_ctx_t* neg_ctx) {
 		char id[strlen(tmp->id)];
 		strncpy(id, tmp->id, sizeof(id));
 		char delimiter[] = ".";
-		char *ptr;
+		char *key;
 
 		// initialisieren und ersten Abschnitt erstellen
-		ptr = strtok(id, delimiter);
+		key = strtok(id, delimiter);
 		i = 0;
-		while(ptr != NULL) {
+		while(key != NULL) {
 			switch(i) {
 				case CATEGORY:
-					category = json_object_get(neg_ctx->root, ptr);
+					category = json_object_get(neg_ctx->root, key);
 					if(category == NULL) {
 						category = json_object();
-						json_object_set(neg_ctx->root, ptr, category);	
+						json_object_set(neg_ctx->root, key, category);	
 					}
 					break;
 				case GROUP:
-					group = json_object_get(category, ptr);
+					group = json_object_get(category, key);
 					if(group == NULL) {
 						group = json_object();
-						json_object_set(category, ptr, group);	
+						json_object_set(category, key, group);	
 					}
 					break;
 				case TYPE:
-					type = json_object_get(group, ptr);
+					type = json_object_get(group, key);
 					if(type == NULL) {
 						type = json_object();
-						json_object_set(group, ptr, type);	
+						json_object_set(group, key, type);	
 					}
 					break;
 				case VALUE:
-					value = json_object_get(type, ptr);
+					value = json_object_get(type, key);
 					if(value == NULL) {
 						value = json_object();
-						json_object_set(type, ptr, json_string(tmp->value));
+						json_object_set(type, key, json_string(tmp->value));
 					}
 					else {
 						json_object_update(value, json_string(tmp->value));
 					}
 					break;
 			}
-			ptr = strtok(NULL, delimiter);
+			key = strtok(NULL, delimiter);
 			i++;
 		}
 	}
