@@ -9,7 +9,9 @@
 
 #include <iostream>
 #include <vector>
+#include <functional>
 
+#include "KT_C99_CallbackWrapper.hpp"
 #include "KT_Configuration.h"
 #include "KT_Configuration.hpp"
 #include "KT_Configuration_glob.h"
@@ -22,12 +24,6 @@ extern "C" {
 #endif
 
 /* KIARA::Transport::KT_Msg C wrapper */
-
-struct kt_conn_session{
-    void* connection;
-    void* session;
-};
-
 
 kt_msg_t* kt_msg_new ()
 {
@@ -72,7 +68,7 @@ kt_conn_session_t* kt_connect ( const kt_configuration_t* conf )
 		connection->set_configuration (*config);
 	}
 	else {
-	    std::cerr << "Could not connect, you indicated a unsupported application layer" << std::endl;
+	    std::cerr << "Could not connect, you indicated an unsupported application layer" << std::endl;
 	    return nullptr;
 	}
 
@@ -144,6 +140,40 @@ kt_msg_t* kt_recv ( kt_conn_session_t* conn_session, int linger )
     return reinterpret_cast<kt_msg_t*> (message);
 }
 
+kt_conn_session_t* kt_init_server ( kt_configuration_t* conf,
+        kt_handle_t callback_handle)
+{
+    const KIARA::Transport::KT_Configuration* config =
+            reinterpret_cast<const KIARA::Transport::KT_Configuration*> (conf);
+    KIARA::Transport::KT_Connection* connection;
+
+
+    if ( KT_ZEROMQ == config->get_application_layer() )
+    {
+        connection = new KIARA::Transport::KT_Zeromq ();
+        connection->set_configuration (*config);
+    }
+    else {
+        std::cerr << "Could not connect, you indicated a unsupported application layer" << std::endl;
+        return nullptr;
+    }
+
+    KIARA::Transport::KT_Session* session = nullptr;
+
+    connection->register_callback( KIARA::Transport::KT_C99_CallbackWrapper(callback_handle).make_function());
+    if ( 0 != connection->bind() )
+    {
+        std::cerr << "Failed to bind" << std::endl;
+    }
+
+    kt_conn_session_t* conn_session = new kt_conn_session;
+    conn_session->connection = connection;
+    conn_session->session = session;
+    return conn_session;
+}
+void kt_register_handle ( kt_conn_session_t*, kt_handle_t* );
+int kt_run_server ( kt_conn_session_t* );
+void* kt_stop_server ( kt_conn_session_t*, int );
 
 #ifdef __cplusplus
 }

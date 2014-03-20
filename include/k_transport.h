@@ -18,10 +18,16 @@
 extern "C" {
 #endif
 
+struct kt_conn_session{
+    void* connection;
+    void* session;
+};
+
+
 // typedefs to guarantee type safety when using them along with the wrapper
 typedef struct kt_conn_session kt_conn_session_t;
 typedef struct kt_msg kt_msg_t;
-typedef struct kt_handle kt_handle_t;
+typedef void (*kt_handle_t)(kt_conn_session_t*, kt_msg_t*);
 typedef struct kt_configuration kt_configuration_t;
 
 // generic functions
@@ -83,7 +89,7 @@ kt_msg_t* kt_recv ( kt_conn_session_t*, int );
 void* kt_disconnect ( kt_conn_session_t* );
 
 // server functions
-kt_conn_session_t* kt_init_server ( kt_configuration_t );
+kt_conn_session_t* kt_init_server ( kt_configuration_t*, kt_handle_t );
 void kt_register_handle ( kt_conn_session_t*, kt_handle_t* );
 int kt_run_server ( kt_conn_session_t* );
 void* kt_stop_server ( kt_conn_session_t*, int );

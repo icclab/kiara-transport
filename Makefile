@@ -38,6 +38,7 @@ all: 	server_0mq_http_pp \
 		client_0mq_http_pp \
 		server_0mq_rep_pp \
 		client_0mq_req_pp \
+		server_0mq_rep_c \
 		client_0mq_req_c
 
 server_0mq_http_pp:	$(BUILDDIR)/KT_Client.o \
@@ -63,6 +64,16 @@ server_0mq_rep_pp:	$(BUILDDIR)/KT_Client.o \
 					$(BUILDDIR)/http_parser.o \
 					$(BUILDDIR)/main_server_0mq_rep_pp.o  \
 					$(BUILDDIR)/server_0mq_rep_pp
+
+server_0mq_rep_c:	$(BUILDDIR)/k_transport.o \
+					$(BUILDDIR)/KT_C99_CallbackWrapper.o \
+					$(BUILDDIR)/KT_Configuration.o \
+					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_Msg.o \
+					$(BUILDDIR)/KT_Session.o \
+					$(BUILDDIR)/KT_Zeromq.o \
+					$(BUILDDIR)/main_server_0mq_rep_c.o \
+					$(BUILDDIR)/server_0mq_rep_c
 
 
 client_0mq_http_pp: $(BUILDDIR)/KT_Client.o \
@@ -98,6 +109,7 @@ client_0mq_req_c:	$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/main_client_0mq_req_c.o \
 					$(BUILDDIR)/client_0mq_req_c
 
+
 SERVER_0MQ_HTTP_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
@@ -116,6 +128,15 @@ SERVER_0MQ_REP_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
 							$(BUILDDIR)/KT_Session.o \
 							$(BUILDDIR)/KT_Zeromq.o \
 							$(BUILDDIR)/main_server_0mq_rep_pp.o
+
+SERVER_0MQ_REP_CC_DEPS =	$(BUILDDIR)/main_server_0mq_rep_c.o \
+							$(BUILDDIR)/k_transport.o \
+							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
+							$(BUILDDIR)/KT_Configuration.o \
+							$(BUILDDIR)/KT_Connection.o \
+							$(BUILDDIR)/KT_Msg.o \
+							$(BUILDDIR)/KT_Session.o \
+							$(BUILDDIR)/KT_Zeromq.o
 
 CLIENT_0MQ_HTTP_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
                    		    $(BUILDDIR)/KT_Configuration.o \
@@ -138,6 +159,7 @@ CLIENT_0MQ_REQ_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
 
 CLIENT_0MQ_REQ_CC_DEPS =	$(BUILDDIR)/main_client_0mq_req_c.o \
 							$(BUILDDIR)/k_transport.o \
+							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
 							$(BUILDDIR)/KT_Msg.o \
@@ -147,6 +169,9 @@ CLIENT_0MQ_REQ_CC_DEPS =	$(BUILDDIR)/main_client_0mq_req_c.o \
 
 $(BUILDDIR)/k_transport.o: $(BUILDDIR) src/core/k_transport.cpp
 	$(CXX) -c $(CXXFLAGS) -o $@ src/core/k_transport.cpp
+
+$(BUILDDIR)/KT_C99_CallbackWrapper.o: $(BUILDDIR) src/core/KT_C99_CallbackWrapper.cpp
+	$(CXX) -c $(CXXFLAGS) -o $@ src/core/KT_C99_CallbackWrapper.cpp
 
 $(BUILDDIR)/KT_Client.o: $(BUILDDIR) src/core/KT_Client.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/core/KT_Client.cpp
@@ -186,6 +211,12 @@ $(BUILDDIR)/main_server_0mq_rep_pp.o: $(BUILDDIR) src/examples/main_server_0mq_r
 
 $(BUILDDIR)/server_0mq_rep_pp: $(BUILDDIR) $(SERVER_0MQ_REP_CPP_DEPS)
 		$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $@ $(SERVER_0MQ_REP_CPP_DEPS)
+
+$(BUILDDIR)/main_server_0mq_rep_c.o: $(BUILDDIR) src/examples/main_server_0mq_rep.c
+		$(CC) -c $(CCFLAGS) -o $@ src/examples/main_server_0mq_rep.c
+
+$(BUILDDIR)/server_0mq_rep_c: $(BUILDDIR) $(SERVER_0MQ_REP_CC_DEPS)
+		$(CC) $(LDFLAGS) $(CCFLAGS) -o $@ $(SERVER_0MQ_REP_CC_DEPS)
 
 $(BUILDDIR)/main_client_0mq_http_pp.o: $(BUILDDIR) src/examples/main_client_0mq_http.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/examples/main_client_0mq_http.cpp
