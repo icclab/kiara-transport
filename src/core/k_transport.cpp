@@ -116,7 +116,6 @@ int kt_send ( kt_conn_session_t* conn_session, kt_msg_t* msg, int linger )
     KIARA::Transport::KT_Msg* message =
             reinterpret_cast<KIARA::Transport::KT_Msg*> (msg);
 
-    std::cerr << message->get_payload_as_string() << std::endl;
     int ret = connection->send(*message, *session, linger);
 
     kt_msg_destroy(msg);

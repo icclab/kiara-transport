@@ -34,9 +34,6 @@ void KT_C99_CallbackWrapper::callback_wrapper (KT_Msg& msg, KT_Session* sess,
 {
     if (nullptr == _c99_cb) return;
 
-    std::cerr << "C99 CallbackWrapper called" << std::endl;
-
-
     kt_conn_session_t* conn_sess = new kt_conn_session {conn, sess};
     kt_msg_t* msg_t = reinterpret_cast<kt_msg_t*>(&msg);
     _c99_cb(conn_sess, msg_t);
