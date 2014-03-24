@@ -6,6 +6,7 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "../../include/k_transport.h"
 #include "../../src/core/KT_Configuration.h"
 
@@ -30,5 +31,5 @@ int main ()
     kt_send( conn_session, message, 0 );
     kt_msg_t* reply = kt_recv( conn_session, 0 );
 
-    printf("%.*s\n", kt_msg_get_payload_size(reply), (char*)kt_msg_get_payload(reply));
+    printf("From Server: %.*s\n", kt_msg_get_payload_size(reply), (char*)kt_msg_get_payload(reply));
 }

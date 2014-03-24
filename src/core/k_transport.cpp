@@ -24,6 +24,7 @@ extern "C" {
 #endif
 
 /* KIARA::Transport::KT_Msg C wrapper */
+KIARA::Transport::KT_C99_CallbackWrapper* cb_wrapper;
 
 kt_msg_t* kt_msg_new ()
 {
@@ -160,7 +161,8 @@ kt_conn_session_t* kt_init_server ( kt_configuration_t* conf,
 
     KIARA::Transport::KT_Session* session = nullptr;
 
-    connection->register_callback( KIARA::Transport::KT_C99_CallbackWrapper(callback_handle).make_function());
+    cb_wrapper = new KIARA::Transport::KT_C99_CallbackWrapper(callback_handle);
+    connection->register_callback( cb_wrapper->make_function());
     if ( 0 != connection->bind() )
     {
         std::cerr << "Failed to bind" << std::endl;
