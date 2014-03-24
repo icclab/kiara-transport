@@ -79,7 +79,7 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Session** ret ) {
 	session->set_socket ( socket );
 	session->set_endpoint ( binding_name );
 	std::vector<char> identifier (id, id + id_size);
-	session->set_zeromq_identifier( std::move(identifier));
+	session->set_identifier( std::move(identifier));
 	_sessions.insert ( std::make_pair ( binding_name, session ) );
 
 	*ret = session;
@@ -92,9 +92,9 @@ int
 KIARA::Transport::KT_Zeromq::send ( KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session& session, int linger) {
 	if ( KT_STREAM == _configuration.get_application_type() )
 	{
-		int rc = zmq_send ( session.get_socket(), session.get_zeromq_identifier().data(), session.get_zeromq_identifier().size(), ZMQ_SNDMORE );
+		int rc = zmq_send ( session.get_socket(), session.get_identifier().data(), session.get_identifier().size(), ZMQ_SNDMORE );
 		int errcode = errno;
-		if (session.get_zeromq_identifier().size() != static_cast<std::vector<char>::size_type>(rc) )
+		if (session.get_identifier().size() != static_cast<std::vector<char>::size_type>(rc) )
 		{
 			std::cerr << "Failed to send identity to 0mq socket: " << std::strerror(errcode) << std::endl;
 			errno = errcode;
@@ -130,7 +130,7 @@ KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, KIARA
 		identifier.resize(size_t(size));
 		char* id_ptr = (char*)zmq_msg_data(&id);
 		identifier = std::vector<char>(id_ptr, id_ptr + size);
-		session.set_zeromq_identifier ( std::move(identifier) );
+		session.set_identifier ( std::move(identifier) );
 		zmq_msg_close(&id);
 	}
 

@@ -28,7 +28,7 @@ private:
   void* _k_user_data = nullptr;
   void* _socket = nullptr;
   std::string _endpoint;
-  std::vector< char > _zeromq_identifier;
+  std::vector< char > _identifier;
   
 public:
 
@@ -77,14 +77,14 @@ public:
     return _k_user_data;
   }
 
-	const std::vector< char >& get_zeromq_identifier() const
+	const std::vector< char >& get_identifier() const
 	{
-		return _zeromq_identifier;
+		return _identifier;
 	}
 
-	void set_zeromq_identifier(const std::vector< char >& zeromqIdentifier)
+	void set_identifier(const std::vector< char >& identifier)
 	{
-		_zeromq_identifier = zeromqIdentifier;
+		_identifier = identifier;
 	}
 };
 } // end of Transport namespace
