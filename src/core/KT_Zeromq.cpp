@@ -49,20 +49,21 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Session** ret ) {
 	}
 
 	KT_Configuration config = get_configuration();
-	std::string binding_name;
+	// memory leak
+	std::string* binding_name = new std::string;
 	if (KT_TCP == config.get_transport_layer())
 	{
-		binding_name += "tcp://";
+		binding_name->append("tcp://");
 	} else {
 		return -1;
 	}
 
-	binding_name += config.get_hostname();
-	binding_name += ":";
-	binding_name += std::to_string(config.get_port_number());
+	binding_name->append(config.get_hostname());
+	binding_name->append(":");
+	binding_name->append(std::to_string(config.get_port_number()));
 
 	// TODO: fix dangerous pointer to underlying data structure
-	const char* host = binding_name.c_str();
+	const char* host = binding_name->c_str();
 	int rc = zmq_connect ( socket, host );
 
 	if ( 0 != rc )
@@ -77,10 +78,10 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Session** ret ) {
 
 	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session ();
 	session->set_socket ( socket );
-	session->set_endpoint ( binding_name );
+	session->set_endpoint ( *binding_name );
 	std::vector<char> identifier (id, id + id_size);
 	session->set_identifier( std::move(identifier));
-	_sessions.insert ( std::make_pair ( binding_name, session ) );
+	_sessions.insert ( std::make_pair ( *binding_name, session ) );
 
 	*ret = session;
 
@@ -192,19 +193,20 @@ KIARA::Transport::KT_Zeromq::bind ( ) {
 	}
 
 	KT_Configuration config = get_configuration();
-	std::string binding_name;
+	// memory leak
+	std::string* binding_name = new std::string;
 	if (KT_TCP == config.get_transport_layer())
 	{
-		binding_name += "tcp://";
+		binding_name->append("tcp://");
 	} else {
 		return -1;
 	}
 
-	binding_name += config.get_hostname();
-	binding_name += ":";
-	binding_name += std::to_string(config.get_port_number());
+	binding_name->append(config.get_hostname());
+	binding_name->append(":");
+	binding_name->append(std::to_string(config.get_port_number()));
 
-	int rc = zmq_bind ( socket, binding_name.c_str() );
+	int rc = zmq_bind ( socket, binding_name->c_str() );
 	errcode = errno;
 	if ( 0 != rc )
 	{
@@ -214,11 +216,11 @@ KIARA::Transport::KT_Zeromq::bind ( ) {
 
 	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session();
 	session->set_socket ( socket );
-	session->set_endpoint ( binding_name.c_str() );
-	_sessions.insert ( std::make_pair ( binding_name.c_str(), session ) );
+	session->set_endpoint ( binding_name->c_str() );
+	_sessions.insert ( std::make_pair ( binding_name->c_str(), session ) );
 
 	interupted = false;
-	poller_thread = new std::thread ( &KT_Zeromq::poller, this, socket, binding_name.c_str() );
+	poller_thread = new std::thread ( &KT_Zeromq::poller, this, socket, binding_name->c_str() );
 	return 0;
 }
 
