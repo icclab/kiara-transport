@@ -118,6 +118,7 @@ int header_value_cb (http_parser* p, char const* at, size_t len)
 	tmp_parser_fields *parser_fields;
 	parser_fields = (tmp_parser_fields*) p->data;
 	if(parser_fields->host->compare(0, 4, "1") == 0) {
+		parser_fields->host->clear();
 		parser_fields->host->resize (len);
 		parser_fields->host->insert (0, at, len);
 	}

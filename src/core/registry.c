@@ -29,14 +29,15 @@ neg_ctx_t *reg_create_context() {
 
 int reg_set_remote_capability(neg_ctx_t *neg_ctx, const char *endpoint, const char *remote_body){
 	neg_dict_remote_collection_t *remote_dict = reg_get_remote_dict(neg_ctx, endpoint);
-	neg_dict_remote_collection_t *tmp, *current_dict;
+	neg_dict_remote_collection_t *tmp, *current_dict, *out;
 	neg_dict_remote_collection_t *s = malloc(sizeof(*s));
-	strcpy(s->id, "some.negotiation.id");
+	s->id = "some.negotiation.id";
 	s->sub = NULL;
 	s->value = "MUST";
 	HASH_ADD_KEYPTR(hh, remote_dict->sub, s->id, strlen(s->id), s);
 	HASH_ITER(hh, neg_ctx->dict_collection, current_dict, tmp) {
 		HASH_FIND_STR(current_dict->sub, "some.negotiation.id", out);
+		printf("%s\n", out->value);
 	}
 	return 0;
 }
@@ -44,9 +45,9 @@ int reg_set_remote_capability(neg_ctx_t *neg_ctx, const char *endpoint, const ch
 neg_dict_remote_collection_t* reg_get_remote_dict(neg_ctx_t *neg_ctx, const char *endpoint){
 	neg_dict_remote_collection_t *s = malloc(sizeof(*s));
 	HASH_FIND_STR(neg_ctx->dict_collection, endpoint, s);
-	if(!s) {
-		s = malloc(sizeof(*s));
-		strcpy(s->id, &endpoint);
+	if(s == NULL) {
+		s = malloc(sizeof (struct neg_dict_remote_collection_t));
+		s->id = endpoint;
 		s->sub = NULL;
 		s->value = "";
 		HASH_ADD_KEYPTR(hh, neg_ctx->dict_collection, s->id, strlen(s->id), s);

@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
 	
 	neg_set_local_capability(neg_ctx, "transport.user-protocols.none.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.communication-paradigm.req-rep.prec", "MUST");
-	neg_ctx->host = "tcp://*:81";
+	neg_ctx->host = "tcp://*:5555";
 	int rc = neg_run_server(neg_ctx);
 	return 5;
 }

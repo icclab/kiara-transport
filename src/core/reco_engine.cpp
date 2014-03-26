@@ -44,7 +44,7 @@ int RecoServer::RunServer() {
 	
 	connection->get_session().find(ctx->host)->second->set_k_user_data(ctx);
 	
-	sleep(300);
+	sleep(600);
 
 	connection->unbind();
 
@@ -70,6 +70,7 @@ void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 			//POST Request
 			case 3:
 				reg_set_remote_capability(neg_ctx, parser.get_identifier().c_str(), parser.get_payload().c_str());
+				std::cout << "Done so!" << std::endl;
 				payload.append ( "POST request are currently not enabled" );
 				payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
 				break;
@@ -81,9 +82,7 @@ void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	}
 	//DEBUG Only
 	std::cout << parser.get_payload() << std::endl;
-	std::cout << parser.get_url() << std::endl;
 	std::cout << parser.get_identifier() << std::endl;
-	std::cout << "/negotiation" << std::endl;	
 
 	KT_Msg message;
 	message.set_payload(payload);
@@ -115,7 +114,7 @@ RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 	KT_Msg request;
 	std::string payload(reg_get_local_capability_json(neg_ctx));
 	std::cout << payload << std::endl;
-	payload = KT_HTTP_Requester::generate_request("POST", "localhost:81", "/negotiation",  std::vector<char>(payload.begin(), payload.end()));
+	payload = KT_HTTP_Requester::generate_request("POST", "localhost:5555", "/negotiation",  std::vector<char>(payload.begin(), payload.end()));
 	
 	request.set_payload(payload);
 

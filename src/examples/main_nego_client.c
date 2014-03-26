@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
 	neg_set_local_capability(neg_ctx, "transport.user-protocols.none.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.communication-paradigm.req-rep.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.communication-paradigm.pub-sub.prec", "SHOULD");
-	neg_ctx->host = "tcp://localhost:81";
+	neg_ctx->host = "tcp://localhost:5555";
 	int rc = neg_send_offer(neg_ctx);
 	return 0;
 }
