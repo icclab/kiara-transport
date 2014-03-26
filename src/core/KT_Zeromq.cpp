@@ -22,15 +22,15 @@ KIARA::Transport::KT_Zeromq::poller ( void* socket, std::string endpoint ) {
 	while (!interupted)
 	{
 		KT_Msg msg;
-		int error = recv (*sess, msg, 0);
-		_std_callback ( msg, sess, this );
+		if (0 == recv (*sess, msg, 0))
+		    _std_callback ( msg, sess, this );
 	}
 }
 
 int
 KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Session** ret ) {
 	void* socket = NULL;
-	int errcode;
+	int errcode = 0;
 	if ( KT_STREAM == _configuration.get_application_type() )
 	{
 		socket = zmq_socket ( _context, ZMQ_STREAM );
@@ -125,6 +125,7 @@ KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, KIARA
 
 	if ( KT_STREAM == _configuration.get_application_type() )
 	{
+	    std::cerr << "KT_STREAM, stripping zmq_identity" << std::endl;
 		zmq_msg_t id;
 		zmq_msg_init (&id);
 		size = zmq_msg_recv (&id, session.get_socket(), 0);
@@ -173,7 +174,7 @@ KIARA::Transport::KT_Zeromq::register_callback ( std::function<void(KT_Msg&, KT_
 int
 KIARA::Transport::KT_Zeromq::bind ( ) {
 	void* socket = NULL;
-	int errcode;
+	int errcode = 0;
 
 	if ( KT_STREAM == _configuration.get_application_type() )
 	{
