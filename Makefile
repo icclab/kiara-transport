@@ -216,7 +216,7 @@ $(BUILDDIR)/main_server_0mq_rep_c.o: $(BUILDDIR) src/examples/main_server_0mq_re
 		$(CC) -c $(CCFLAGS) -o $@ src/examples/main_server_0mq_rep.c
 
 $(BUILDDIR)/server_0mq_rep_c: $(BUILDDIR) $(SERVER_0MQ_REP_CC_DEPS)
-		$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $@ $(SERVER_0MQ_REP_CC_DEPS)
+		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(SERVER_0MQ_REP_CC_DEPS)
 
 $(BUILDDIR)/main_client_0mq_http_pp.o: $(BUILDDIR) src/examples/main_client_0mq_http.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/examples/main_client_0mq_http.cpp
@@ -234,4 +234,4 @@ $(BUILDDIR)/main_client_0mq_req_c.o: $(BUILDDIR) src/examples/main_client_0mq_re
 		$(CC) -c $(CCFLAGS) -o $@ src/examples/main_client_0mq_req.c
 
 $(BUILDDIR)/client_0mq_req_c: $(BUILDDIR) $(CLIENT_0MQ_REQ_CC_DEPS)
-		$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $@ $(CLIENT_0MQ_REQ_CC_DEPS)
+		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(CLIENT_0MQ_REQ_CC_DEPS)

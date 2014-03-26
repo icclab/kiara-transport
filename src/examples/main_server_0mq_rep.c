@@ -11,6 +11,7 @@
 #include "../../include/k_transport.h"
 #include "../../src/core/KT_Configuration.h"
 
+void cb (kt_conn_session_t*, kt_msg_t*);
 void cb (kt_conn_session_t* conn_sess, kt_msg_t* msg) {
     printf("From Client: %.*s\n", kt_msg_get_payload_size(msg), (char*)kt_msg_get_payload(msg));
     kt_msg_t* message = kt_msg_new();
