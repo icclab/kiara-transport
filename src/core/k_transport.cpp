@@ -143,20 +143,43 @@ kt_msg_t* kt_recv ( kt_conn_session_t* conn_session, int linger )
 kt_conn_session_t* kt_init_server ( kt_configuration_t* conf,
         kt_handle_t callback_handle)
 {
-    const KIARA::Transport::KT_Configuration* config =
-            reinterpret_cast<const KIARA::Transport::KT_Configuration*> (conf);
+    KIARA::Transport::KT_Configuration* config =
+            reinterpret_cast<KIARA::Transport::KT_Configuration*> (conf);
     KIARA::Transport::KT_Connection* connection;
 
+    if ( KT_WEBSERVER == config->get_application_type() ) {
+        if ( 0 == config->get_port_number() ) {
+            // TODO: How to check if we have enough privileges to allocate port 80?
+            config->set_port_number(8080);
+        }
+        if ( KT_ZEROMQ == config->get_application_layer() ) {
+            connection = new KIARA::Transport::KT_Zeromq();
+            connection->set_configuration(*config);
+            goto connection_object_created;
+        } else {
+            std::cerr << "Could not connect, you indicated an unsupported application layer" << std::endl;
+        }
+    }
+    if ( KT_REQUESTREPLY == config->get_application_type() ) {
+        if ( 0 == config->get_port_number()) {
+            config->set_port_number(5555);
+        }
+        connection = new KIARA::Transport::KT_Zeromq();
+        connection->set_configuration(*config);
+        goto connection_object_created;
+    }
     if ( KT_ZEROMQ == config->get_application_layer() )
     {
         connection = new KIARA::Transport::KT_Zeromq ();
         connection->set_configuration (*config);
+        goto connection_object_created;
     }
     else {
-        std::cerr << "Could not connect, you indicated a unsupported application layer" << std::endl;
+        std::cerr << "Could not connect, you indicated an unsupported application layer" << std::endl;
         return nullptr;
     }
 
+    connection_object_created:
     kt_conn_session_t* conn_session = new kt_conn_session;
     conn_session->connection = connection;
     conn_session->session = nullptr;
