@@ -40,7 +40,8 @@ KT_HTTP_Parser::KT_HTTP_Parser (KT_Msg& msg)
 
 KT_HTTP_Parser::~KT_HTTP_Parser()
 {
-	// TODO Auto-generated destructor stub
+    delete (static_cast<std::string*>(parser->data));
+    free (parser);
 }
 
 std::string KT_HTTP_Parser::get_payload()
