@@ -147,7 +147,6 @@ kt_conn_session_t* kt_init_server ( kt_configuration_t* conf,
             reinterpret_cast<const KIARA::Transport::KT_Configuration*> (conf);
     KIARA::Transport::KT_Connection* connection;
 
-
     if ( KT_ZEROMQ == config->get_application_layer() )
     {
         connection = new KIARA::Transport::KT_Zeromq ();
@@ -158,20 +157,39 @@ kt_conn_session_t* kt_init_server ( kt_configuration_t* conf,
         return nullptr;
     }
 
-    cb_wrapper = new KIARA::Transport::KT_C99_CallbackWrapper(callback_handle);
-    connection->register_callback( cb_wrapper->make_function());
-    if ( 0 != connection->bind() )
-    {
-        std::cerr << "Failed to bind" << std::endl;
-    }
-
     kt_conn_session_t* conn_session = new kt_conn_session;
     conn_session->connection = connection;
     conn_session->session = nullptr;
+
+    if (NULL != callback_handle) {
+        kt_register_handle(conn_session, callback_handle);
+    }
+
     return conn_session;
 }
-void kt_register_handle ( kt_conn_session_t*, kt_handle_t* );
-int kt_run_server ( kt_conn_session_t* );
+
+void kt_register_handle ( kt_conn_session_t* conn_session, kt_handle_t callback_handle)
+{
+    KIARA::Transport::KT_Connection* connection =
+            reinterpret_cast<KIARA::Transport::KT_Connection*> (conn_session->connection);
+    cb_wrapper = new KIARA::Transport::KT_C99_CallbackWrapper(callback_handle);
+    connection->register_callback( cb_wrapper->make_function());
+}
+
+int kt_run_server ( kt_conn_session_t* conn_session )
+{
+    KIARA::Transport::KT_Connection* connection =
+            reinterpret_cast<KIARA::Transport::KT_Connection*> (conn_session->connection);
+    KIARA::Transport::KT_Session* session =
+            reinterpret_cast<KIARA::Transport::KT_Session*> (conn_session->session);
+    if ( 0 != connection->bind() )
+    {
+        std::cerr << "Failed to bind" << std::endl;
+        return -1;
+    }
+    session = connection->get_session()->begin()->second;
+    return 0;
+}
 
 void* kt_stop_server ( kt_conn_session_t* conn_session, int linger )
 {
