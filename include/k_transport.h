@@ -90,7 +90,7 @@ void* kt_disconnect ( kt_conn_session_t* );
 
 // server functions
 kt_conn_session_t* kt_init_server ( kt_configuration_t*, kt_handle_t );
-void kt_register_handle ( kt_conn_session_t*, kt_handle_t* );
+void kt_register_handle ( kt_conn_session_t*, kt_handle_t );
 int kt_run_server ( kt_conn_session_t* );
 void* kt_stop_server ( kt_conn_session_t*, int );
 
