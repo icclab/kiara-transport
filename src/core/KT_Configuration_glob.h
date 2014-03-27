@@ -32,18 +32,18 @@ typedef unsigned int kt_transport_layer;
 
 // crypto layer
 typedef unsigned int kt_crypto_layer;
-#define KT_NONE   0
-#define KT_SSL    1
-#define KT_TLS    2
+#define KT_NONE   1
+#define KT_SSL    2
+#define KT_TLS    3
 
 // application layer
 typedef unsigned int kt_application_layer;
-#define KT_ZEROMQ  0
-#define KT_HTTP    1
-#define KT_RTSP    2
-#define KT_NTP     3
-#define KT_FTP     4
-#define KT_NFS     5
+#define KT_ZEROMQ  1
+#define KT_HTTP    2
+#define KT_RTSP    3
+#define KT_NTP     4
+#define KT_FTP     5
+#define KT_NFS     6
 
 /* The application type directly decides the communication pattern of the
  * socket and network and transport layers. Also it makes certain assumptions
@@ -52,11 +52,11 @@ typedef unsigned int kt_application_layer;
  */
 
 typedef unsigned int kt_application_type;
-#define KT_WEBSERVER      0
-#define KT_PUBLISHER      1
-#define KT_STREAM         2
-#define KT_ROUNDROBIN     3
-#define KT_REQUESTREPLY   4
+#define KT_WEBSERVER      1
+#define KT_PUBLISHER      2
+#define KT_STREAM         3
+#define KT_ROUNDROBIN     4
+#define KT_REQUESTREPLY   5
 
 #ifdef __cplusplus
 }

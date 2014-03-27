@@ -19,15 +19,15 @@ class KT_Configuration
 private:
 
   // Layer 3 in the networking stack
-  unsigned int _network_layer;
+  unsigned int _network_layer = 0;
   // Layer 4 in the networking stack
-  unsigned int _transport_layer;
-  std::string _hostname;
-  unsigned int _port_number;
+  unsigned int _transport_layer = 0;
+  std::string _hostname = "";
+  unsigned int _port_number = 0;
   // Optional crypto layer, based on OpenSSL
-  unsigned int _crypto_layer;
-  unsigned int _application_layer;
-  unsigned int _application_type;
+  unsigned int _crypto_layer = 0;
+  unsigned int _application_layer = 0;
+  unsigned int _application_type = 0;
   
 public:
 
