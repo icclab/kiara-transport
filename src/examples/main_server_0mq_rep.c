@@ -34,7 +34,9 @@ int main ()
     kt_configuration_set_port( config, 5555 );
 
     kt_conn_session_t* conn_session = kt_init_server(config, &cb);
+    kt_run_server(conn_session);
 
     sleep (300);
 
+    kt_stop_server(conn_session, 0);
 }
