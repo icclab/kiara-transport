@@ -172,7 +172,16 @@ kt_conn_session_t* kt_init_server ( kt_configuration_t* conf,
 }
 void kt_register_handle ( kt_conn_session_t*, kt_handle_t* );
 int kt_run_server ( kt_conn_session_t* );
-void* kt_stop_server ( kt_conn_session_t*, int );
+
+void* kt_stop_server ( kt_conn_session_t* conn_session, int linger )
+{
+    KIARA::Transport::KT_Connection* connection =
+            reinterpret_cast<KIARA::Transport::KT_Connection*> (conn_session->connection);
+    KIARA::Transport::KT_Session* session =
+            reinterpret_cast<KIARA::Transport::KT_Session*> (conn_session->session);
+    connection->unbind();
+    return session->get_k_user_data();
+}
 
 #ifdef __cplusplus
 }
