@@ -188,6 +188,7 @@ int kt_run_server ( kt_conn_session_t* conn_session )
         return -1;
     }
     session = connection->get_session()->begin()->second;
+    conn_session->session = reinterpret_cast<void*>(session);
     return 0;
 }
 
