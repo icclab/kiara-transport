@@ -2,7 +2,7 @@
  * File:   registry.c
  * Author: aepp
  *
- * Created on 25. November 2013, 16:45
+ * Created on 25. November 2013, 16:44
  */
 
 #include <stdio.h>
