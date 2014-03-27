@@ -18,7 +18,7 @@ KIARA::Transport::KT_Zeromq::~KT_Zeromq() {
 
 void
 KIARA::Transport::KT_Zeromq::poller ( void* socket, std::string endpoint ) {
-	KIARA::Transport::KT_Session* sess = _sessions.find ( endpoint )->second;
+	KIARA::Transport::KT_Session* sess = _sessions->find ( endpoint )->second;
 	while (!interupted)
 	{
 		KT_Msg msg;
@@ -81,7 +81,7 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Session** ret ) {
 	session->set_endpoint ( *binding_name );
 	std::vector<char> identifier (id, id + id_size);
 	session->set_identifier( std::move(identifier));
-	_sessions.insert ( std::make_pair ( *binding_name, session ) );
+	_sessions->insert ( std::make_pair ( *binding_name, session ) );
 
 	*ret = session;
 
@@ -157,7 +157,7 @@ KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, KIARA
 int
 KIARA::Transport::KT_Zeromq::disconnect ( KIARA::Transport::KT_Session& session ) {
 	zmq_close ( session.get_socket() );
-	_sessions.erase( session.get_endpoint() );
+	_sessions->erase( session.get_endpoint() );
 	return 0;
 }
 
@@ -218,7 +218,7 @@ KIARA::Transport::KT_Zeromq::bind ( ) {
 	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session();
 	session->set_socket ( socket );
 	session->set_endpoint ( binding_name->c_str() );
-	_sessions.insert ( std::make_pair ( binding_name->c_str(), session ) );
+	_sessions->insert ( std::make_pair ( binding_name->c_str(), session ) );
 
 	interupted = false;
 	poller_thread = new std::thread ( &KT_Zeromq::poller, this, socket, binding_name->c_str() );

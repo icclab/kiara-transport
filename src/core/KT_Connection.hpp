@@ -28,7 +28,7 @@ class KT_Connection
 protected:
 
   void* _context;
-  std::map< std::string, KT_Session* > _sessions;
+  std::map< std::string, KT_Session* >* _sessions;
   KT_Configuration _configuration;
   std::function<void(KT_Msg&, KT_Session*, KT_Connection*)> _std_callback;
   
@@ -114,7 +114,7 @@ public:
    * Set the value of _session
    * @param session the new value of _session
    */
-  virtual void set_session ( std::map< std::string, KT_Session* > session ) {
+  virtual void set_session ( std::map< std::string, KT_Session* >* session ) {
       _sessions = session;
   }
 
@@ -122,7 +122,7 @@ public:
    * Get the value of _session
    * @return the value of _session
    */
-  virtual std::map< std::string, KT_Session* > const get_session ( ) const {
+  virtual std::map< std::string, KT_Session* >* const get_session ( ) const {
     return _sessions;
   }
 
