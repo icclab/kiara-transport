@@ -11,7 +11,7 @@
 #include <stddef.h>
 
 #define KT_TRANSPORT_MAJOR 0
-#define KT_TRANSPORT_MINOR 1
+#define KT_TRANSPORT_MINOR 2
 #define KT_TRANSPORT_PATCH 0
 
 #ifdef __cplusplus
