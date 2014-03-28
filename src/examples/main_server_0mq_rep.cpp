@@ -22,12 +22,15 @@ int main ()
 
 	KT_Configuration config;
 	config.set_application_type ( KT_REQUESTREPLY );
+	config.set_transport_layer( KT_TCP );
+	config.set_hostname( "*" );
+	config.set_port_number( 5555 );
 
 	KT_Connection* connection = new KT_Zeromq ();
 	connection->set_configuration (config);
 
 	connection->register_callback( &callback_handler );
-	connection->bind("tcp://*:5555");
+	connection->bind();
 
 	sleep (300);
 
@@ -40,8 +43,8 @@ void callback_handler ( KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	std::vector<char> answer_vector = msg.get_payload();
 	std::string answer(answer_vector.begin(), answer_vector.end());
 	std::cout << answer << std::endl;
-	//std::cout << "Memory hex dump:" << std::endl << std::endl;
-	//Dump ( msg.get_payload().data(), msg.get_payload().size() );
+	std::cout << "Memory hex dump:" << std::endl << std::endl;
+	Dump ( msg.get_payload().data(), msg.get_payload().size() );
 
 	std::string payload ( "Here comes the answer" );
 	KT_Msg message;

@@ -29,7 +29,7 @@
 extern "C" {
 #endif
 
-/** Output a debug message
+/** Output a debug message if you do not #define NDEBUG
  * 
  * @param format printf-style format string, followed by variables
  */

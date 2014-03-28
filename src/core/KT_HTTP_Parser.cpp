@@ -31,6 +31,7 @@ KT_HTTP_Parser::KT_HTTP_Parser (KT_Msg& msg)
     parser = (http_parser*) malloc ( sizeof ( http_parser ) );
     http_parser_init ( parser, HTTP_BOTH );
 
+    // FIXME: Memory leak here
     parser->data = static_cast<void*>(new std::string);
     http_parser_execute ( parser, &settings, msg.get_payload().data(), \
         msg.get_payload().size() );
@@ -39,7 +40,8 @@ KT_HTTP_Parser::KT_HTTP_Parser (KT_Msg& msg)
 
 KT_HTTP_Parser::~KT_HTTP_Parser()
 {
-	// TODO Auto-generated destructor stub
+    delete (static_cast<std::string*>(parser->data));
+    free (parser);
 }
 
 std::string KT_HTTP_Parser::get_payload()

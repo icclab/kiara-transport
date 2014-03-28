@@ -11,78 +11,24 @@
 #include <stddef.h>
 
 #define KT_TRANSPORT_MAJOR 0
-#define KT_TRANSPORT_MINOR 1
+#define KT_TRANSPORT_MINOR 2
 #define KT_TRANSPORT_PATCH 0
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// network layer
-typedef unsigned int kt_network_layer;
-#define KT_IPLEGACY 4
-#define KT_IPV6     6
-
-// transport layer
-// see RFC 790 for numbers
-typedef unsigned int kt_transport_layer;
-#define KT_TCP    6
-#define KT_UDP   21
-#define KT_DCCP  33
-#define KT_SCTP 132
-
-/* TODO: This needs some more fine tuning like setting the protocol level,
- * desired algorithms, key exchanges etc.
- * <habl> 21.08.2013
- */
-
-// crypto layer
-typedef unsigned int kt_crypto_layer;
-#define KT_NONE   0
-#define KT_SSL    1
-#define KT_TLS    2
-
-// application layer
-typedef unsigned int kt_application_layer;
-#define KT_ZEROMQ  0
-#define KT_HTTP    1
-#define KT_RTSP    2
-#define KT_NTP     3
-#define KT_FTP     4
-#define KT_NFS     5
-
-struct kt_network_stack {
-  kt_network_layer network_layer;
-  kt_transport_layer transport_layer;
-  kt_crypto_layer crypto_layer;
-  kt_application_layer application_layer;
-  unsigned int port;
+struct kt_conn_session{
+    void* connection;
+    void* session;
 };
 
-/* The application type directly decides the communication pattern of the
- * socket and network and transport layers. Also it makes certain assumptions
- * that for e.g. a webserver implies HTTP with TCP on Port 80 and a streaming
- * service uses RTSP and UDP on port 554.
- */
 
-typedef unsigned int kt_application_type;
-#define KT_WEBSERVER      0
-#define KT_PUBLISHER      1
-#define KT_STREAM         2
-#define KT_ROUNDROBIN     3
-#define KT_REQUESTREPLY   4
-
-typedef struct {
-  struct kt_network_stack network_config;
-  kt_application_type application_type;
-  char *base_url;
-} kt_connconf_t;
-
+// typedefs to guarantee type safety when using them along with the wrapper
 typedef struct kt_conn_session kt_conn_session_t;
-
 typedef struct kt_msg kt_msg_t;
-
-typedef struct kt_handle kt_handle_t;
+typedef void (*kt_handle_t)(kt_conn_session_t*, kt_msg_t*);
+typedef struct kt_configuration kt_configuration_t;
 
 // generic functions
 
@@ -90,6 +36,7 @@ kt_msg_t* kt_msg_new ();
 void kt_msg_destroy ( kt_msg_t* );
 void kt_msg_set_payload ( kt_msg_t*, void*, size_t);
 void* kt_msg_get_payload ( kt_msg_t* );
+unsigned int kt_msg_get_payload_size ( kt_msg_t* );
 kt_handle_t* kt_create_handle ( void* (*)(kt_conn_session_t*, kt_msg_t*) );
 
 // client functions
@@ -100,7 +47,7 @@ kt_handle_t* kt_create_handle ( void* (*)(kt_conn_session_t*, kt_msg_t*) );
  * 
  * kt_conn_session_t* sess = kt_connect ( "http://domain.tld" );
  */
-kt_conn_session_t* kt_connect ( const char* );
+kt_conn_session_t* kt_connect ( const kt_configuration_t* );
 
 /* Send data to the remote host
  *
@@ -142,8 +89,8 @@ kt_msg_t* kt_recv ( kt_conn_session_t*, int );
 void* kt_disconnect ( kt_conn_session_t* );
 
 // server functions
-kt_conn_session_t* kt_init_server ( kt_connconf_t );
-void kt_register_handle ( kt_conn_session_t*, kt_handle_t* );
+kt_conn_session_t* kt_init_server ( kt_configuration_t*, kt_handle_t );
+void kt_register_handle ( kt_conn_session_t*, kt_handle_t );
 int kt_run_server ( kt_conn_session_t* );
 void* kt_stop_server ( kt_conn_session_t*, int );
 
