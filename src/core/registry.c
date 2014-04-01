@@ -14,7 +14,7 @@
 #include "registry.h"
 #include "negotiation.h"
 
-neg_ctx_t *reg_create_context() {
+neg_ctx_t *reg_create_context(void) {
 	neg_ctx_t *neg_ctx;
 	neg_ctx = (neg_ctx_t *) malloc(sizeof (struct neg_ctx_t));
 	neg_ctx->hash = NULL;
@@ -41,7 +41,7 @@ int reg_set_remote_capability(neg_ctx_t *neg_ctx, const char *endpoint, const ch
 			//TODO: Parse the IDL section
 		} else if (json_is_object(value)) {
 			asprintf(&nego_key, "%s.", key);
-			_reg_parse_dict(value, 1, remote_dict, nego_key);
+			_reg_parse_dict(value, remote_dict, nego_key);
 		}
 	}
 	HASH_ITER(hh, neg_ctx->dict_collection, current_dict, tmp) {
@@ -69,6 +69,7 @@ int reg_set_capability(neg_ctx_t *neg_ctx, char *key, char *value) {
 	s->id = key;
 	s->value = value;
 	HASH_ADD_KEYPTR(hh, neg_ctx->hash, s->id, strlen(s->id), s);
+	return 0;
 }
 
 neg_dict_t* reg_get_capability(neg_ctx_t* neg_ctx, char* key) {
@@ -78,10 +79,10 @@ neg_dict_t* reg_get_capability(neg_ctx_t* neg_ctx, char* key) {
 
 char* reg_get_local_capability_json(neg_ctx_t* neg_ctx) {
 	struct neg_dict_t *tmp;
-	json_t *category;
-	json_t *group;
-	json_t *type;
-	json_t *value;
+	json_t *category = NULL;
+	json_t *group = NULL;
+	json_t *type = NULL;
+	json_t *value = NULL;
 
 	for (tmp = neg_ctx->hash; tmp != NULL; tmp = (struct neg_dict_t *) tmp->hh.next) {
 		int i;
@@ -133,23 +134,22 @@ char* reg_get_local_capability_json(neg_ctx_t* neg_ctx) {
 	return json_dumps(neg_ctx->root, JSON_ENCODE_ANY);
 }
 
-int _reg_parse_dict(json_t* value, int level, neg_dict_remote_collection_t* remote_dict, char* nego_key) {
+int _reg_parse_dict(json_t* value, neg_dict_remote_collection_t* remote_dict, const char* nego_key) {
 	json_t *new_value;
 	const char *new_key;
-	json_error_t error;
 
 	json_object_foreach(value, new_key, new_value) {
 		if (json_is_object(new_value)) {
 			const char *tmp_key;
 			asprintf(&tmp_key, "%s%s.", nego_key, new_key);
-			_reg_parse_dict(new_value, level, remote_dict, tmp_key);
+			_reg_parse_dict(new_value, remote_dict, tmp_key);
 		}
 		if (json_is_string(new_value)) {
 			neg_dict_remote_collection_t *s = malloc(sizeof (*s));
 			s->id = (const char *)malloc((strlen(nego_key) + strlen(new_key) + 1)*sizeof(char));
-			s->value = (const char *)malloc((strlen(new_value) + 1)*sizeof(char));
-			strcat(s->id, nego_key);
-			strcat(s->id, new_key);
+			s->value = (char *)malloc((strlen(json_string_value(new_value)) + 1)*sizeof(char));
+			strcat((char*) s->id, (char*) nego_key);
+			strcat((char*) s->id, (char*) new_key);
 			strcat(s->value, json_string_value(new_value));
 			s->sub = NULL;
 			HASH_ADD_KEYPTR(hh, remote_dict->sub, s->id, strlen(s->id), s);
