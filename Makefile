@@ -4,7 +4,6 @@ CXX = clang++
 CCFLAGS =	-Weverything\
 			-Wno-padded \
 			-pedantic \
-			-std=c99 \
 			-O0 \
 			-g \
 			-fno-omit-frame-pointer \
@@ -171,13 +170,13 @@ $(BUILDDIR)/KT_Zeromq.o: $(BUILDDIR) src/core/KT_Zeromq.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/core/KT_Zeromq.cpp
 	
 $(BUILDDIR)/negotiation.o: $(BUILDDIR) src/core/negotiation.c
-	$(CC) -c $(CFLAGS) -o $@ src/core/negotiation.c
+	$(CC) -c $(CCFLAGS) -o $@ src/core/negotiation.c
 
 $(BUILDDIR)/reco_engine.o: $(BUILDDIR) src/core/reco_engine.cpp
 	$(CXX) -c $(CXXFLAGS) -o $@ src/core/reco_engine.cpp
 
 $(BUILDDIR)/registry.o: $(BUILDDIR) src/core/registry.c
-	$(CC) -c $(CFLAGS) -o $@ src/core/registry.c
+	$(CC) -c $(CCFLAGS) -o $@ src/core/registry.c
 
 $(BUILDDIR)/http_parser.o: $(BUILDDIR) src/core/http_parser.c
 		$(CXX) -c $(CXXFLAGS) -Wno-everything -o $@ src/core/http_parser.c
@@ -186,10 +185,10 @@ $(BUILDDIR)/main_server_0mq_http_pp.o: $(BUILDDIR) src/examples/main_server_0mq_
 		$(CXX) -c $(CXXFLAGS) -o $@ src/examples/main_server_0mq_http.cpp
 
 $(BUILDDIR)/main_nego.o: $(BUILDDIR) src/examples/main_nego.c
-		$(CC) -c $(CFLAGS) -o $@ src/examples/main_nego.c
+		$(CC) -c $(CCFLAGS) -o $@ src/examples/main_nego.c
 	
 $(BUILDDIR)/main_nego_client.o: $(BUILDDIR) src/examples/main_nego_client.c
-		$(CC) -c $(CFLAGS) -o $@ src/examples/main_nego_client.c
+		$(CC) -c $(CCFLAGS) -o $@ src/examples/main_nego_client.c
 
 $(BUILDDIR)/server_0mq_http_pp: $(BUILDDIR) $(SERVER_0MQ_DEPS)
 		$(CXX) $(LDFLAGS) $(FLAGS) -o $@ $(SERVER_0MQ_DEPS)

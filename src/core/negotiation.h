@@ -48,7 +48,7 @@ int neg_send_offer(neg_ctx_t *neg_ctx);
 int neg_set_local_capability(neg_ctx_t *neg_ctx, char *key, char *value);
 neg_dict_t *neg_get_capability(neg_ctx_t *neg_ctx, char *key);
 int neg_run_server(neg_ctx_t *neg_ctx);
-neg_ctx_t *neg_init();
+neg_ctx_t *neg_init(void);
 
 #ifdef	__cplusplus
 }

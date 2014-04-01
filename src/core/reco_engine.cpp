@@ -69,6 +69,7 @@ void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 				break;
 			//POST Request
 			case 3:
+				std::cout << parser.get_payload() << std::endl;
 				reg_set_remote_capability(neg_ctx, parser.get_identifier().c_str(), parser.get_payload().c_str());
 				std::cout << "Done so!" << std::endl;
 				payload.append ( "POST request are currently not enabled" );
