@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <uthash.h>
 #include "reco_engine.h"
 #include "registry.h"
 
@@ -37,3 +38,107 @@ int neg_run_server(neg_ctx_t *neg_ctx) {
 	return 1;
 }
 
+int neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
+	neg_dict_remote_collection_t *s = malloc(sizeof (*s));
+	neg_dict_remote_collection_t* remote_dict = reg_get_remote_dict(neg_ctx, endpoint);
+	neg_dict_t *current_dict, *tmp;
+	dec_dict_t *dec_dict, *dec_tmp, *dec_it, *dec, *d_tmp;
+	
+	dec_dict = NULL;
+	char delimiter[] = ".";
+	char *key;
+	
+	HASH_ITER(hh, neg_ctx->hash, current_dict, tmp) {
+		s = malloc(sizeof (struct neg_dict_remote_collection_t));
+		HASH_FIND_STR(remote_dict->sub, current_dict->id, s);
+		if(s == NULL){
+			printf("Nothing to do\n");
+			//No value found in dict, use mine
+		}
+		else {
+			//Found value, negotiate
+			int i;
+			char *nego_key, *tmp_id;
+			char id[strlen(current_dict->id) + 1];
+			
+			strncpy(id, current_dict->id, sizeof (id));
+			key = strtok(id, delimiter);
+			i = 1;
+			while (key != NULL) {
+				if(i <= 2) {
+					if(i == 2) {
+						asprintf(&nego_key, "%s.%s", nego_key, key);
+					}
+					else {
+						asprintf(&nego_key, "%s", key);
+					}
+					
+				}
+				else if(i == 3){
+					HASH_FIND_STR(dec_dict, nego_key, dec_tmp);
+					if (dec_tmp == NULL) {
+						dec_tmp = malloc(sizeof(*dec_tmp));
+						dec_tmp->id = nego_key;
+						dec_tmp->sub = NULL;
+						dec_tmp->value = 0;
+						HASH_ADD_KEYPTR(hh, dec_dict, nego_key, strlen(nego_key), dec_tmp);
+					}
+					//char tmp_id[strlen(*key) + 1];
+					tmp_id = malloc(sizeof(char) * (strlen(key) + 1));
+					strncpy(tmp_id, key, sizeof (tmp_id));
+					printf("%s\n", tmp_id);
+				}
+				else if(i == 4){
+					int l_prec = _prec_to_int(current_dict->value);
+					int r_prec = _prec_to_int(s->value);
+					int neg_value = (l_prec * r_prec) + (l_prec - r_prec);
+					HASH_FIND_STR(dec_dict, nego_key, dec_it);
+					HASH_ITER(hh, dec_it->sub, dec, d_tmp) {
+						if(neg_value > dec->value) {
+							HASH_DEL(dec_it->sub, dec);
+						}
+						else {
+							neg_value = 0;
+						}
+					}
+					if(neg_value > 0) {
+						dec = malloc(sizeof (*dec));
+						dec->id = tmp_id;
+						dec->sub = NULL;
+						dec->value = neg_value;
+						HASH_ADD_KEYPTR(hh, dec_it->sub, dec->id, strlen(dec->id), dec);
+						printf("neg_value is: %i\n", neg_value);
+					}
+				}
+				key = strtok(NULL, delimiter);
+				i++;
+			}
+		}
+	}
+	HASH_ITER(hh, dec_dict, dec_it, dec_tmp) {
+		HASH_ITER(hh, dec_it->sub, dec, d_tmp) {
+			printf("Result is: %s : %s : %i\n", dec_it->id, dec->id, dec->value);
+		}
+	}
+}
+
+int _prec_to_int(char *prec) {
+	int ret;
+	
+	if(strcmp(prec, "MUST") == 0) {
+		ret = 4;
+	}
+	else if(strcmp(prec, "SHOULD") == 0){
+		ret = 3;
+	}
+	else if(strcmp(prec, "SHOULD NOT") == 0){
+		ret = 2;
+	}
+	else if(strcmp(prec, "MUST NOT") == 0){
+		ret = 1;
+	}
+	else {
+		//Unknown stuff here
+	}
+	return ret;
+}

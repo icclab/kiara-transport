@@ -71,7 +71,7 @@ void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 			case 3:
 				std::cout << parser.get_payload() << std::endl;
 				reg_set_remote_capability(neg_ctx, parser.get_identifier().c_str(), parser.get_payload().c_str());
-				std::cout << "Done so!" << std::endl;
+				neg_negotiate(neg_ctx, parser.get_identifier().c_str());
 				payload.append ( "POST request are currently not enabled" );
 				payload = KT_HTTP_Responder::generate_400_BAD_REQUEST( std::vector<char>(payload.begin(), payload.end()) );
 				break;
