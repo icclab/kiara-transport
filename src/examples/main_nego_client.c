@@ -12,7 +12,10 @@
  * 
  */
 int main(void) {
+	char *response;
+	
 	neg_ctx_t *neg_ctx = neg_init();
+	
 	neg_set_local_capability(neg_ctx, "transport.transport-protocols.tcp.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.transport-protocols.udp.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.user-protocols.suuuuu.prec", "SHOULD");
@@ -22,7 +25,8 @@ int main(void) {
 	neg_set_local_capability(neg_ctx, "security.mechanism.tls.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
 	neg_ctx->host = "tcp://localhost:5555";
-	int rc = neg_send_offer(neg_ctx);
-	return rc;
+	response = neg_send_offer(neg_ctx);
+	int ret = neg_set_final_capabilities(neg_ctx, response);
+	return ret;
 }
 

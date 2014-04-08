@@ -130,7 +130,12 @@ RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 
 	KT_HTTP_Parser parser (reply);
 	std::cout << "Parser found in body:" << std::endl;
-	std::cout << parser << std::endl;
+	response = parser.get_payload();
+	//std::cout << response << std::endl;
+}
+
+char *RecoClient::GetPayload() {
+	return (char *) response.c_str();
 }
 
 #ifdef	__cplusplus
@@ -147,9 +152,9 @@ void reco_run_server(void *reco_server){
 	tmp_reco_server->RunServer();
 }
 
-void* reco_send_offer (char *endpoint, neg_ctx_t* neg_ctx) {
+char* reco_send_offer (char *endpoint, neg_ctx_t* neg_ctx) {
 	RecoClient *out = new RecoClient(endpoint, neg_ctx);
-	return ((void*)out);
+	return out->GetPayload();
 }
 
 #ifdef	__cplusplus

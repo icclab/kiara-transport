@@ -28,8 +28,10 @@ class RecoClient {
 public:
 	RecoClient(char *serverhost, neg_ctx_t* neg_ctx);
 	~RecoClient();
+	char *GetPayload();
 private:
 	std::string host;
+	std::string response;
 };
 #endif
 
@@ -39,7 +41,7 @@ extern "C" {
 	
 void* init_reco_server(char* endpoint, neg_ctx_t *neg_ctx);
 void reco_run_server(void *reco_server);
-void* reco_send_offer (char* endpoint, neg_ctx_t *neg_ctx);
+char* reco_send_offer (char* endpoint, neg_ctx_t *neg_ctx);
 
 #ifdef	__cplusplus
 }

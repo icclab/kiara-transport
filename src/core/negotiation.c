@@ -27,14 +27,18 @@ neg_dict_t *neg_get_capability(neg_ctx_t* neg_ctx, char* key){
 	return reg_get_capability(neg_ctx, key);
 }
 
-int neg_send_offer(neg_ctx_t *neg_ctx){
-	reco_send_offer(neg_ctx->host, neg_ctx);
-	return 1;
+char *neg_send_offer(neg_ctx_t *neg_ctx){
+	return reco_send_offer(neg_ctx->host, neg_ctx);
 }
 
 int neg_run_server(neg_ctx_t *neg_ctx) {
 	void* server = init_reco_server(neg_ctx->host, neg_ctx);
 	reco_run_server(server);
+	return 1;
+}
+
+int neg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
+	reg_set_final_capabilities(neg_ctx, response);
 	return 1;
 }
 

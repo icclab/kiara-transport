@@ -19,6 +19,7 @@ neg_ctx_t *reg_create_context(void) {
 	neg_ctx = (neg_ctx_t *) malloc(sizeof (struct neg_ctx_t));
 	neg_ctx->hash = NULL;
 	neg_ctx->dict_collection = NULL;
+	neg_ctx->final_capabilities = NULL;
 	neg_ctx->root = json_object();
 	neg_ctx->root_response = json_object();
 	return neg_ctx;
@@ -45,10 +46,27 @@ int reg_set_remote_capability(neg_ctx_t *neg_ctx, const char *endpoint, const ch
 			_reg_parse_dict(value, remote_dict, nego_key);
 		}
 	}
+
 	HASH_ITER(hh, neg_ctx->dict_collection, current_dict, tmp) {
 		HASH_FIND_STR(current_dict->sub, "security.mechanism.ssl.prec", out);
 	}
 	return 0;
+}
+
+int reg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
+	json_t *root, *value;
+	json_error_t error;
+	const char *key;
+
+	root = json_loads(response, 0, &error);
+	void *iter = json_object_iter(root);
+	
+	while (iter) {
+		key = json_object_iter_key(iter);
+		value = json_object_iter_value(iter);
+		/* use key and value ... */
+		iter = json_object_iter_next(root, iter);
+	}
 }
 
 neg_dict_remote_collection_t* reg_get_remote_dict(neg_ctx_t *neg_ctx, const char *endpoint) {
@@ -151,8 +169,8 @@ int _reg_parse_dict(json_t* value, neg_dict_remote_collection_t* remote_dict, co
 		}
 		if (json_is_string(new_value)) {
 			neg_dict_remote_collection_t *s = malloc(sizeof (*s));
-			s->id = (const char *)malloc((strlen(nego_key) + strlen(new_key) + 1)*sizeof(char));
-			s->value = (char *)malloc((strlen(json_string_value(new_value)) + 1)*sizeof(char));
+			s->id = (const char *) malloc((strlen(nego_key) + strlen(new_key) + 1) * sizeof (char));
+			s->value = (char *) malloc((strlen(json_string_value(new_value)) + 1) * sizeof (char));
 			strcat((char*) s->id, (char*) nego_key);
 			strcat((char*) s->id, (char*) new_key);
 			strcat(s->value, json_string_value(new_value));
