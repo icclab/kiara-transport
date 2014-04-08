@@ -29,6 +29,7 @@ int reg_set_capability(neg_ctx_t *neg_ctx, char *key, char *value);
 neg_dict_t *reg_get_capability(neg_ctx_t* neg_ctx, char* key);
 char** _reg_str_split(char* a_str, const char a_delim);
 char* reg_get_local_capability_json(neg_ctx_t* neg_ctx);
+char* _reg_get_local_capability_json(neg_dict_t *hash, json_t *root);
 int _reg_parse_dict(json_t* value, neg_dict_remote_collection_t* remote_dict, const char* nego_key);
 
 #ifdef	__cplusplus

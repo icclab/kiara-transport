@@ -20,6 +20,7 @@ neg_ctx_t *reg_create_context(void) {
 	neg_ctx->hash = NULL;
 	neg_ctx->dict_collection = NULL;
 	neg_ctx->root = json_object();
+	neg_ctx->root_response = json_object();
 	return neg_ctx;
 }
 
@@ -78,13 +79,17 @@ neg_dict_t* reg_get_capability(neg_ctx_t* neg_ctx, char* key) {
 }
 
 char* reg_get_local_capability_json(neg_ctx_t* neg_ctx) {
+	return _reg_get_local_capability_json(neg_ctx->hash, neg_ctx->root);
+}
+
+char* _reg_get_local_capability_json(neg_dict_t *hash, json_t *root) {
 	struct neg_dict_t *tmp;
 	json_t *category = NULL;
 	json_t *group = NULL;
 	json_t *type = NULL;
 	json_t *value = NULL;
 
-	for (tmp = neg_ctx->hash; tmp != NULL; tmp = (struct neg_dict_t *) tmp->hh.next) {
+	for (tmp = hash; tmp != NULL; tmp = (struct neg_dict_t *) tmp->hh.next) {
 		int i;
 		char id[strlen(tmp->id) + 1];
 		strncpy(id, tmp->id, sizeof (id));
@@ -97,10 +102,10 @@ char* reg_get_local_capability_json(neg_ctx_t* neg_ctx) {
 		while (key != NULL) {
 			switch (i) {
 				case CATEGORY:
-					category = json_object_get(neg_ctx->root, key);
+					category = json_object_get(root, key);
 					if (category == NULL) {
 						category = json_object();
-						json_object_set(neg_ctx->root, key, category);
+						json_object_set(root, key, category);
 					}
 					break;
 				case GROUP:
@@ -131,7 +136,7 @@ char* reg_get_local_capability_json(neg_ctx_t* neg_ctx) {
 			i++;
 		}
 	}
-	return json_dumps(neg_ctx->root, JSON_ENCODE_ANY);
+	return json_dumps(root, JSON_ENCODE_ANY);
 }
 
 int _reg_parse_dict(json_t* value, neg_dict_remote_collection_t* remote_dict, const char* nego_key) {

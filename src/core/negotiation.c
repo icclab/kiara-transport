@@ -38,7 +38,7 @@ int neg_run_server(neg_ctx_t *neg_ctx) {
 	return 1;
 }
 
-int neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
+char *neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 	neg_dict_remote_collection_t *s = malloc(sizeof (*s));
 	neg_dict_remote_collection_t* remote_dict = reg_get_remote_dict(neg_ctx, endpoint);
 	neg_dict_t *current_dict, *tmp;
@@ -52,8 +52,7 @@ int neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 		s = malloc(sizeof (struct neg_dict_remote_collection_t));
 		HASH_FIND_STR(remote_dict->sub, current_dict->id, s);
 		if(s == NULL){
-			printf("Nothing to do\n");
-			//No value found in dict, use mine
+			printf("No coresponding value found in dict\n");
 		}
 		else {
 			//Found value, negotiate
@@ -72,7 +71,6 @@ int neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 					else {
 						asprintf(&nego_key, "%s", key);
 					}
-					
 				}
 				else if(i == 3){
 					HASH_FIND_STR(dec_dict, nego_key, dec_tmp);
@@ -86,7 +84,6 @@ int neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 					//char tmp_id[strlen(*key) + 1];
 					tmp_id = malloc(sizeof(char) * (strlen(key) + 1));
 					strncpy(tmp_id, key, sizeof (tmp_id));
-					printf("%s\n", tmp_id);
 				}
 				else if(i == 4){
 					int l_prec = _prec_to_int(current_dict->value);
@@ -107,7 +104,6 @@ int neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 						dec->sub = NULL;
 						dec->value = neg_value;
 						HASH_ADD_KEYPTR(hh, dec_it->sub, dec->id, strlen(dec->id), dec);
-						printf("neg_value is: %i\n", neg_value);
 					}
 				}
 				key = strtok(NULL, delimiter);
@@ -115,11 +111,20 @@ int neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 			}
 		}
 	}
+	neg_dict_t *neg_dict, *nego_tmp;
+	neg_dict = NULL;
 	HASH_ITER(hh, dec_dict, dec_it, dec_tmp) {
 		HASH_ITER(hh, dec_it->sub, dec, d_tmp) {
-			printf("Result is: %s : %s : %i\n", dec_it->id, dec->id, dec->value);
+			char *response_key;
+			nego_tmp = malloc(sizeof (*nego_tmp));
+			asprintf(&response_key, "%s.%s.prec", dec_it->id, dec->id);
+			nego_tmp->id = response_key;
+			nego_tmp->value = "1";
+			HASH_ADD_KEYPTR(hh, neg_dict, response_key, strlen(response_key), nego_tmp);
 		}
 	}
+	char *json = _reg_get_local_capability_json(neg_dict, neg_ctx->root_response);
+	return json;
 }
 
 int _prec_to_int(char *prec) {
