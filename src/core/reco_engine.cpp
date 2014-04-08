@@ -131,7 +131,6 @@ RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 	KT_HTTP_Parser parser (reply);
 	std::cout << "Parser found in body:" << std::endl;
 	response = parser.get_payload();
-	//std::cout << response << std::endl;
 }
 
 char *RecoClient::GetPayload() {

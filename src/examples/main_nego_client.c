@@ -26,6 +26,7 @@ int main(void) {
 	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
 	neg_ctx->host = "tcp://localhost:5555";
 	response = neg_send_offer(neg_ctx);
+	printf(response);
 	int ret = neg_set_final_capabilities(neg_ctx, response);
 	return ret;
 }

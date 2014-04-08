@@ -54,19 +54,22 @@ int reg_set_remote_capability(neg_ctx_t *neg_ctx, const char *endpoint, const ch
 }
 
 int reg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
+	neg_dict_remote_collection_t *tmp = NULL;
 	json_t *root, *value;
 	json_error_t error;
 	const char *key;
+	char *nego_key;
 
 	root = json_loads(response, 0, &error);
-	void *iter = json_object_iter(root);
 	
-	while (iter) {
-		key = json_object_iter_key(iter);
-		value = json_object_iter_value(iter);
-		/* use key and value ... */
-		iter = json_object_iter_next(root, iter);
+	json_object_foreach(root, key, value) {
+		asprintf(&nego_key, "%s.", key);
+		_reg_parse_dict(value, tmp, nego_key);
 	}
+}
+
+int _parse_final_capabilities(){
+	
 }
 
 neg_dict_remote_collection_t* reg_get_remote_dict(neg_ctx_t *neg_ctx, const char *endpoint) {
