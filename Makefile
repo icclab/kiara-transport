@@ -1,6 +1,12 @@
 CC = clang
 CXX = clang++
 
+negoc: CCFLAGS =	-Weverything\
+			-Wno-padded \
+			-pedantic \
+			-O0 \
+			-g
+
 CCFLAGS =	-Weverything\
 			-Wno-padded \
 			-pedantic \
@@ -10,6 +16,14 @@ CCFLAGS =	-Weverything\
 			-fsanitize=address \
 			-fno-omit-frame-pointer \
 			-fsanitize-memory-track-origins
+
+negoc: CXXFLAGS =	-Weverything \
+			-Wno-padded \
+			-Wno-c++98-compat-pedantic \
+			-pedantic \
+			-std=c++11 \
+			-O0 \
+			-g
 
 CXXFLAGS =	-Weverything \
 			-Wno-padded \
@@ -22,7 +36,7 @@ CXXFLAGS =	-Weverything \
 			-fno-omit-frame-pointer \
 			-fsanitize-memory-track-origins
 
-LDFLAGS = -lzmq -lczmq -ljansson -fsanitize=address
+LDFLAGS = -lzmq -lczmq -ljansson
 
 DEST=build
 ARCH=$(shell uname -m)-$(shell uname -s)
@@ -40,7 +54,7 @@ all: 	server_0mq_http_pp \
 		client_0mq_req_pp \
 		server_0mq_rep_c \
 		client_0mq_req_c
-negoc: server_0mq_http_nego \
+negoc:	server_0mq_http_nego \
 		client_0mq_http_nego
 
 server_0mq_http_pp:	$(BUILDDIR)/KT_Client.o \
@@ -278,7 +292,6 @@ $(BUILDDIR)/http_parser.o: $(BUILDDIR) src/core/http_parser.c
 $(BUILDDIR)/main_server_0mq_http_pp.o: $(BUILDDIR) src/examples/main_server_0mq_http.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/examples/main_server_0mq_http.cpp
 
-
 $(BUILDDIR)/main_nego.o: $(BUILDDIR) src/examples/main_nego.c
 		$(CC) -c $(CCFLAGS) -o $@ src/examples/main_nego.c
 	
@@ -317,3 +330,9 @@ $(BUILDDIR)/main_client_0mq_req_c.o: $(BUILDDIR) src/examples/main_client_0mq_re
 
 $(BUILDDIR)/client_0mq_req_c: $(BUILDDIR) $(CLIENT_0MQ_REQ_CC_DEPS)
 		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(CLIENT_0MQ_REQ_CC_DEPS)
+
+$(BUILDDIR)/server_0mq_http_nego: $(BUILDDIR) $(SERVER_0MQ_C_NEGO_DEPS)
+		$(CXX) $(LDFLAGS) $(FLAGS) -o $@ $(SERVER_0MQ_C_NEGO_DEPS)
+	
+$(BUILDDIR)/client_0mq_http_nego: $(BUILDDIR) $(CLIENT_0MQ_C_NEGO_DEPS)
+		$(CXX) $(LDFLAGS) $(FLAGS) -o $@ $(CLIENT_0MQ_C_NEGO_DEPS)

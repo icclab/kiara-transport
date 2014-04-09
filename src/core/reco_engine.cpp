@@ -34,15 +34,18 @@ RecoServer::~RecoServer() {
 
 int RecoServer::RunServer() {
 	KT_Configuration config;
-	config.set_application_type(KT_STREAM);
+	config.set_application_type ( KT_STREAM );
+	config.set_transport_layer( KT_TCP );
+	config.set_hostname( "*" );
+	config.set_port_number( ctx->port );
 
-	KT_Connection* connection = new KT_Zeromq();
-	connection->set_configuration(config);
+	KT_Connection* connection = new KT_Zeromq ();
+	connection->set_configuration (config);
+
+	connection->register_callback( &callback_handler );
+	connection->bind();
 	
-	connection->register_callback(&callback_handler);
-	connection->bind(host);
-	
-	connection->get_session().find(ctx->host)->second->set_k_user_data(ctx);
+	connection->get_session()->begin()->second->set_k_user_data(ctx);
 	
 	sleep(600);
 
@@ -52,7 +55,7 @@ int RecoServer::RunServer() {
 }
 
 void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
-	KT_HTTP_Parser parser(msg);
+	KT_HTTP_Parser parser (msg);
 	neg_ctx_t *neg_ctx = (neg_ctx_t*) sess->get_k_user_data();
 	std::cout << neg_ctx->host << std::endl;
 	std::string payload("");
@@ -71,7 +74,6 @@ void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 			case 3:
 				std::cout << parser.get_payload() << std::endl;
 				reg_set_remote_capability(neg_ctx, parser.get_identifier().c_str(), parser.get_payload().c_str());
-				
 				payload.append ( neg_negotiate(neg_ctx, parser.get_identifier().c_str()) );
 				payload = KT_HTTP_Responder::generate_200_OK( std::vector<char>(payload.begin(), payload.end()) );
 				break;
@@ -92,17 +94,23 @@ void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 }
 
 RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
-	host = serverhost;
+
 	KT_Configuration config;
 	config.set_application_type ( KT_STREAM );
+
+	config.set_host( KT_TCP, "localhost", 5555);
+
+	// Or alternatively:
+	// config.set_transport_layer( KT_TCP );
+	// config.set_hostname("localhost");
+	// config.set_port_number( 5555 );
 
 	KT_Connection* connection = new KT_Zeromq ();
 	connection->set_configuration (config);
 
 	KT_Session* session = nullptr;
-	KT_Client endpoint;
-	endpoint.set_endpoint(host);
-	if (0 != connection->connect(endpoint, &session))
+	
+	if (0 != connection->connect(&session))
 	{
 		std::cerr << "Failed to connect" << std::endl;
 	}
