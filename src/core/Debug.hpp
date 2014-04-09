@@ -11,6 +11,11 @@
 #include <iostream>
 #include <iomanip>
 
+/** Dumps the memory region into hex format to std::cout
+ *
+ * @param mem A pointer to the memory region to dump
+ * @param n Number of bytes to dump to
+ */
 void Dump( const void * mem, unsigned int n ) {
   const char * p = reinterpret_cast< const char *>( mem );
   for ( unsigned int i = 0; i < n; i++ ) {

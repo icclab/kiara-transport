@@ -9,6 +9,7 @@
 
 #include <string>
 #include <map>
+#include <functional>
 
 #include "KT_Configuration.hpp"
 #include "KT_Msg.hpp"
@@ -27,9 +28,9 @@ class KT_Connection
 protected:
 
   void* _context;
-  std::map< std::string, KT_Session* > _sessions;
+  std::map< std::string, KT_Session* >* _sessions;
   KT_Configuration _configuration;
-  void (*_callback)(KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session* session, KIARA::Transport::KT_Connection* obj);
+  std::function<void(KT_Msg&, KT_Session*, KT_Connection*)> _std_callback;
   
 public:
 
@@ -39,12 +40,11 @@ public:
 
   /**
    * @return int 0 if successful
-   * @param endpoint Where to connect to
    * @param ret Return a KT_Session pointer when successful
    */
 
   virtual int
-  connect (KT_Client& endpoint, KT_Session** ret) = 0;
+  connect ( KT_Session** ret) = 0;
 
   /**
    * @return int 0 if successful
@@ -79,14 +79,14 @@ public:
    */
 
   virtual int
-  register_callback (void (*callback)(KT_Msg&, KT_Session*, KIARA::Transport::KT_Connection*)) = 0;
+  register_callback (std::function<void(KT_Msg&, KT_Session*, KT_Connection*)>) = 0;
 
   /**
    * bind requires a valid callback handler which is called when a message is
    * received, it binds according to the set configuration
    */
   virtual int
-  bind (std::string) = 0;
+  bind () = 0;
   
   /**
    * stops listening to incomming messages
@@ -114,7 +114,7 @@ public:
    * Set the value of _session
    * @param session the new value of _session
    */
-  virtual void set_session ( std::map< std::string, KT_Session* > session ) {
+  virtual void set_session ( std::map< std::string, KT_Session* >* session ) {
       _sessions = session;
   }
 
@@ -122,7 +122,7 @@ public:
    * Get the value of _session
    * @return the value of _session
    */
-  virtual std::map< std::string, KT_Session* > const get_session ( ) const {
+  virtual std::map< std::string, KT_Session* >* const get_session ( ) const {
     return _sessions;
   }
 
