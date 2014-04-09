@@ -36,7 +36,9 @@ CXXFLAGS =	-Weverything \
 			-fno-omit-frame-pointer \
 			-fsanitize-memory-track-origins
 
-LDFLAGS = -lzmq -lczmq -ljansson
+LDFLAGS = -lzmq -lczmq -fsanitize=address
+
+negoc: LDFLAGS = -lzmq -lczmq -ljansson
 
 DEST=build
 ARCH=$(shell uname -m)-$(shell uname -s)
