@@ -54,22 +54,47 @@ int reg_set_remote_capability(neg_ctx_t *neg_ctx, const char *endpoint, const ch
 }
 
 int reg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
-	neg_dict_remote_collection_t *tmp = NULL;
 	json_t *root, *value;
 	json_error_t error;
 	const char *key;
 	char *nego_key;
+	neg_dict_t *current_dict, *tmp;
 
 	root = json_loads(response, 0, &error);
 	
 	json_object_foreach(root, key, value) {
 		asprintf(&nego_key, "%s.", key);
-		_reg_parse_dict(value, tmp, nego_key);
+		_parse_final_capabilities(value, neg_ctx, nego_key, CATEGORY);
 	}
+	return 0;
 }
 
-int _parse_final_capabilities(){
-	
+int _parse_final_capabilities(json_t *value, neg_ctx_t* neg_ctx, char *nego_key, enum dict_struct level){
+	json_t *new_value;
+	char *new_key;
+
+	json_object_foreach(value, new_key, new_value) {
+		if (json_is_object(new_value) && (level == CATEGORY)) {
+			const char *tmp_key;
+			asprintf(&tmp_key, "%s%s", nego_key, new_key);
+			int new_level = level;
+			_parse_final_capabilities(new_value, neg_ctx, tmp_key, ++new_level);
+		}
+		if (json_is_object(new_value) && level == GROUP) {
+			//printf("test2\n");
+			neg_dict_t *s = malloc(sizeof (*s));
+			s->id = nego_key;
+			s->value = new_key;
+			HASH_ADD_KEYPTR(hh, neg_ctx->final_capabilities, s->id, strlen(s->id), s);
+			//Maybe not needed
+			int new_level = level;
+			_parse_final_capabilities(new_value, neg_ctx, new_key, ++new_level);
+		}
+		if (json_is_string(new_value) && level == VALUE) {
+			//Dont know what to do here at the moment
+		}
+	}
+	return 0;
 }
 
 neg_dict_remote_collection_t* reg_get_remote_dict(neg_ctx_t *neg_ctx, const char *endpoint) {
@@ -96,7 +121,10 @@ int reg_set_capability(neg_ctx_t *neg_ctx, char *key, char *value) {
 
 neg_dict_t* reg_get_capability(neg_ctx_t* neg_ctx, char* key) {
 	HASH_FIND_STR(neg_ctx->hash, key, neg_ctx->neg_dict);
-	return neg_ctx->neg_dict;
+}
+
+void reg_get_final_capability(neg_ctx_t* neg_ctx, char* key) {
+	HASH_FIND_STR(neg_ctx->final_capabilities, key, neg_ctx->neg_dict);
 }
 
 char* reg_get_local_capability_json(neg_ctx_t* neg_ctx) {

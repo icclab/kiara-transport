@@ -114,7 +114,6 @@ RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 
 	KT_Msg request;
 	std::string payload(reg_get_local_capability_json(neg_ctx));
-	std::cout << payload << std::endl;
 	payload = KT_HTTP_Requester::generate_request("POST", "localhost:5555", "/negotiation",  std::vector<char>(payload.begin(), payload.end()));
 	
 	request.set_payload(payload);
@@ -129,7 +128,6 @@ RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 		std::cerr << "Receive failed" << std::endl;
 
 	KT_HTTP_Parser parser (reply);
-	std::cout << "Parser found in body:" << std::endl;
 	response = parser.get_payload();
 }
 

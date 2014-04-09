@@ -27,6 +27,10 @@ neg_dict_t *neg_get_capability(neg_ctx_t* neg_ctx, char* key){
 	return reg_get_capability(neg_ctx, key);
 }
 
+void neg_get_final_capability(neg_ctx_t* neg_ctx, char* key){
+	reg_get_final_capability(neg_ctx, key);
+}
+
 char *neg_send_offer(neg_ctx_t *neg_ctx){
 	return reco_send_offer(neg_ctx->host, neg_ctx);
 }

@@ -26,8 +26,11 @@ int main(void) {
 	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
 	neg_ctx->host = "tcp://localhost:5555";
 	response = neg_send_offer(neg_ctx);
-	printf(response);
 	int ret = neg_set_final_capabilities(neg_ctx, response);
+	neg_get_final_capability(neg_ctx, "transport.transport-protocols");
+	printf("Transport protocl is: %s\n", neg_ctx->neg_dict->value);
+	neg_get_final_capability(neg_ctx, "transport.communication-paradigm");
+	printf("Communication paradigm is: %s\n", neg_ctx->neg_dict->value);
 	return ret;
 }
 

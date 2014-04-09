@@ -19,6 +19,8 @@ int main(void) {
 	neg_set_local_capability(neg_ctx, "transport.transport-protocols.sctp.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.user-protocols.none.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.communication-paradigm.req-rep.prec", "MUST");
+	neg_set_local_capability(neg_ctx, "security.mechanism.tls.prec", "MUST");
+	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
 	neg_ctx->host = "tcp://*:5555";
 	int rc = neg_run_server(neg_ctx);
 	return rc;
