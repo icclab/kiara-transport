@@ -89,9 +89,9 @@ char *neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 						dec_tmp->value = 0;
 						HASH_ADD_KEYPTR(hh, dec_dict, nego_key, strlen(nego_key), dec_tmp);
 					}
-					//char tmp_id[strlen(*key) + 1];
-					tmp_id = malloc(sizeof(char) * (strlen(key) + 1));
-					strncpy(tmp_id, key, sizeof (tmp_id));
+					tmp_id = (char*)malloc(sizeof(char) * (strlen(key) + 1));
+					strncpy(tmp_id, key, strlen(key));
+					tmp_id[strlen(key)] = '\0';
 				}
 				else if(i == 4){
 					int l_prec = _prec_to_int(current_dict->value);

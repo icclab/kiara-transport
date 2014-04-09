@@ -1,12 +1,6 @@
 CC = clang
 CXX = clang++
 
-negoc: CCFLAGS =	-Weverything\
-			-Wno-padded \
-			-pedantic \
-			-O0 \
-			-g
-
 CCFLAGS =	-Weverything\
 			-Wno-padded \
 			-pedantic \
@@ -16,14 +10,15 @@ CCFLAGS =	-Weverything\
 			-fsanitize=address \
 			-fno-omit-frame-pointer \
 			-fsanitize-memory-track-origins
-
-negoc: CXXFLAGS =	-Weverything \
+	
+negoc: CCFLAGS =	-Weverything\
 			-Wno-padded \
-			-Wno-c++98-compat-pedantic \
 			-pedantic \
-			-std=c++11 \
 			-O0 \
-			-g
+			-g \
+			-fsanitize=address \
+			-fno-omit-frame-pointer \
+			-fsanitize-memory-track-origins
 
 CXXFLAGS =	-Weverything \
 			-Wno-padded \
@@ -36,9 +31,7 @@ CXXFLAGS =	-Weverything \
 			-fno-omit-frame-pointer \
 			-fsanitize-memory-track-origins
 
-LDFLAGS = -lzmq -lczmq -fsanitize=address
-
-negoc: LDFLAGS = -lzmq -lczmq -ljansson
+LDFLAGS = -lzmq -lczmq -ljansson -fsanitize=address
 
 DEST=build
 ARCH=$(shell uname -m)-$(shell uname -s)

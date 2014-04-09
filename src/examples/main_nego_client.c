@@ -31,6 +31,8 @@ int main(void) {
 	printf("Transport protocl is: %s\n", neg_ctx->neg_dict->value);
 	neg_get_final_capability(neg_ctx, "transport.communication-paradigm");
 	printf("Communication paradigm is: %s\n", neg_ctx->neg_dict->value);
+	neg_get_final_capability(neg_ctx, "security.mechanism");
+	printf("Security mechanism is: %s\n", neg_ctx->neg_dict->value);
 	return ret;
 }
 

@@ -90,9 +90,9 @@ int _parse_final_capabilities(json_t *value, neg_ctx_t* neg_ctx, char *nego_key,
 			int new_level = level;
 			_parse_final_capabilities(new_value, neg_ctx, new_key, ++new_level);
 		}
-		if (json_is_string(new_value) && level == VALUE) {
+		/*if (json_is_string(new_value) && level == VALUE) {
 			//Dont know what to do here at the moment
-		}
+		}*/
 	}
 	return 0;
 }
@@ -200,11 +200,15 @@ int _reg_parse_dict(json_t* value, neg_dict_remote_collection_t* remote_dict, co
 		}
 		if (json_is_string(new_value)) {
 			neg_dict_remote_collection_t *s = malloc(sizeof (*s));
-			s->id = (const char *) malloc((strlen(nego_key) + strlen(new_key) + 1) * sizeof (char));
+			const char *tmp_key;
+			asprintf(&tmp_key, "%s%s", nego_key, new_key);
+			/*s->id = (const char *) malloc((strlen(nego_key) + strlen(new_key) + 1) * sizeof (char));
 			s->value = (char *) malloc((strlen(json_string_value(new_value)) + 1) * sizeof (char));
 			strcat((char*) s->id, (char*) nego_key);
 			strcat((char*) s->id, (char*) new_key);
-			strcat(s->value, json_string_value(new_value));
+			strcat(s->value, json_string_value(new_valu*/
+			s->id = tmp_key;
+			s->value = json_string_value(new_value);
 			s->sub = NULL;
 			HASH_ADD_KEYPTR(hh, remote_dict->sub, s->id, strlen(s->id), s);
 		}
