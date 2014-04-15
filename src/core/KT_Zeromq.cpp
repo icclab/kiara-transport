@@ -32,27 +32,36 @@ KT_Zeromq::poller ( void* socket, std::string endpoint ) {
 	}
 }
 
+void* KT_Zeromq::create_socket (unsigned int socket_type)
+{
+    void* socket = nullptr;
+    int errcode = 0;
+    switch (socket_type)
+    {
+    case KT_STREAM:
+    case KT_WEBSERVER:
+        socket = zmq_socket ( _context, ZMQ_STREAM );
+        errcode = errno;
+        break;
+    case KT_REQUESTREPLY:
+        socket = zmq_socket ( _context, ZMQ_REQ);
+        errcode = errno;
+        break;
+    default:
+        break;
+    }
+    errno = errcode;
+    return socket;
+}
+
 int
 KT_Zeromq::connect ( KT_Session** ret ) {
-	void* socket = NULL;
+	void* socket = nullptr;
 	int errcode = 0;
 
-	switch (_configuration.get_application_type())
-	{
-	case KT_STREAM:
-	case KT_WEBSERVER:
-	    socket = zmq_socket ( _context, ZMQ_STREAM );
-	    errcode = errno;
-	    break;
-	case KT_REQUESTREPLY:
-	    socket = zmq_socket ( _context, ZMQ_REQ);
-	    errcode = errno;
-	    break;
-	default:
-	    break;
-	}
+	socket = create_socket(_configuration.get_application_type());
 
-	if (NULL == socket)
+	if (nullptr == socket)
 	{
 		errno = errcode;
 		return -1;
@@ -183,21 +192,12 @@ KT_Zeromq::register_callback ( std::function<void(KT_Msg&, KT_Session*, KT_Conne
  */
 int
 KT_Zeromq::bind ( ) {
-	void* socket = NULL;
+	void* socket = nullptr;
 	int errcode = 0;
 
-	if ( KT_STREAM == _configuration.get_application_type() )
-	{
-		socket = zmq_socket ( _context, ZMQ_STREAM );
-		errcode = errno;
-	}
-	else if ( KT_REQUESTREPLY == _configuration.get_application_type() )
-	{
-		socket = zmq_socket ( _context, ZMQ_REP);
-		errcode = errno;
-	}
+	socket = create_socket(_configuration.get_application_type());
 
-	if (NULL == socket)
+	if (nullptr == socket)
 	{
 		errno = errcode;
 		return -1;
