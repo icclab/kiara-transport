@@ -39,6 +39,8 @@ void* kt_msg_get_payload ( kt_msg_t* );
 unsigned int kt_msg_get_payload_size ( kt_msg_t* );
 kt_handle_t* kt_create_handle ( void* (*)(kt_conn_session_t*, kt_msg_t*) );
 
+kt_msg_t* kt_msg_http_reply (char*);
+
 // client functions
 
 /* Connect to a remote endpoint

@@ -114,6 +114,7 @@ client_0mq_req_c:	$(BUILDDIR)/k_transport.o \
 demo_broker:	$(BUILDDIR)/k_transport.o \
 				$(BUILDDIR)/KT_Configuration.o \
 				$(BUILDDIR)/KT_Connection.o \
+				$(BUILDDIR)/KT_HTTP_Responder.o \
 				$(BUILDDIR)/KT_Msg.o \
 				$(BUILDDIR)/KT_Session.o \
 				$(BUILDDIR)/KT_Zeromq.o \
@@ -182,6 +183,7 @@ DEMO_BROKER_DEPS =	$(BUILDDIR)/main_demo_broker.o \
 					$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 					$(BUILDDIR)/KT_Configuration.o \
 					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_HTTP_Responder.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
 					$(BUILDDIR)/KT_Zeromq.o
