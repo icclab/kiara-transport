@@ -204,9 +204,11 @@ int kt_run_server ( kt_conn_session_t* conn_session )
     KIARA::Transport::KT_Connection* connection =
             reinterpret_cast<KIARA::Transport::KT_Connection*> (conn_session->connection);
 
-    if ( 0 != connection->bind() )
+    int ret = connection->bind();
+    if ( 0 != ret )
     {
         std::cerr << "Failed to bind" << std::endl;
+        std::cerr << std::strerror(ret) << std::endl;
         return -1;
     }
     conn_session->session = reinterpret_cast<void*>(connection->get_session()->begin()->second);
