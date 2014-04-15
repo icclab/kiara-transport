@@ -36,15 +36,20 @@ int
 KT_Zeromq::connect ( KT_Session** ret ) {
 	void* socket = NULL;
 	int errcode = 0;
-	if ( KT_STREAM == _configuration.get_application_type() )
+
+	switch (_configuration.get_application_type())
 	{
-		socket = zmq_socket ( _context, ZMQ_STREAM );
-		errcode = errno;
-	}
-	else if ( KT_REQUESTREPLY == _configuration.get_application_type() )
-	{
-		socket = zmq_socket ( _context, ZMQ_REQ);
-		errcode = errno;
+	case KT_STREAM:
+	case KT_WEBSERVER:
+	    socket = zmq_socket ( _context, ZMQ_STREAM );
+	    errcode = errno;
+	    break;
+	case KT_REQUESTREPLY:
+	    socket = zmq_socket ( _context, ZMQ_REQ);
+	    errcode = errno;
+	    break;
+	default:
+	    break;
 	}
 
 	if (NULL == socket)
