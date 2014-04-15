@@ -8,17 +8,22 @@
 #include "KT_Zeromq.hpp"
 #include <iostream>
 
-KIARA::Transport::KT_Zeromq::KT_Zeromq() {
+namespace KIARA
+{
+namespace Transport
+{
+
+KT_Zeromq::KT_Zeromq() {
 	_context = zmq_ctx_new ();
 }
 
-KIARA::Transport::KT_Zeromq::~KT_Zeromq() {
+KT_Zeromq::~KT_Zeromq() {
 	zmq_ctx_destroy ( _context );
 }
 
 void
-KIARA::Transport::KT_Zeromq::poller ( void* socket, std::string endpoint ) {
-	KIARA::Transport::KT_Session* sess = _sessions->find ( endpoint )->second;
+KT_Zeromq::poller ( void* socket, std::string endpoint ) {
+	KT_Session* sess = _sessions->find ( endpoint )->second;
 	while (!interupted)
 	{
 		KT_Msg msg;
@@ -28,7 +33,7 @@ KIARA::Transport::KT_Zeromq::poller ( void* socket, std::string endpoint ) {
 }
 
 int
-KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Session** ret ) {
+KT_Zeromq::connect ( KT_Session** ret ) {
 	void* socket = NULL;
 	int errcode = 0;
 	if ( KT_STREAM == _configuration.get_application_type() )
@@ -76,7 +81,7 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Session** ret ) {
 	size_t id_size = 256;
 	zmq_getsockopt(socket, ZMQ_IDENTITY, id, &id_size);
 
-	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session ();
+	KT_Session* session = new KT_Session ();
 	session->set_socket ( socket );
 	session->set_endpoint ( *binding_name );
 	std::vector<char> identifier (id, id + id_size);
@@ -90,7 +95,7 @@ KIARA::Transport::KT_Zeromq::connect ( KIARA::Transport::KT_Session** ret ) {
 
 // Zeromq has no synchronous send. Thus linger is correctly throwing a -Wunused warning
 int
-KIARA::Transport::KT_Zeromq::send ( KIARA::Transport::KT_Msg& message, KIARA::Transport::KT_Session& session, int linger) {
+KT_Zeromq::send ( KT_Msg& message, KT_Session& session, int linger) {
 	if ( KT_STREAM == _configuration.get_application_type() )
 	{
 		int rc = zmq_send ( session.get_socket(), session.get_identifier().data(), session.get_identifier().size(), ZMQ_SNDMORE );
@@ -117,8 +122,8 @@ KIARA::Transport::KT_Zeromq::send ( KIARA::Transport::KT_Msg& message, KIARA::Tr
 // Zeromq has no asynchronous recv. Thus linger is correctly throwing a -Wunused warning
 // zmq_recv will block until a message arrived
 int
-KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, KIARA::Transport::KT_Msg& ret, int linger ) {
-	KIARA::Transport::KT_Msg message;
+KT_Zeromq::recv ( KT_Session& session, KT_Msg& ret, int linger ) {
+	KT_Msg message;
 	std::vector< char > buffer;
 	std::vector< char > identifier;
 	int size;
@@ -155,14 +160,14 @@ KIARA::Transport::KT_Zeromq::recv ( KIARA::Transport::KT_Session& session, KIARA
 }
 
 int
-KIARA::Transport::KT_Zeromq::disconnect ( KIARA::Transport::KT_Session& session ) {
+KT_Zeromq::disconnect ( KT_Session& session ) {
 	zmq_close ( session.get_socket() );
 	_sessions->erase( session.get_endpoint() );
 	return 0;
 }
 
 int
-KIARA::Transport::KT_Zeromq::register_callback ( std::function<void(KT_Msg&, KT_Session*, KT_Connection*)> callback ) {
+KT_Zeromq::register_callback ( std::function<void(KT_Msg&, KT_Session*, KT_Connection*)> callback ) {
 	_std_callback = callback;
 	return 0;
 }
@@ -172,7 +177,7 @@ KIARA::Transport::KT_Zeromq::register_callback ( std::function<void(KT_Msg&, KT_
  * received, it binds according to the set configuration
  */
 int
-KIARA::Transport::KT_Zeromq::bind ( ) {
+KT_Zeromq::bind ( ) {
 	void* socket = NULL;
 	int errcode = 0;
 
@@ -215,7 +220,7 @@ KIARA::Transport::KT_Zeromq::bind ( ) {
 		return -1;
 	}
 
-	KIARA::Transport::KT_Session* session = new KIARA::Transport::KT_Session();
+	KT_Session* session = new KT_Session();
 	session->set_socket ( socket );
 	session->set_endpoint ( binding_name->c_str() );
 	_sessions->insert ( std::make_pair ( binding_name->c_str(), session ) );
@@ -229,8 +234,11 @@ KIARA::Transport::KT_Zeromq::bind ( ) {
  * stops listening to incomming messages
  */
 int
-KIARA::Transport::KT_Zeromq::unbind ( ) {
+KT_Zeromq::unbind ( ) {
 	interupted = true;
 	poller_thread->join();
 	return 0;
 }
+
+} /* namespace Transport */
+} /* namespace KIARA */
