@@ -32,7 +32,7 @@ KT_Zeromq::poller ( void* socket, std::string endpoint ) {
 	}
 }
 
-void* KT_Zeromq::create_socket (unsigned int socket_type)
+void* KT_Zeromq::create_socket (unsigned int socket_type, bool listener)
 {
     void* socket = nullptr;
     int errcode = 0;
@@ -44,7 +44,12 @@ void* KT_Zeromq::create_socket (unsigned int socket_type)
         errcode = errno;
         break;
     case KT_REQUESTREPLY:
-        socket = zmq_socket ( _context, ZMQ_REQ);
+        if (listener)
+        {
+            socket = zmq_socket ( _context, ZMQ_REP);
+        } else {
+            socket = zmq_socket ( _context, ZMQ_REQ);
+        }
         errcode = errno;
         break;
     default:
@@ -59,7 +64,7 @@ KT_Zeromq::connect ( KT_Session** ret ) {
 	void* socket = nullptr;
 	int errcode = 0;
 
-	socket = create_socket(_configuration.get_application_type());
+	socket = create_socket(_configuration.get_application_type(), false);
 
 	if (nullptr == socket)
 	{
@@ -199,7 +204,7 @@ KT_Zeromq::bind ( ) {
 	void* socket = nullptr;
 	int errcode = 0;
 
-	socket = create_socket(_configuration.get_application_type());
+	socket = create_socket(_configuration.get_application_type(), true);
 
 	if (nullptr == socket)
 	{
