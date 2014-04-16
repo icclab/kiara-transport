@@ -110,8 +110,10 @@ KT_Zeromq::connect ( KT_Session** ret ) {
 // Zeromq has no synchronous send. Thus linger is correctly throwing a -Wunused warning
 int
 KT_Zeromq::send ( KT_Msg& message, KT_Session& session, int linger) {
-	if ( KT_STREAM == _configuration.get_application_type() )
-	{
+    switch (_configuration.get_application_type ())
+    {
+    case (KT_STREAM):
+    case (KT_WEBSERVER):
 		int rc = zmq_send ( session.get_socket(), session.get_identifier().data(), session.get_identifier().size(), ZMQ_SNDMORE );
 		int errcode = errno;
 		if (session.get_identifier().size() != static_cast<std::vector<char>::size_type>(rc) )
@@ -142,18 +144,20 @@ KT_Zeromq::recv ( KT_Session& session, KT_Msg& ret, int linger ) {
 	std::vector< char > identifier;
 	int size;
 
-	if ( KT_STREAM == _configuration.get_application_type() )
-	{
-	    std::cerr << "KT_STREAM, stripping zmq_identity" << std::endl;
-		zmq_msg_t id;
-		zmq_msg_init (&id);
-		size = zmq_msg_recv (&id, session.get_socket(), 0);
-		identifier.resize(size_t(size));
-		char* id_ptr = (char*)zmq_msg_data(&id);
-		identifier = std::vector<char>(id_ptr, id_ptr + size);
-		session.set_identifier ( std::move(identifier) );
-		zmq_msg_close(&id);
-	}
+	switch (_configuration.get_application_type ())
+    {
+    case (KT_STREAM):
+    case (KT_WEBSERVER):
+        std::cerr << "KT_STREAM, stripping zmq_identity" << std::endl;
+        zmq_msg_t id;
+        zmq_msg_init (&id);
+        size = zmq_msg_recv (&id, session.get_socket (), 0);
+        identifier.resize (size_t (size));
+        char* id_ptr = (char*) zmq_msg_data (&id);
+        identifier = std::vector<char> (id_ptr, id_ptr + size);
+        session.set_identifier (std::move (identifier));
+        zmq_msg_close (&id);
+    }
 
 	zmq_msg_t msg;
 	zmq_msg_init (&msg);
