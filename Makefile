@@ -1,15 +1,26 @@
 CC = clang
 CXX = clang++
 
+ASAN = 1
+
+ASAN_COMPILER_FLAGS = 	-fsanitize=address \
+						-fno-omit-frame-pointer \
+						-fsanitize-memory-track-origins
+
+ASAN_LINKER_FLAGS =		-fsanitize=address
+
+ifeq ($(ASAN),0)
+	ASAN_COMPILER_FLAGS =
+	ASAN_LINKER_FLAGS =
+endif
+
 CCFLAGS =	-Weverything\
 			-Wno-padded \
 			-pedantic \
 			-std=c99 \
 			-O0 \
 			-g \
-			-fsanitize=address \
-			-fno-omit-frame-pointer \
-			-fsanitize-memory-track-origins
+			$(ASAN_COMPILER_FLAGS)
 
 CXXFLAGS =	-Weverything \
 			-Wno-padded \
@@ -18,11 +29,9 @@ CXXFLAGS =	-Weverything \
 			-std=c++11 \
 			-O0 \
 			-g \
-			-fsanitize=address \
-			-fno-omit-frame-pointer \
-			-fsanitize-memory-track-origins
+			$(ASAN_COMPILER_FLAGS)
 
-LDFLAGS = -lzmq -lczmq -fsanitize=address
+LDFLAGS = -lzmq -lczmq $(ASAN_LINKER_FLAGS)
 
 DEST=build
 ARCH=$(shell uname -m)-$(shell uname -s)
@@ -71,6 +80,7 @@ server_0mq_rep_c:	$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 					$(BUILDDIR)/KT_Configuration.o \
 					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_HTTP_Responder.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
 					$(BUILDDIR)/KT_Zeromq.o \
@@ -105,6 +115,7 @@ client_0mq_req_pp: $(BUILDDIR)/KT_Client.o \
 client_0mq_req_c:	$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/KT_Configuration.o \
 					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_HTTP_Responder.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
 					$(BUILDDIR)/KT_Zeromq.o \
@@ -146,6 +157,7 @@ SERVER_0MQ_REP_CC_DEPS =	$(BUILDDIR)/main_server_0mq_rep_c.o \
 							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
+							$(BUILDDIR)/KT_HTTP_Responder.o \
 							$(BUILDDIR)/KT_Msg.o \
 							$(BUILDDIR)/KT_Session.o \
 							$(BUILDDIR)/KT_Zeromq.o
@@ -174,6 +186,7 @@ CLIENT_0MQ_REQ_CC_DEPS =	$(BUILDDIR)/main_client_0mq_req_c.o \
 							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
+							$(BUILDDIR)/KT_HTTP_Responder.o \
 							$(BUILDDIR)/KT_Msg.o \
 							$(BUILDDIR)/KT_Session.o \
 							$(BUILDDIR)/KT_Zeromq.o
