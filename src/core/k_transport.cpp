@@ -64,7 +64,7 @@ kt_msg_t* kt_msg_http_reply (char* content)
     kt_msg_t* msg = kt_msg_new();
     std::string payload = KIARA::Transport::KT_HTTP_Responder::generate_200_OK( std::vector<char>(content, content + strlen(content)) );
     char* p = reinterpret_cast<char*>(malloc(sizeof(char)*payload.size()));
-    payload.copy(p,0,payload.size());
+    payload.copy(p,payload.size());
     kt_msg_set_payload(msg, p, payload.size());
     return msg;
 }
