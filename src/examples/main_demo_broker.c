@@ -40,8 +40,7 @@ kt_msg_t* hello_request_reply (kt_msg_t* msg)
     kt_send( conn_session, msg, 0 );
     kt_msg_t* reply = kt_recv( conn_session, 0 );
 
-    //printf("From Server: %.*s\n", kt_msg_get_payload_size(reply), (char*)kt_msg_get_payload(reply));
-    kt_stop_server(conn_session, 0);
+    kt_disconnect(conn_session);
     return reply;
 }
 
