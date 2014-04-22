@@ -207,6 +207,7 @@ void kt_register_handle ( kt_conn_session_t* conn_session, kt_handle_t callback_
 {
     KIARA::Transport::KT_Connection* connection =
             reinterpret_cast<KIARA::Transport::KT_Connection*> (conn_session->connection);
+    // Memory leak, cb_wrapper is never deleted
     cb_wrapper = new KIARA::Transport::KT_C99_CallbackWrapper(callback_handle);
     connection->register_callback( cb_wrapper->make_function());
 }
