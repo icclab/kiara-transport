@@ -59,10 +59,10 @@ unsigned int kt_msg_get_payload_size ( kt_msg_t* c_msg )
     return msg->get_payload().size();
 }
 
-kt_msg_t* kt_msg_http_reply (char* content)
+kt_msg_t* kt_msg_http_reply (char* content, size_t size)
 {
     kt_msg_t* msg = kt_msg_new();
-    std::string payload = KIARA::Transport::KT_HTTP_Responder::generate_200_OK( std::vector<char>(content, content + strlen(content)) );
+    std::string payload = KIARA::Transport::KT_HTTP_Responder::generate_200_OK( std::vector<char>(content, content + size) );
     char* p = reinterpret_cast<char*>(malloc(sizeof(char)*payload.size()));
     payload.copy(p,payload.size());
     kt_msg_set_payload(msg, p, payload.size());

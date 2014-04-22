@@ -20,7 +20,7 @@ void cb (kt_conn_session_t* conn_sess, kt_msg_t* msg) {
     printf("From Client: %.*s\n", kt_msg_get_payload_size(msg), (char*)kt_msg_get_payload(msg));
 
     kt_msg_t* message = hello_request_reply(msg);
-    message = kt_msg_http_reply(kt_msg_get_payload(message));
+    message = kt_msg_http_reply(kt_msg_get_payload(message), kt_msg_get_payload_size(message));
 
     kt_send( conn_sess, message, 0 );
 }
