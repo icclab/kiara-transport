@@ -26,9 +26,9 @@ KT_Zeromq::poller ( void* socket, std::string endpoint ) {
 	KT_Session* sess = _sessions->find ( endpoint )->second;
 	while (!interupted)
 	{
-		KT_Msg msg;
-		if (0 == recv (*sess, msg, 0))
-		    _std_callback ( msg, sess, this );
+		KT_Msg* msg = new KT_Msg;
+		if (0 == recv (*sess, *msg, 0))
+		    _std_callback ( *msg, sess, this );
 	}
 }
 
