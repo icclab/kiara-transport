@@ -26,12 +26,13 @@ int main ()
     kt_conn_session_t* conn_session = kt_init_server(config, NULL);
     kt_run_server(conn_session);
 
-    kt_msg_t* msg = kt_msg_new();
-    char* payload = malloc(sizeof(char)*6);
-    strcpy(payload, "hello");
-    kt_msg_set_payload(msg, (void*)payload, 6);
     while (1)
     {
+        kt_msg_t* msg = kt_msg_new();
+        char* payload = malloc(sizeof(char)*6);
+        strcpy(payload, "hello");
+        kt_msg_set_payload(msg, (void*)payload, 6);
+
         kt_send(conn_session, msg, 0);
         sleep (1);
     }
