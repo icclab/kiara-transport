@@ -48,7 +48,8 @@ all: 	server_0mq_http_pp \
 		server_0mq_rep_pp \
 		client_0mq_req_pp \
 		server_0mq_rep_c \
-		client_0mq_req_c
+		client_0mq_req_c \
+        server_0mq_pub_c
 
 demo:	demo_broker
 
@@ -86,6 +87,17 @@ server_0mq_rep_c:	$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/KT_Zeromq.o \
 					$(BUILDDIR)/main_server_0mq_rep_c.o \
 					$(BUILDDIR)/server_0mq_rep_c
+
+server_0mq_pub_c:	$(BUILDDIR)/k_transport.o \
+					$(BUILDDIR)/KT_C99_CallbackWrapper.o \
+					$(BUILDDIR)/KT_Configuration.o \
+					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_Msg.o \
+					$(BUILDDIR)/KT_Session.o \
+					$(BUILDDIR)/KT_Zeromq.o \
+					$(BUILDDIR)/main_server_0mq_pub_c.o \
+					$(BUILDDIR)/server_0mq_pub_c
 
 
 client_0mq_http_pp: $(BUILDDIR)/KT_Client.o \
@@ -153,6 +165,16 @@ SERVER_0MQ_REP_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
 							$(BUILDDIR)/main_server_0mq_rep_pp.o
 
 SERVER_0MQ_REP_CC_DEPS =	$(BUILDDIR)/main_server_0mq_rep_c.o \
+							$(BUILDDIR)/k_transport.o \
+							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
+							$(BUILDDIR)/KT_Configuration.o \
+							$(BUILDDIR)/KT_Connection.o \
+							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_Msg.o \
+							$(BUILDDIR)/KT_Session.o \
+							$(BUILDDIR)/KT_Zeromq.o
+
+SERVER_0MQ_PUB_CC_DEPS =	$(BUILDDIR)/main_server_0mq_pub_c.o \
 							$(BUILDDIR)/k_transport.o \
 							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 							$(BUILDDIR)/KT_Configuration.o \
@@ -252,6 +274,12 @@ $(BUILDDIR)/main_server_0mq_rep_c.o: $(BUILDDIR) src/examples/main_server_0mq_re
 
 $(BUILDDIR)/server_0mq_rep_c: $(BUILDDIR) $(SERVER_0MQ_REP_CC_DEPS)
 		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(SERVER_0MQ_REP_CC_DEPS)
+
+$(BUILDDIR)/main_server_0mq_pub_c.o: $(BUILDDIR) src/examples/main_server_0mq_pub.c
+		$(CC) -c $(CCFLAGS) -o $@ src/examples/main_server_0mq_pub.c
+
+$(BUILDDIR)/server_0mq_pub_c: $(BUILDDIR) $(SERVER_0MQ_PUB_CC_DEPS)
+		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(SERVER_0MQ_PUB_CC_DEPS)
 
 $(BUILDDIR)/main_client_0mq_http_pp.o: $(BUILDDIR) src/examples/main_client_0mq_http.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/examples/main_client_0mq_http.cpp
