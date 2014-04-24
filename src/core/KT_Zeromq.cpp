@@ -52,6 +52,20 @@ void* KT_Zeromq::create_socket (unsigned int socket_type, bool listener)
         }
         errcode = errno;
         break;
+    case KT_PUBLISHSUBSCRIBE:
+        // Even though a client is listening to messages we have to invert this
+        // model since clients connect to the server that binds. Since connect
+        // implicitly means !listener this would be the wrong way around.
+        //
+        // Basically the client acts as a server and the server as a client.
+        if (!listener)
+        {
+            socket = zmq_socket ( _context, ZMQ_PUB);
+        } else {
+            socket = zmq_socket ( _context, ZMQ_SUB);
+        }
+        errcode = errno;
+        break;
     default:
         break;
     }
@@ -94,6 +108,12 @@ KT_Zeromq::connect ( KT_Session** ret ) {
 	{
 		errno = errcode;
 		return -1;
+	}
+
+	if (KT_PUBLISHSUBSCRIBE == config.get_application_type())
+	{
+	    // Just subscribe to everything
+	    zmq_setsockopt(socket, ZMQ_SUBSCRIBE, "", 0);
 	}
 
 	uint8_t id [256];
@@ -239,8 +259,11 @@ KT_Zeromq::bind ( ) {
 	session->set_endpoint ( binding_name->c_str() );
 	_sessions->insert ( std::make_pair ( binding_name->c_str(), session ) );
 
-	interupted = false;
-	poller_thread = new std::thread ( &KT_Zeromq::poller, this, socket, binding_name->c_str() );
+	if (KT_PUBLISHSUBSCRIBE != _configuration.get_application_type())
+	{
+	    interupted = false;
+	    poller_thread = new std::thread ( &KT_Zeromq::poller, this, socket, binding_name->c_str() );
+	}
 	return 0;
 }
 
