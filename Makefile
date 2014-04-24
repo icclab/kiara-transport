@@ -49,7 +49,8 @@ all: 	server_0mq_http_pp \
 		client_0mq_req_pp \
 		server_0mq_rep_c \
 		client_0mq_req_c \
-        server_0mq_pub_c
+        server_0mq_pub_c \
+        client_0mq_sub_c
 
 demo:	demo_broker
 
@@ -134,6 +135,16 @@ client_0mq_req_c:	$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/main_client_0mq_req_c.o \
 					$(BUILDDIR)/client_0mq_req_c
 
+client_0mq_sub_c:	$(BUILDDIR)/k_transport.o \
+					$(BUILDDIR)/KT_Configuration.o \
+					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_Msg.o \
+					$(BUILDDIR)/KT_Session.o \
+					$(BUILDDIR)/KT_Zeromq.o \
+					$(BUILDDIR)/main_client_0mq_sub_c.o \
+					$(BUILDDIR)/client_0mq_sub_c
+
 demo_broker:	$(BUILDDIR)/k_transport.o \
 				$(BUILDDIR)/KT_Configuration.o \
 				$(BUILDDIR)/KT_Connection.o \
@@ -204,6 +215,16 @@ CLIENT_0MQ_REQ_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
                     		$(BUILDDIR)/main_client_0mq_req_pp.o
 
 CLIENT_0MQ_REQ_CC_DEPS =	$(BUILDDIR)/main_client_0mq_req_c.o \
+							$(BUILDDIR)/k_transport.o \
+							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
+							$(BUILDDIR)/KT_Configuration.o \
+							$(BUILDDIR)/KT_Connection.o \
+							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_Msg.o \
+							$(BUILDDIR)/KT_Session.o \
+							$(BUILDDIR)/KT_Zeromq.o
+
+CLIENT_0MQ_SUB_CC_DEPS =	$(BUILDDIR)/main_client_0mq_sub_c.o \
 							$(BUILDDIR)/k_transport.o \
 							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 							$(BUILDDIR)/KT_Configuration.o \
@@ -298,6 +319,12 @@ $(BUILDDIR)/main_client_0mq_req_c.o: $(BUILDDIR) src/examples/main_client_0mq_re
 
 $(BUILDDIR)/client_0mq_req_c: $(BUILDDIR) $(CLIENT_0MQ_REQ_CC_DEPS)
 		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(CLIENT_0MQ_REQ_CC_DEPS)
+
+$(BUILDDIR)/main_client_0mq_sub_c.o: $(BUILDDIR) src/examples/main_client_0mq_sub.c
+		$(CC) -c $(CCFLAGS) -o $@ src/examples/main_client_0mq_sub.c
+
+$(BUILDDIR)/client_0mq_sub_c: $(BUILDDIR) $(CLIENT_0MQ_SUB_CC_DEPS)
+		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(CLIENT_0MQ_SUB_CC_DEPS)
 
 $(BUILDDIR)/main_demo_broker.o: $(BUILDDIR) src/examples/main_demo_broker.c
 		$(CC) -c $(CCFLAGS) -o $@ src/examples/main_demo_broker.c
