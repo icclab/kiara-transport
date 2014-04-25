@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 #include "../../include/k_transport.h"
 #include "../../src/core/KT_Configuration.h"
 
@@ -26,6 +27,15 @@ int main ()
     while (1)
     {
         kt_msg_t* message = kt_recv(conn_session, 0);
-        printf("From Server: %.*s\n", kt_msg_get_payload_size(message), (char*)kt_msg_get_payload(message));
+        printf("  _______    _     __          __\n");
+        printf(" |___  / |  | |   /\\ \\        / /\n");
+        printf("    / /| |__| |  /  \\ \\  /\\  / / \n");
+        printf("   / / |  __  | / /\\ \\ \\/  \\/ /  \n");
+        printf("  / /__| |  | |/ ____ \\  /\\  /   \n");
+        printf(" /_____|_|  |_/_/    \\_\\/  \\/    \n");
+        time_t ltime;
+        ltime=time(NULL);
+        printf("%s\n\n",asctime( localtime(&ltime) ) );
+        printf("%.*s\n", kt_msg_get_payload_size(message), (char*)kt_msg_get_payload(message));
     }
 }
