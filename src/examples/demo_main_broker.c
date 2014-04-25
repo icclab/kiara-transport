@@ -37,7 +37,11 @@ kt_msg_t* hello_request_reply (kt_msg_t* msg)
 
     kt_conn_session_t* conn_session = kt_connect( config );
 
-    kt_send( conn_session, msg, 0 );
+    char* payload = kt_msg_http_get_payload(msg);
+    kt_msg_t* payload_message = kt_msg_new();
+    kt_msg_set_payload(payload_message, payload, strlen(payload));
+
+    kt_send( conn_session, payload_message, 0 );
     kt_msg_t* reply = kt_recv( conn_session, 0 );
 
     kt_disconnect(conn_session);
