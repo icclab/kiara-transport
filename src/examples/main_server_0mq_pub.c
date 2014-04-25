@@ -34,7 +34,7 @@ int main ()
         kt_msg_set_payload(msg, (void*)payload, 6);
 
         kt_send(conn_session, msg, 0);
-        sleep (1);
+        //sleep (1);
     }
 
     kt_stop_server(conn_session, 0);
