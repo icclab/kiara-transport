@@ -1,7 +1,26 @@
+# Authors:
+#  * Mathias Hablützel (ZHAW) <habl@zhaw.ch>
+#  * Philipp Aeschlimann (ZHAW) <aepp@zhaw.ch>
+#  * Sandro Brunner (ZHAW) <brnr@zhaw.ch>
+
+
+# Tested with:
+# * MAC OS X 10.9 MAVERICKS (built from macports)
+#  * clang version 3.4 (tags/RELEASE_34/final)
+#    Target: x86_64-apple-darwin13.1.0
+#    Thread model: posix
+#  * clang version 3.5.0 (trunk 206638)
+#    Target: x86_64-apple-darwin13.1.0
+#    Thread model: posix
+
 CC = clang
 CXX = clang++
 
+# Use clang >=3.4 when turning ASAN on
 ASAN = 1
+
+# Be sure to run dsymutil(1) on the binaries/executables on OSX
+# or you'll lack of symbols even though -g is turned on
 
 ASAN_COMPILER_FLAGS = 	-fsanitize=address \
 						-fno-omit-frame-pointer \
@@ -9,6 +28,7 @@ ASAN_COMPILER_FLAGS = 	-fsanitize=address \
 
 ASAN_LINKER_FLAGS =		-fsanitize=address
 
+# if you want to turn off ASAN, just append to make {TARGET} ASAN=0
 ifeq ($(ASAN),0)
 	ASAN_COMPILER_FLAGS =
 	ASAN_LINKER_FLAGS =
@@ -43,16 +63,55 @@ $(BUILDDIR):
 clean:
 		rm -f -r $(BUILDDIR)
 
-all: 	server_0mq_http_pp \
-		client_0mq_http_pp \
-		server_0mq_rep_pp \
-		client_0mq_req_pp \
-		server_0mq_rep_c \
-		client_0mq_req_c \
-        server_0mq_pub_c \
-        client_0mq_sub_c
+all:	examples \
+        demo
 
-demo:	demo_broker
+demo:	demo_broker \
+        demo_reply \
+        demo_subscriber
+
+examples:   server_0mq_http_pp \
+    		client_0mq_http_pp \
+    		server_0mq_rep_pp \
+    		client_0mq_req_pp \
+    		server_0mq_rep_c \
+    		client_0mq_req_c \
+            server_0mq_pub_c \
+            client_0mq_sub_c 
+
+# Demo applications
+
+demo_broker:	$(BUILDDIR)/k_transport.o \
+				$(BUILDDIR)/KT_Configuration.o \
+				$(BUILDDIR)/KT_Connection.o \
+				$(BUILDDIR)/KT_HTTP_Responder.o \
+				$(BUILDDIR)/KT_Msg.o \
+				$(BUILDDIR)/KT_Session.o \
+				$(BUILDDIR)/KT_Zeromq.o \
+				$(BUILDDIR)/demo_main_broker.o \
+				$(BUILDDIR)/demo_broker
+
+demo_reply:    	$(BUILDDIR)/k_transport.o \
+				$(BUILDDIR)/KT_Configuration.o \
+				$(BUILDDIR)/KT_Connection.o \
+				$(BUILDDIR)/KT_HTTP_Responder.o \
+				$(BUILDDIR)/KT_Msg.o \
+				$(BUILDDIR)/KT_Session.o \
+				$(BUILDDIR)/KT_Zeromq.o \
+				$(BUILDDIR)/demo_main_reply.o \
+				$(BUILDDIR)/demo_reply
+
+demo_subscriber:   	$(BUILDDIR)/k_transport.o \
+    				$(BUILDDIR)/KT_Configuration.o \
+    				$(BUILDDIR)/KT_Connection.o \
+    				$(BUILDDIR)/KT_HTTP_Responder.o \
+    				$(BUILDDIR)/KT_Msg.o \
+    				$(BUILDDIR)/KT_Session.o \
+    				$(BUILDDIR)/KT_Zeromq.o \
+    				$(BUILDDIR)/demo_main_subscriber.o \
+    				$(BUILDDIR)/demo_subscriber 
+
+# Examples Server
 
 server_0mq_http_pp:	$(BUILDDIR)/KT_Client.o \
 					$(BUILDDIR)/KT_Configuration.o \
@@ -100,6 +159,7 @@ server_0mq_pub_c:	$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/main_server_0mq_pub_c.o \
 					$(BUILDDIR)/server_0mq_pub_c
 
+# Examples Clients
 
 client_0mq_http_pp: $(BUILDDIR)/KT_Client.o \
                     $(BUILDDIR)/KT_Configuration.o \
@@ -145,16 +205,39 @@ client_0mq_sub_c:	$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/main_client_0mq_sub_c.o \
 					$(BUILDDIR)/client_0mq_sub_c
 
-demo_broker:	$(BUILDDIR)/k_transport.o \
-				$(BUILDDIR)/KT_Configuration.o \
-				$(BUILDDIR)/KT_Connection.o \
-				$(BUILDDIR)/KT_HTTP_Responder.o \
-				$(BUILDDIR)/KT_Msg.o \
-				$(BUILDDIR)/KT_Session.o \
-				$(BUILDDIR)/KT_Zeromq.o \
-				$(BUILDDIR)/main_demo_broker.o \
-				$(BUILDDIR)/demo_broker
+# Demo build deps
 
+DEMO_BROKER_DEPS =	$(BUILDDIR)/demo_main_broker.o \
+					$(BUILDDIR)/k_transport.o \
+					$(BUILDDIR)/KT_C99_CallbackWrapper.o \
+					$(BUILDDIR)/KT_Configuration.o \
+					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_Msg.o \
+					$(BUILDDIR)/KT_Session.o \
+					$(BUILDDIR)/KT_Zeromq.o
+
+DEMO_REPLY_DEPS =	$(BUILDDIR)/demo_main_reply.o \
+					$(BUILDDIR)/k_transport.o \
+					$(BUILDDIR)/KT_C99_CallbackWrapper.o \
+					$(BUILDDIR)/KT_Configuration.o \
+					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_Msg.o \
+					$(BUILDDIR)/KT_Session.o \
+					$(BUILDDIR)/KT_Zeromq.o
+
+DEMO_SUBSCRIBER_DEPS =	$(BUILDDIR)/demo_main_subscriber.o \
+			    		$(BUILDDIR)/k_transport.o \
+			    		$(BUILDDIR)/KT_C99_CallbackWrapper.o \
+			    		$(BUILDDIR)/KT_Configuration.o \
+			    		$(BUILDDIR)/KT_Connection.o \
+			    		$(BUILDDIR)/KT_HTTP_Responder.o \
+			    		$(BUILDDIR)/KT_Msg.o \
+			    		$(BUILDDIR)/KT_Session.o \
+			    		$(BUILDDIR)/KT_Zeromq.o
+
+# Example Servers build deps
 
 SERVER_0MQ_HTTP_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
 							$(BUILDDIR)/KT_Configuration.o \
@@ -195,6 +278,8 @@ SERVER_0MQ_PUB_CC_DEPS =	$(BUILDDIR)/main_server_0mq_pub_c.o \
 							$(BUILDDIR)/KT_Session.o \
 							$(BUILDDIR)/KT_Zeromq.o
 
+# Example Clients build deps
+
 CLIENT_0MQ_HTTP_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
                    		    $(BUILDDIR)/KT_Configuration.o \
                    		    $(BUILDDIR)/KT_Connection.o \
@@ -234,16 +319,7 @@ CLIENT_0MQ_SUB_CC_DEPS =	$(BUILDDIR)/main_client_0mq_sub_c.o \
 							$(BUILDDIR)/KT_Session.o \
 							$(BUILDDIR)/KT_Zeromq.o
 
-DEMO_BROKER_DEPS =	$(BUILDDIR)/main_demo_broker.o \
-					$(BUILDDIR)/k_transport.o \
-					$(BUILDDIR)/KT_C99_CallbackWrapper.o \
-					$(BUILDDIR)/KT_Configuration.o \
-					$(BUILDDIR)/KT_Connection.o \
-					$(BUILDDIR)/KT_HTTP_Responder.o \
-					$(BUILDDIR)/KT_Msg.o \
-					$(BUILDDIR)/KT_Session.o \
-					$(BUILDDIR)/KT_Zeromq.o
-
+# Build instructions API/Lib
 
 $(BUILDDIR)/k_transport.o: $(BUILDDIR) src/core/k_transport.cpp
 	$(CXX) -c $(CXXFLAGS) -o $@ src/core/k_transport.cpp
@@ -278,6 +354,9 @@ $(BUILDDIR)/KT_Zeromq.o: $(BUILDDIR) src/core/KT_Zeromq.cpp
 $(BUILDDIR)/http_parser.o: $(BUILDDIR) src/core/http_parser.c
 		$(CC) -c $(CFLAGS) -Wno-everything -o $@ src/core/http_parser.c
 
+
+# Build instructions Example Server
+
 $(BUILDDIR)/main_server_0mq_http_pp.o: $(BUILDDIR) src/examples/main_server_0mq_http.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/examples/main_server_0mq_http.cpp
 
@@ -301,6 +380,9 @@ $(BUILDDIR)/main_server_0mq_pub_c.o: $(BUILDDIR) src/examples/main_server_0mq_pu
 
 $(BUILDDIR)/server_0mq_pub_c: $(BUILDDIR) $(SERVER_0MQ_PUB_CC_DEPS)
 		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(SERVER_0MQ_PUB_CC_DEPS)
+
+
+# Build instructions Example Clients
 
 $(BUILDDIR)/main_client_0mq_http_pp.o: $(BUILDDIR) src/examples/main_client_0mq_http.cpp
 		$(CXX) -c $(CXXFLAGS) -o $@ src/examples/main_client_0mq_http.cpp
@@ -326,8 +408,23 @@ $(BUILDDIR)/main_client_0mq_sub_c.o: $(BUILDDIR) src/examples/main_client_0mq_su
 $(BUILDDIR)/client_0mq_sub_c: $(BUILDDIR) $(CLIENT_0MQ_SUB_CC_DEPS)
 		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(CLIENT_0MQ_SUB_CC_DEPS)
 
-$(BUILDDIR)/main_demo_broker.o: $(BUILDDIR) src/examples/main_demo_broker.c
-		$(CC) -c $(CCFLAGS) -o $@ src/examples/main_demo_broker.c
+
+# Build instructions Demo
+
+$(BUILDDIR)/demo_main_broker.o: $(BUILDDIR) src/examples/demo_main_broker.c
+		$(CC) -c $(CCFLAGS) -o $@ src/examples/demo_main_broker.c
 
 $(BUILDDIR)/demo_broker: $(BUILDDIR) $(DEMO_BROKER_DEPS)
 		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(DEMO_BROKER_DEPS)
+
+$(BUILDDIR)/demo_main_reply.o: $(BUILDDIR) src/examples/demo_main_reply.c
+		$(CC) -c $(CCFLAGS) -o $@ src/examples/demo_main_reply.c
+
+$(BUILDDIR)/demo_reply: $(BUILDDIR) $(DEMO_REPLY_DEPS)
+		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(DEMO_REPLY_DEPS)
+
+$(BUILDDIR)/demo_main_subscriber.o: $(BUILDDIR) src/examples/demo_main_subscriber.c
+		$(CC) -c $(CCFLAGS) -o $@ src/examples/demo_main_subscriber.c
+
+$(BUILDDIR)/demo_subscriber: $(BUILDDIR) $(DEMO_SUBSCRIBER_DEPS)
+		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(DEMO_SUBSCRIBER_DEPS)
