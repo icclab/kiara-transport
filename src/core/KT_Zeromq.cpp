@@ -53,12 +53,7 @@ void* KT_Zeromq::create_socket (unsigned int socket_type, bool listener)
         errcode = errno;
         break;
     case KT_PUBLISHSUBSCRIBE:
-        // Even though a client is listening to messages we have to invert this
-        // model since clients connect to the server that binds. Since connect
-        // implicitly means !listener this would be the wrong way around.
-        //
-        // Basically the client acts as a server and the server as a client.
-        if (!listener)
+        if (listener)
         {
             socket = zmq_socket ( _context, ZMQ_PUB);
         } else {
@@ -189,6 +184,7 @@ KT_Zeromq::recv ( KT_Session& session, KT_Msg& ret, int linger ) {
 	size = zmq_msg_recv (&msg, session.get_socket(), 0);
 	if ( -1 == size )
 	{
+	    std::cerr << std::strerror(errno) << std::endl;
 		ret = std::move (message);
 		return -1;
 	}
