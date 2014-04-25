@@ -20,6 +20,7 @@
 #include "KT_Zeromq.hpp"
 
 #include "KT_HTTP_Responder.hpp"
+#include "KT_HTTP_Parser.hpp"
 
 #ifdef __cplusplus
 extern "C" {
@@ -67,6 +68,17 @@ kt_msg_t* kt_msg_http_reply (char* content, size_t size)
     payload.copy(p,payload.size());
     kt_msg_set_payload(msg, p, payload.size());
     return msg;
+}
+
+char* kt_msg_http_get_payload (kt_msg_t* c_msg)
+{
+    KIARA::Transport::KT_Msg *msg = reinterpret_cast<KIARA::Transport::KT_Msg *> (c_msg);
+    KIARA::Transport::KT_HTTP_Parser parser (*msg);
+    std::string s = parser.get_payload();
+    s.append(1, '\0');
+    char* ptr = (char*)malloc(sizeof(char) * s.size());
+    s.copy(ptr, s.size());
+    return ptr;
 }
 
 kt_conn_session_t* kt_connect ( const kt_configuration_t* conf )

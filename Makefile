@@ -142,6 +142,7 @@ server_0mq_rep_c:	$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/KT_Configuration.o \
 					$(BUILDDIR)/KT_Connection.o \
 					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_HTTP_Parser.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
 					$(BUILDDIR)/KT_Zeromq.o \
@@ -209,30 +210,36 @@ client_0mq_sub_c:	$(BUILDDIR)/k_transport.o \
 
 DEMO_BROKER_DEPS =	$(BUILDDIR)/demo_main_broker.o \
 					$(BUILDDIR)/k_transport.o \
+					$(BUILDDIR)/http_parser.o \
 					$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 					$(BUILDDIR)/KT_Configuration.o \
 					$(BUILDDIR)/KT_Connection.o \
 					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_HTTP_Parser.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
 					$(BUILDDIR)/KT_Zeromq.o
 
 DEMO_REPLY_DEPS =	$(BUILDDIR)/demo_main_reply.o \
 					$(BUILDDIR)/k_transport.o \
+					$(BUILDDIR)/http_parser.o \
 					$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 					$(BUILDDIR)/KT_Configuration.o \
 					$(BUILDDIR)/KT_Connection.o \
 					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_HTTP_Parser.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
 					$(BUILDDIR)/KT_Zeromq.o
 
 DEMO_SUBSCRIBER_DEPS =	$(BUILDDIR)/demo_main_subscriber.o \
 			    		$(BUILDDIR)/k_transport.o \
+						$(BUILDDIR)/http_parser.o \
 			    		$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 			    		$(BUILDDIR)/KT_Configuration.o \
 			    		$(BUILDDIR)/KT_Connection.o \
 			    		$(BUILDDIR)/KT_HTTP_Responder.o \
+						$(BUILDDIR)/KT_HTTP_Parser.o \
 			    		$(BUILDDIR)/KT_Msg.o \
 			    		$(BUILDDIR)/KT_Session.o \
 			    		$(BUILDDIR)/KT_Zeromq.o
@@ -260,20 +267,24 @@ SERVER_0MQ_REP_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
 
 SERVER_0MQ_REP_CC_DEPS =	$(BUILDDIR)/main_server_0mq_rep_c.o \
 							$(BUILDDIR)/k_transport.o \
+							$(BUILDDIR)/http_parser.o \
 							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
 							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Parser.o \
 							$(BUILDDIR)/KT_Msg.o \
 							$(BUILDDIR)/KT_Session.o \
 							$(BUILDDIR)/KT_Zeromq.o
 
 SERVER_0MQ_PUB_CC_DEPS =	$(BUILDDIR)/main_server_0mq_pub_c.o \
 							$(BUILDDIR)/k_transport.o \
+							$(BUILDDIR)/http_parser.o \
 							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
 							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Parser.o \
 							$(BUILDDIR)/KT_Msg.o \
 							$(BUILDDIR)/KT_Session.o \
 							$(BUILDDIR)/KT_Zeromq.o
@@ -301,20 +312,24 @@ CLIENT_0MQ_REQ_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
 
 CLIENT_0MQ_REQ_CC_DEPS =	$(BUILDDIR)/main_client_0mq_req_c.o \
 							$(BUILDDIR)/k_transport.o \
+							$(BUILDDIR)/http_parser.o \
 							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
 							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Parser.o \
 							$(BUILDDIR)/KT_Msg.o \
 							$(BUILDDIR)/KT_Session.o \
 							$(BUILDDIR)/KT_Zeromq.o
 
 CLIENT_0MQ_SUB_CC_DEPS =	$(BUILDDIR)/main_client_0mq_sub_c.o \
 							$(BUILDDIR)/k_transport.o \
+							$(BUILDDIR)/http_parser.o \
 							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
 							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Parser.o \
 							$(BUILDDIR)/KT_Msg.o \
 							$(BUILDDIR)/KT_Session.o \
 							$(BUILDDIR)/KT_Zeromq.o
