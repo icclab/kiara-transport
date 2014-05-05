@@ -61,7 +61,7 @@ int reg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
 	neg_dict_t *current_dict, *tmp;
 
 	root = json_loads(response, 0, &error);
-	
+
 	json_object_foreach(root, key, value) {
 		asprintf(&nego_key, "%s.", key);
 		_parse_final_capabilities(value, neg_ctx, nego_key, CATEGORY);
@@ -69,7 +69,7 @@ int reg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
 	return 0;
 }
 
-int _parse_final_capabilities(json_t *value, neg_ctx_t* neg_ctx, char *nego_key, enum dict_struct level){
+int _parse_final_capabilities(json_t *value, neg_ctx_t* neg_ctx, char *nego_key, enum dict_struct level) {
 	json_t *new_value;
 	char *new_key;
 
@@ -202,11 +202,6 @@ int _reg_parse_dict(json_t* value, neg_dict_remote_collection_t* remote_dict, co
 			neg_dict_remote_collection_t *s = malloc(sizeof (*s));
 			const char *tmp_key;
 			asprintf(&tmp_key, "%s%s", nego_key, new_key);
-			/*s->id = (const char *) malloc((strlen(nego_key) + strlen(new_key) + 1) * sizeof (char));
-			s->value = (char *) malloc((strlen(json_string_value(new_value)) + 1) * sizeof (char));
-			strcat((char*) s->id, (char*) nego_key);
-			strcat((char*) s->id, (char*) new_key);
-			strcat(s->value, json_string_value(new_valu*/
 			s->id = tmp_key;
 			s->value = json_string_value(new_value);
 			s->sub = NULL;

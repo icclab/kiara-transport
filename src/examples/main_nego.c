@@ -2,7 +2,7 @@
  * File:   main_nego.c
  * Author: aepp
  *
- * Created on 7. März 2014, 14:56
+ * Created on 7. MÃ¤rz 2014, 14:56
  */
 
 #include <stdio.h>
@@ -26,4 +26,3 @@ int main(void) {
 	int rc = neg_run_server(neg_ctx);
 	return rc;
 }
-

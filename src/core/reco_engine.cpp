@@ -45,8 +45,10 @@ int RecoServer::RunServer() {
 	connection->register_callback( &callback_handler );
 	connection->bind();
 	
-	connection->get_session()->begin()->second->set_k_user_data(ctx);
+	std::string blarg {"This is a teststring on the stack which I will pass as a pointer to the session."};
 	
+	connection->get_session()->begin()->second->set_k_user_data(&blarg);
+	std::cout << *(std::string*)connection->get_session()->begin()->second->get_k_user_data() << std::endl;
 	sleep(600);
 
 	connection->unbind();
@@ -110,7 +112,7 @@ RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 
 	KT_Session* session = nullptr;
 	
-	if (0 != connection->connect(&session))
+	if (0 == connection->connect(&session))
 	{
 		std::cerr << "Failed to connect" << std::endl;
 	}
