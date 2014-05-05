@@ -35,6 +35,7 @@ private:
 	std::thread* poller_thread;
 	bool interupted;
 	void poller ( void* socket, std::string endpoint );
+	void* create_socket(unsigned int socket_type, bool listener);
 
 public:
 

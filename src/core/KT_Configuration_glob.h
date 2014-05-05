@@ -52,11 +52,11 @@ typedef unsigned int kt_application_layer;
  */
 
 typedef unsigned int kt_application_type;
-#define KT_WEBSERVER      1
-#define KT_PUBLISHER      2
-#define KT_STREAM         3
-#define KT_ROUNDROBIN     4
-#define KT_REQUESTREPLY   5
+#define KT_WEBSERVER        1
+#define KT_PUBLISHSUBSCRIBE 2
+#define KT_STREAM           3
+#define KT_ROUNDROBIN       4
+#define KT_REQUESTREPLY     5
 
 #ifdef __cplusplus
 }

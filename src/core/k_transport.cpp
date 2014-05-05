@@ -19,6 +19,9 @@
 #include "KT_Session.hpp"
 #include "KT_Zeromq.hpp"
 
+#include "KT_HTTP_Responder.hpp"
+#include "KT_HTTP_Parser.hpp"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -55,6 +58,27 @@ unsigned int kt_msg_get_payload_size ( kt_msg_t* c_msg )
 {
     KIARA::Transport::KT_Msg *msg = reinterpret_cast<KIARA::Transport::KT_Msg *> (c_msg);
     return msg->get_payload().size();
+}
+
+kt_msg_t* kt_msg_http_reply (char* content, size_t size)
+{
+    kt_msg_t* msg = kt_msg_new();
+    std::string payload = KIARA::Transport::KT_HTTP_Responder::generate_200_OK( std::vector<char>(content, content + size) );
+    char* p = reinterpret_cast<char*>(malloc(sizeof(char)*payload.size()));
+    payload.copy(p,payload.size());
+    kt_msg_set_payload(msg, p, payload.size());
+    return msg;
+}
+
+char* kt_msg_http_get_payload (kt_msg_t* c_msg)
+{
+    KIARA::Transport::KT_Msg *msg = reinterpret_cast<KIARA::Transport::KT_Msg *> (c_msg);
+    KIARA::Transport::KT_HTTP_Parser parser (*msg);
+    std::string s = parser.get_payload();
+    s.append(1, '\0');
+    char* ptr = (char*)malloc(sizeof(char) * s.size());
+    s.copy(ptr, s.size());
+    return ptr;
 }
 
 kt_conn_session_t* kt_connect ( const kt_configuration_t* conf )
@@ -195,6 +219,7 @@ void kt_register_handle ( kt_conn_session_t* conn_session, kt_handle_t callback_
 {
     KIARA::Transport::KT_Connection* connection =
             reinterpret_cast<KIARA::Transport::KT_Connection*> (conn_session->connection);
+    // Memory leak, cb_wrapper is never deleted
     cb_wrapper = new KIARA::Transport::KT_C99_CallbackWrapper(callback_handle);
     connection->register_callback( cb_wrapper->make_function());
 }
@@ -204,9 +229,11 @@ int kt_run_server ( kt_conn_session_t* conn_session )
     KIARA::Transport::KT_Connection* connection =
             reinterpret_cast<KIARA::Transport::KT_Connection*> (conn_session->connection);
 
-    if ( 0 != connection->bind() )
+    int ret = connection->bind();
+    if ( 0 != ret )
     {
         std::cerr << "Failed to bind" << std::endl;
+        std::cerr << std::strerror(ret) << std::endl;
         return -1;
     }
     conn_session->session = reinterpret_cast<void*>(connection->get_session()->begin()->second);

@@ -39,6 +39,15 @@ void* kt_msg_get_payload ( kt_msg_t* );
 unsigned int kt_msg_get_payload_size ( kt_msg_t* );
 kt_handle_t* kt_create_handle ( void* (*)(kt_conn_session_t*, kt_msg_t*) );
 
+// HTTP functions, not part of API, just for example/demo purposes
+// WARNING: THESE FUNCTIONS MAY BE DROPPED, REMOVED, DEPRECATED, MODIFIED OR
+//          CHANGED WITHOUT PRIOR NOTIFICATION! THESE FUNCTIONS MAY KILL YOUR
+//          CAT, BURN DOWN YOUR HOUSE OR SIMPLY WIPE YOUR HARDDISK!
+//          BY USING THEM YOU AGREE THAT YOU KNOW EXACTLY WHAT THE CODE DOES
+//          AND YOU ALSO AGREE TO SAY 'my bad' IF SOMETHING GOES WRONG!
+kt_msg_t* kt_msg_http_reply (char*, size_t);
+char* kt_msg_http_get_payload (kt_msg_t*);
+
 // client functions
 
 /* Connect to a remote endpoint
