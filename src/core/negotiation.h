@@ -46,7 +46,7 @@ typedef struct neg_ctx_t {
 	neg_dict_remote_collection_t *dict_collection;
 	char* host;
 	int port;
-	int kiara_endpoint = 1;
+	int kiara_endpoint;
 	char* server_repsonse;
 	char* server_repsonse_body;
 	json_t *root;

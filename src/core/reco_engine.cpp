@@ -18,11 +18,16 @@
 #include <cstring>
 #include <string>
 #include <stdio.h>
-#include <sys/socket.h>
-#include <errno.h>
-#include <netdb.h>
-#include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+
+#include <arpa/inet.h>
 
 using namespace KIARA::Transport;
 
@@ -103,7 +108,7 @@ RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 	KT_Configuration config;
 	config.set_application_type(KT_STREAM);
 
-	config.set_host(KT_TCP, "localhost", 5555);
+	config.set_host(KT_TCP, neg_ctx->host, neg_ctx->port);
 
 	KT_Connection* connection = new KT_Zeromq();
 	connection->set_configuration(config);
@@ -156,61 +161,50 @@ extern "C" {
 	}
 
 	char* reco_send_offer(char *endpoint, neg_ctx_t* neg_ctx) {
-		RecoClient *out = new RecoClient(endpoint, neg_ctx);
-
-		switch (out->remote_endpoint) {
-
-			case 25:
-				return "";
-				break;
-
-			case 0:
-				return out->GetPayload();
-				break;
-
-			default:
-				break;
+		if(_check_remote_endpoint(endpoint, neg_ctx->port) == 0){
+			neg_ctx->kiara_endpoint = 0;
+			return "";
 		}
-		return "";
+		else {
+			RecoClient *out = new RecoClient(endpoint, neg_ctx);
+			return out->GetPayload();
+		}
 	}
 
 	int _check_remote_endpoint(char* hostname, int port) {
-		struct hostent *host;
-		int err, i, sock, ret;
-		struct sockaddr_in sa;
-		
-		strncpy((char*)&sa , "" , sizeof sa);
-		sa.sin_family = AF_INET;
-		
-		if(isdigit(hostname[0])){
-			sa.sin_addr.s_addr = inet_addr(hostname);
+		int sockfd, ret = 1;
+		struct addrinfo hints, *servinfo, *p;
+		int rv;
+		char s[INET6_ADDRSTRLEN], sport[20];
+
+		memset(&hints, 0, sizeof hints);
+		hints.ai_family = AF_UNSPEC;
+		hints.ai_socktype = SOCK_STREAM;
+		sprintf(sport, "%d", port);
+
+		if ((rv = getaddrinfo(hostname, sport, &hints, &servinfo)) != 0) {
+			fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+			return 1;
 		}
-		//Resolve hostname to ip address
-		else if( (host = gethostbyname(hostname)) != 0){
-			strncpy((char*)&sa.sin_addr , (char*)host->h_addr , sizeof sa.sin_addr);
+
+		// loop through all the results and connect to the first we can
+		for(p = servinfo; p != NULL; p = p->ai_next) {
+			if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
+				continue;
+			}
+			if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
+				close(sockfd);
+				continue;
+			}
+			break;
 		}
-		
-        sa.sin_port = htons(port);
-        //Create a socket of type internet
-        sock = socket(AF_INET , SOCK_STREAM , 0);
-         
-        //Check whether socket created fine or not
-        if(sock < 0) {
-            perror("\nSocket");
-            exit(1);
-        }
-        //Connect using that socket and sockaddr structure
-        err = connect(sock , (struct sockaddr*)&sa , sizeof sa);
-         
-        //not connected
-        if( err < 0 ) {
-            ret = 0;
-        }
-        //connected
-        else{
-            ret = 1;
-        }
-        close(sock);
+
+		if (p == NULL) {
+			ret = 0;
+		}
+
+		close(sockfd);
+
 		return ret;
 	}
 

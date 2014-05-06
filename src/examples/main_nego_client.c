@@ -13,6 +13,7 @@
  */
 int main(void) {
 	char *response;
+	int ret = 0;
 	
 	neg_ctx_t *neg_ctx = neg_init();
 	
@@ -24,18 +25,22 @@ int main(void) {
 	neg_set_local_capability(neg_ctx, "transport.communication-paradigm.pub-su.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "security.mechanism.tls.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
-	neg_ctx->host = "tcp://localhost:5555";
+	neg_ctx->host = "localhost";
+	neg_ctx->port = 5556;
 	response = neg_send_offer(neg_ctx);
+	
 	if(neg_ctx->kiara_endpoint == 0){
 		printf("Not a KIARA endpoint");
 	}
-	int ret = neg_set_final_capabilities(neg_ctx, response);
-	neg_get_final_capability(neg_ctx, "transport.transport-protocols");
-	printf("Transport protocl is: %s\n", neg_ctx->neg_dict->value);
-	neg_get_final_capability(neg_ctx, "transport.communication-paradigm");
-	printf("Communication paradigm is: %s\n", neg_ctx->neg_dict->value);
-	neg_get_final_capability(neg_ctx, "security.mechanism");
-	printf("Security mechanism is: %s\n", neg_ctx->neg_dict->value);
+	else {
+		int ret = neg_set_final_capabilities(neg_ctx, response);
+		neg_get_final_capability(neg_ctx, "transport.transport-protocols");
+		printf("Transport protocl is: %s\n", neg_ctx->neg_dict->value);
+		neg_get_final_capability(neg_ctx, "transport.communication-paradigm");
+		printf("Communication paradigm is: %s\n", neg_ctx->neg_dict->value);
+		neg_get_final_capability(neg_ctx, "security.mechanism");
+		printf("Security mechanism is: %s\n", neg_ctx->neg_dict->value);
+	}
 	return ret;
 }
 

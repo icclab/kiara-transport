@@ -24,14 +24,16 @@ int main(void) {
 	neg_set_local_capability(neg_ctx, "security.mechanism.tls.prec", "MUST");
 	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
 	neg_ctx->host = "localhost";
-	neg_ctx->port = 5555;
+	neg_ctx->port = 5556;
 	
 	f = fork();
 	if(f == 0) {
+		//Start the negotiation Server
 		int rc = neg_run_server(neg_ctx);
 		wait(&status);
 	}
 	else {
+		//Start the Server for the Service
 		char cwd[1024];
 		getcwd(cwd, sizeof(cwd));
 		strcat(cwd, "/server_0mq_http_pp");

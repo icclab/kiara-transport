@@ -44,7 +44,7 @@ extern "C" {
 void* init_reco_server(char* endpoint, neg_ctx_t *neg_ctx);
 void reco_run_server(void *reco_server);
 char* reco_send_offer (char* endpoint, neg_ctx_t *neg_ctx);
-int _check_remote_endpoint(char* address);
+int _check_remote_endpoint(char* hostname, int port);
 
 #ifdef	__cplusplus
 }
