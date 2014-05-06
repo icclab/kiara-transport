@@ -12,6 +12,8 @@
  * 
  */
 int main(void) {
+	int f, status;
+	
 	neg_ctx_t *neg_ctx = neg_init();
 	neg_set_local_capability(neg_ctx, "transport.transport-protocols.tcp.prec", "MUST");
 	neg_set_local_capability(neg_ctx, "transport.transport-protocols.udp.prec", "SHOULD");
@@ -23,6 +25,19 @@ int main(void) {
 	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
 	neg_ctx->host = "localhost";
 	neg_ctx->port = 5555;
-	int rc = neg_run_server(neg_ctx);
-	return rc;
+	
+	f = fork();
+	if(f == 0) {
+		int rc = neg_run_server(neg_ctx);
+		wait(&status);
+	}
+	else {
+		char cwd[1024];
+		getcwd(cwd, sizeof(cwd));
+		strcat(cwd, "/server_0mq_http_pp");
+		execl(cwd, "server_0mq_http_pp", 0, NULL);
+		printf("Server did not start successful\n");
+	}
+	
+	return 0;
 }

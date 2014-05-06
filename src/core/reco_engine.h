@@ -30,6 +30,7 @@ public:
 	~RecoClient();
 	char *GetPayload();
 private:
+	int remote_endpoint = 0;
 	std::string host;
 	std::string response;
 };
