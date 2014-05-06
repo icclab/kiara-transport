@@ -26,6 +26,9 @@ int main(void) {
 	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
 	neg_ctx->host = "tcp://localhost:5555";
 	response = neg_send_offer(neg_ctx);
+	if(neg_ctx->kiara_endpoint == 0){
+		printf("Not a KIARA endpoint");
+	}
 	int ret = neg_set_final_capabilities(neg_ctx, response);
 	neg_get_final_capability(neg_ctx, "transport.transport-protocols");
 	printf("Transport protocl is: %s\n", neg_ctx->neg_dict->value);

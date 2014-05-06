@@ -17,6 +17,12 @@
 #include <unistd.h>
 #include <cstring>
 #include <string>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <errno.h>
+#include <netdb.h>
+#include <string.h>
+#include <stdlib.h>
 
 using namespace KIARA::Transport;
 
@@ -104,7 +110,7 @@ RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 
 	KT_Session* session = nullptr;
 
-	if (0 == connection->connect(&session)) {
+	if (0 != connection->connect(&session)) {
 		remote_endpoint = 25;
 	} else {
 
@@ -151,7 +157,61 @@ extern "C" {
 
 	char* reco_send_offer(char *endpoint, neg_ctx_t* neg_ctx) {
 		RecoClient *out = new RecoClient(endpoint, neg_ctx);
-		return out->GetPayload();
+
+		switch (out->remote_endpoint) {
+
+			case 25:
+				return "";
+				break;
+
+			case 0:
+				return out->GetPayload();
+				break;
+
+			default:
+				break;
+		}
+		return "";
+	}
+
+	int _check_remote_endpoint(char* hostname, int port) {
+		struct hostent *host;
+		int err, i, sock, ret;
+		struct sockaddr_in sa;
+		
+		strncpy((char*)&sa , "" , sizeof sa);
+		sa.sin_family = AF_INET;
+		
+		if(isdigit(hostname[0])){
+			sa.sin_addr.s_addr = inet_addr(hostname);
+		}
+		//Resolve hostname to ip address
+		else if( (host = gethostbyname(hostname)) != 0){
+			strncpy((char*)&sa.sin_addr , (char*)host->h_addr , sizeof sa.sin_addr);
+		}
+		
+        sa.sin_port = htons(port);
+        //Create a socket of type internet
+        sock = socket(AF_INET , SOCK_STREAM , 0);
+         
+        //Check whether socket created fine or not
+        if(sock < 0) {
+            perror("\nSocket");
+            exit(1);
+        }
+        //Connect using that socket and sockaddr structure
+        err = connect(sock , (struct sockaddr*)&sa , sizeof sa);
+         
+        //not connected
+        if( err < 0 ) {
+            ret = 0;
+        }
+        //connected
+        else{
+            ret = 1;
+        }
+        close(sock);
+		return ret;
 	}
 
 #ifdef	__cplusplus
