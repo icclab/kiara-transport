@@ -1,16 +1,6 @@
 import os
 import os.path
-
-INC = os.path.join('include', os.getenv('HOME'), 'local-install', 'include')
-LIB = os.path.join('.', os.getenv('HOME'), 'local-install', 'lib')
-
-# First let's compile the C files
-env = Environment(CPPPATH=[INC], LIBPATH=[LIB, '#', '#/build/core'], ENV=os.environ)
-env.Append(CCFLAGS='-v')
-env.Replace(CC= 'clang')
-env.Append(CFLAGS='-Weverything -Wno-padded -pedantic -std=c99 -g')
-env.Replace(CXX= 'clang++')
-env.Append(CXXFLAGS='-Weverything -Wno-padded -Wno-c++98-compat-pedantic -pedantic -std=c++11 -O0 -g')
+Import('env')
 
 env.Program('server_0mq_rep_c', env.Split('main_server_0mq_rep.c'), LIBS=['SCALN'])
 env.Program('client_0mq_req_c', env.Split('main_client_0mq_req.c'), LIBS=['SCALN'])
