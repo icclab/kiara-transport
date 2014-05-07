@@ -4,6 +4,7 @@
 
 #include <string>
 #include "KT_Configuration_glob.h"
+#include "negotiation.h"
 
 namespace KIARA {
 namespace Transport {
@@ -33,6 +34,8 @@ public:
 
   KT_Configuration ( );
   virtual ~KT_Configuration ( );
+  
+  void negotiation ( neg_ctx_t* neg_ctx );
 
   /**
    * Set the value of _network_layer

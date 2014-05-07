@@ -12,6 +12,7 @@
  * 
  */
 int main(void) {
+	char *supper = NULL;
 	int f, status;
 	
 	neg_ctx_t *neg_ctx = neg_init();
@@ -30,7 +31,7 @@ int main(void) {
 	if(f == 0) {
 		//Start the negotiation Server
 		int rc = neg_run_server(neg_ctx);
-		wait(&status);
+		
 	}
 	else {
 		//Start the Server for the Service
@@ -39,6 +40,7 @@ int main(void) {
 		strcat(cwd, "/server_0mq_http_pp");
 		execl(cwd, "server_0mq_http_pp", 0, NULL);
 		printf("Server did not start successful\n");
+		wait(&status);
 	}
 	
 	return 0;

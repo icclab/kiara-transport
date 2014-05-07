@@ -31,7 +31,7 @@
 
 using namespace KIARA::Transport;
 
-void callback_handler(KT_Msg&, KT_Session*, KT_Connection*);
+void callback_handler_reco(KT_Msg&, KT_Session*, KT_Connection*);
 
 RecoServer::RecoServer(char* endpoint, neg_ctx_t* neg_ctx) {
 	host = endpoint;
@@ -53,7 +53,7 @@ int RecoServer::RunServer() {
 	KT_Connection* connection = new KT_Zeromq();
 	connection->set_configuration(config);
 
-	connection->register_callback(&callback_handler);
+	connection->register_callback(&callback_handler_reco);
 	connection->bind();
 
 	connection->get_session()->begin()->second->set_k_user_data(ctx);
@@ -65,7 +65,7 @@ int RecoServer::RunServer() {
 	return 0;
 }
 
-void callback_handler(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
+void callback_handler_reco(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	KT_HTTP_Parser parser(msg);
 	neg_ctx_t *neg_ctx = (neg_ctx_t*) sess->get_k_user_data();
 	std::cout << neg_ctx->host << std::endl;

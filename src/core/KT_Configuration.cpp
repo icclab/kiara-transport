@@ -10,6 +10,7 @@
  */
 #include "KT_Configuration.hpp"    // class declaration
 #include "KT_Configuration.h"      // wrapper declaration
+#include "negotiation.h"
 
 namespace KIARA {
 namespace Transport {
@@ -17,6 +18,14 @@ namespace Transport {
 KT_Configuration::KT_Configuration ( ) { }
 
 KT_Configuration::~KT_Configuration ( ) { }
+
+void KT_Configuration::negotiation ( neg_ctx_t* neg_ctx )   {
+	//Check if the negotiation was successful
+	if(neg_ctx->kiara_endpoint == 1) {
+		neg_get_final_capability(neg_ctx, "transport.transport-protocols");
+		
+	}
+}
 
 void KT_Configuration::set_network_layer ( unsigned int network_layer )   {
     _network_layer = network_layer;

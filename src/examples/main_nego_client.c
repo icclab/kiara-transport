@@ -18,6 +18,7 @@ int main(void) {
 	neg_ctx_t *neg_ctx = neg_init();
 	
 	neg_set_local_capability(neg_ctx, "transport.transport-protocols.tcp.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "transport.transport-port.*.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.transport-protocols.udp.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.user-protocols.suuuuu.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.user-protocols.notnull.prec", "SHOULD");

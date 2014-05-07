@@ -46,6 +46,38 @@ int neg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
 	return 1;
 }
 
+char *neg_get_best_local_capability(neg_ctx_t *neg_ctx, const char *capability) {
+	neg_dict_t *current_dict, *tmp;
+	char *c, *key, *tmp_id;
+	char delimiter[] = ".";
+	int prec = 0, i;
+	
+	HASH_ITER(hh, neg_ctx->hash, current_dict, tmp) {
+		if (strncmp(current_dict->id, capability, strlen(capability)) == 0) {
+			if(_prec_to_int(current_dict->value) > prec) {
+				prec = _prec_to_int(current_dict->value);
+				c = current_dict->id;
+			}
+		}
+	}
+	char id[strlen(c) + 1];
+	strncpy(id, c, sizeof (id));
+	key = strtok(id, delimiter);
+	i = 1;
+	while (key != NULL) {
+		if(i == 3){
+			c = key;
+		}
+		key = strtok(NULL, delimiter);
+		i++;
+	}
+	
+	char* str = (char*)malloc(sizeof(char)*(strlen(c)+1));
+	strncpy(str, c, strlen(c));
+	str[strlen(c)] = '\0';
+	return str;
+}
+
 char *neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 	neg_dict_remote_collection_t *s = malloc(sizeof (*s));
 	neg_dict_remote_collection_t* remote_dict = reg_get_remote_dict(neg_ctx, endpoint);
