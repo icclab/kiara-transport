@@ -1,11 +1,11 @@
 import os
 import os.path
 
-INC = os.path.join('include')
-LIB = os.path.join('.')
+INC = os.path.join('include', os.getenv('HOME'), 'local-install', 'include')
+LIB = os.path.join('.', os.getenv('HOME'), 'local-install', 'lib')
 
 # First let's compile the C files
-env = Environment(CPPPATH=[INC], LIBPATH=[LIB, '#'])
+env = Environment(CPPPATH=[INC], LIBPATH=[LIB, '#', '#/src/examples'], ENV=os.environ)
 env.Append(CCFLAGS='-v')
 env.Replace(CC= 'clang')
 env.Append(CFLAGS='-Weverything -Wno-padded -pedantic -std=c99 -g')
@@ -14,7 +14,7 @@ env.Append(CXXFLAGS='-Weverything -Wno-padded -Wno-c++98-compat-pedantic -pedant
 
 
 
-env.Library('SCALN', env.Split('''
+env.SharedLibrary('SCALN', env.Split('''
     #src/core/k_transport.cpp
     #src/core/KT_C99_CallbackWrapper.cpp
     #src/core/KT_Configuration.cpp
@@ -25,6 +25,7 @@ env.Library('SCALN', env.Split('''
 	#src/core/KT_Msg.cpp
 	#src/core/KT_Session.cpp
 	#src/core/KT_Zeromq.cpp
-'''))
+'''), LIBS=['zmq', 'czmq'])
 
-env.Program('server_0mq_rep_c', env.Split('main_server_0mq_rep.c'), LIBS=['SCALN', 'zmq', 'czmq', 'c'])
+env.Program('server_0mq_rep_c', env.Split('main_server_0mq_rep.c'), LIBS=['SCALN'])
+env.Program('clien_0mq_req_c', env.Split('main_client_0mq_req.c'), LIBS=['SCALN'])
