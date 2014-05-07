@@ -50,7 +50,7 @@ char *neg_get_best_local_capability(neg_ctx_t *neg_ctx, const char *capability) 
 	neg_dict_t *current_dict, *tmp;
 	char *c, *key;
 	char delimiter[] = ".";
-	int prec = 0, i;
+	int prec = -1, i;
 	
 	HASH_ITER(hh, neg_ctx->hash, current_dict, tmp) {
 		if (strncmp(current_dict->id, capability, strlen(capability)) == 0) {

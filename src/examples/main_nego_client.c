@@ -12,13 +12,14 @@
  * 
  */
 int main(void) {
-	char *response;
+	char *response, *foo;
 	int ret = 0;
 	
 	neg_ctx_t *neg_ctx = neg_init();
 	
 	neg_set_local_capability(neg_ctx, "transport.transport-protocols.tcp.prec", "SHOULD");
-	neg_set_local_capability(neg_ctx, "transport.transport-port.*.prec", "NONE");
+	neg_set_local_capability(neg_ctx, "transport.transport-port.*.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "transport.transport-port.80.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.transport-protocols.udp.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.user-protocols.suuuuu.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.user-protocols.notnull.prec", "SHOULD");
@@ -43,6 +44,9 @@ int main(void) {
 		printf("Security mechanism is: %s\n", neg_ctx->neg_dict->value);
 		neg_get_final_capability(neg_ctx, "transport.transport-port");
 		printf("Transport Port is: %s\n", neg_ctx->neg_dict->value);
+		foo = neg_get_best_local_capability(neg_ctx, "transport.transport-port");
+		printf("Best own decission for port is: %s\n", foo);
+		free(foo);
 	}
 	return ret;
 }

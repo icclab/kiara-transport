@@ -12,7 +12,6 @@
  * 
  */
 int main(void) {
-	char *supper = NULL;
 	int f, status;
 	
 	neg_ctx_t *neg_ctx = neg_init();
