@@ -1,0 +1,14 @@
+{
+  "transport" : {
+      "description" : "KIARA Transport Library",
+      "default" : false,
+      "type" : "library",
+      "dependsOn" : [],
+      "optionallyDependsOn" : [],
+      "repository" : {
+          "type" : "git",
+          "url" : "gitor@dornbirn.zhaw.ch:kiara/transport.git"
+      },
+      "builder" : "SCons"
+  }
+}
