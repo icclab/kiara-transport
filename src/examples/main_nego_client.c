@@ -18,7 +18,7 @@ int main(void) {
 	neg_ctx_t *neg_ctx = neg_init();
 	
 	neg_set_local_capability(neg_ctx, "transport.transport-protocols.tcp.prec", "SHOULD");
-	neg_set_local_capability(neg_ctx, "transport.transport-port.*.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "transport.transport-port.*.prec", "NONE");
 	neg_set_local_capability(neg_ctx, "transport.transport-protocols.udp.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.user-protocols.suuuuu.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "transport.user-protocols.notnull.prec", "SHOULD");
@@ -41,6 +41,8 @@ int main(void) {
 		printf("Communication paradigm is: %s\n", neg_ctx->neg_dict->value);
 		neg_get_final_capability(neg_ctx, "security.mechanism");
 		printf("Security mechanism is: %s\n", neg_ctx->neg_dict->value);
+		neg_get_final_capability(neg_ctx, "transport.transport-port");
+		printf("Transport Port is: %s\n", neg_ctx->neg_dict->value);
 	}
 	return ret;
 }

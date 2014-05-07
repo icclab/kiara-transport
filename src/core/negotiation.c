@@ -48,7 +48,7 @@ int neg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
 
 char *neg_get_best_local_capability(neg_ctx_t *neg_ctx, const char *capability) {
 	neg_dict_t *current_dict, *tmp;
-	char *c, *key, *tmp_id;
+	char *c, *key;
 	char delimiter[] = ".";
 	int prec = 0, i;
 	
@@ -136,7 +136,12 @@ char *neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 					}
 					if (neg_value > 0) {
 						dec = malloc(sizeof (*dec));
-						dec->id = tmp_id;
+						if(strcmp(tmp_id, "*") == 0) {
+							dec->id = current_dict->value;
+						}
+						else {
+							dec->id = tmp_id;
+						}
 						dec->sub = NULL;
 						dec->value = neg_value;
 						HASH_ADD_KEYPTR(hh, dec_it->sub, dec->id, strlen(dec->id), dec);
@@ -176,8 +181,10 @@ int _prec_to_int(char *prec) {
 		ret = 2;
 	} else if (strcmp(prec, "MUST NOT") == 0) {
 		ret = 1;
+	} else if (strcmp(prec, "NONE") == 0) {
+		ret = 0;
 	} else {
-		//Unknown stuff here
+		ret = 4;
 	}
 	return ret;
 }
