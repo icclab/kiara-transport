@@ -10,6 +10,7 @@
 #include <uthash.h>
 #include "reco_engine.h"
 #include "registry.h"
+#include "KT_Configuration_glob.h"
 
 /*
  * 
@@ -187,4 +188,29 @@ int _prec_to_int(char *prec) {
 		ret = 4;
 	}
 	return ret;
+}
+
+int neg_capability_to_int(char *capability) {
+	if(strcmp(capability, "tcp") == 0){
+		return KT_TCP;
+	} else if (strcmp(capability, "udp") == 0) {
+		return KT_UDP;
+	} else if (strcmp(capability, "stream") == 0) {
+		return KT_STREAM;
+	} else if (strcmp(capability, "tcp") == 0) {
+		
+	} else if (strcmp(capability, "tcp") == 0) {
+		
+	} else if (strcmp(capability, "tcp") == 0) {
+		
+	} else if (strcmp(capability, "tcp") == 0) {
+		
+	} else if (strcmp(capability, "tcp") == 0) {
+		
+	} else if (strcmp(capability, "tcp") == 0) {
+		
+	} else if (strcmp(capability, "tcp") == 0) {
+		
+	}
+	return NULL;
 }

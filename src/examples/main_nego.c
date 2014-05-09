@@ -24,6 +24,7 @@ int main(void) {
 	neg_set_local_capability(neg_ctx, "transport.communication-paradigm.req-rep.prec", "MUST");
 	neg_set_local_capability(neg_ctx, "security.mechanism.tls.prec", "MUST");
 	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "application.application-type.stream.prec", "MUST");
 	neg_ctx->host = "localhost";
 	neg_ctx->port = 5556;
 	

@@ -11,6 +11,7 @@
 #include "KT_Configuration.hpp"    // class declaration
 #include "KT_Configuration.h"      // wrapper declaration
 #include "negotiation.h"
+#include <stdlib.h>
 
 namespace KIARA {
 namespace Transport {
@@ -20,11 +21,34 @@ KT_Configuration::KT_Configuration ( ) { }
 KT_Configuration::~KT_Configuration ( ) { }
 
 void KT_Configuration::negotiation ( neg_ctx_t* neg_ctx )   {
+	char *local;
 	//Check if the negotiation was successful
-	if(neg_ctx->kiara_endpoint == 1) {
-		neg_get_final_capability(neg_ctx, "transport.transport-protocols");
-		
+	neg_get_final_capability(neg_ctx, "transport.transport-protocols");
+	if(neg_ctx->neg_dict == NULL) {
+		local = neg_get_best_local_capability(neg_ctx, "transport.transport-protocols");
+		this->set_transport_layer(neg_capability_to_int(local));
+	} else {
+		this->set_transport_layer(neg_capability_to_int(neg_ctx->neg_dict->value));
 	}
+	
+	neg_get_final_capability(neg_ctx, "transport.transport-port");
+	if(neg_ctx->neg_dict == NULL) {
+		local = neg_get_best_local_capability(neg_ctx, "transport.transport-port");
+		this->set_port_number((unsigned int)strtoull(local, NULL, 0));
+	} else {
+		this->set_port_number((unsigned int)strtoull(neg_ctx->neg_dict->value, NULL, 0));
+	}
+	
+	neg_get_final_capability(neg_ctx, "application.application-type");
+	if(neg_ctx->neg_dict == NULL) {
+		local = neg_get_best_local_capability(neg_ctx, "application.application-type");
+		this->set_application_type(neg_capability_to_int(local));
+	} else {
+		this->set_application_type(neg_capability_to_int(neg_ctx->neg_dict->value));
+	}
+	
+	this->set_hostname( neg_ctx->host );
+	//free(local);
 }
 
 void KT_Configuration::set_network_layer ( unsigned int network_layer )   {

@@ -18,11 +18,48 @@ using namespace KIARA::Transport;
 
 int main ()
 {
+	
+	char *response, *foo;
+	int ret = 0;
+	
+	neg_ctx_t *neg_ctx = neg_init();
+	
+	neg_set_local_capability(neg_ctx, "transport.transport-protocols.tcp.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "transport.transport-port.5555.prec", "MUST");
+	neg_set_local_capability(neg_ctx, "transport.transport-port.*.prec", "MUST");
+	neg_set_local_capability(neg_ctx, "transport.transport-protocols.udp.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "transport.user-protocols.suuuuu.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "transport.user-protocols.notnull.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "transport.communication-paradigm.req-rep.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "transport.communication-paradigm.pub-su.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "security.mechanism.tls.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "application.application-type.stream.prec", "MUST");
+	neg_ctx->host = "localhost";
+	neg_ctx->port = 5556;
+	response = neg_send_offer(neg_ctx);
+	
+	if(neg_ctx->kiara_endpoint == 0){
+		printf("Not a KIARA endpoint");
+	}
+	else {
+		int ret = neg_set_final_capabilities(neg_ctx, response);
+		neg_get_final_capability(neg_ctx, "transport.transport-protocols");
+		printf("Transport protocl is: %s\n", neg_ctx->neg_dict->value);
+		neg_get_final_capability(neg_ctx, "transport.communication-paradigm");
+		printf("Communication paradigm is: %s\n", neg_ctx->neg_dict->value);
+		neg_get_final_capability(neg_ctx, "security.mechanism");
+		printf("Security mechanism is: %s\n", neg_ctx->neg_dict->value);
+		neg_get_final_capability(neg_ctx, "transport.transport-port");
+		printf("Transport Port is: %s\n", neg_ctx->neg_dict->value);
+		foo = neg_get_best_local_capability(neg_ctx, "transport.transport-port");
+		printf("Best own decission for port is: %s\n", foo);
+		free(foo);
+	}
 
 	KT_Configuration config;
-	config.set_application_type ( KT_STREAM );
-
-	config.set_host( KT_TCP, "localhost", 5555);
+	
+	config.negotiation(neg_ctx);
 
 	// Or alternatively:
 	// config.set_transport_layer( KT_TCP );
