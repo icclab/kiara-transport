@@ -49,7 +49,7 @@ int neg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
 
 char *neg_get_best_local_capability(neg_ctx_t *neg_ctx, const char *capability) {
 	neg_dict_t *current_dict, *tmp;
-	char *c, *key;
+	char *c = NULL, *key;
 	char delimiter[] = ".";
 	int prec = -1, i;
 	

@@ -68,6 +68,7 @@ char *neg_get_best_local_capability(neg_ctx_t *neg_ctx, const char *capability);
 int neg_run_server(neg_ctx_t *neg_ctx);
 char *neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint);
 int neg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response);
+int neg_set_profile(int profile);
 int neg_capability_to_int(char *capability);
 int _prec_to_int(char *prec);
 neg_ctx_t *neg_init(void);

@@ -24,14 +24,14 @@ int main ()
 	
 	neg_ctx_t *neg_ctx = neg_init();
 	
-	neg_set_local_capability(neg_ctx, "transport.transport-protocols.tcp.prec", "SHOULD");
-	neg_set_local_capability(neg_ctx, "transport.transport-port.5555.prec", "MUST");
-	neg_set_local_capability(neg_ctx, "transport.transport-port.*.prec", "MUST");
-	neg_set_local_capability(neg_ctx, "transport.transport-protocols.udp.prec", "SHOULD");
-	neg_set_local_capability(neg_ctx, "transport.user-protocols.suuuuu.prec", "SHOULD");
-	neg_set_local_capability(neg_ctx, "transport.user-protocols.notnull.prec", "SHOULD");
-	neg_set_local_capability(neg_ctx, "transport.communication-paradigm.req-rep.prec", "SHOULD");
-	neg_set_local_capability(neg_ctx, "transport.communication-paradigm.pub-su.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "network.transport-protocols.tcp.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "network.transport-port.80.prec", "MUST");
+	neg_set_local_capability(neg_ctx, "network.transport-port.*.prec", "NONE");
+	neg_set_local_capability(neg_ctx, "network.transport-protocols.udp.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "network.user-protocols.suuuuu.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "network.user-protocols.notnull.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "network.communication-paradigm.req-rep.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "network.communication-paradigm.pub-su.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "security.mechanism.tls.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "application.application-type.stream.prec", "MUST");
@@ -44,15 +44,15 @@ int main ()
 	}
 	else {
 		int ret = neg_set_final_capabilities(neg_ctx, response);
-		neg_get_final_capability(neg_ctx, "transport.transport-protocols");
+		neg_get_final_capability(neg_ctx, "network.transport-protocols");
 		printf("Transport protocl is: %s\n", neg_ctx->neg_dict->value);
-		neg_get_final_capability(neg_ctx, "transport.communication-paradigm");
+		neg_get_final_capability(neg_ctx, "network.communication-paradigm");
 		printf("Communication paradigm is: %s\n", neg_ctx->neg_dict->value);
 		neg_get_final_capability(neg_ctx, "security.mechanism");
 		printf("Security mechanism is: %s\n", neg_ctx->neg_dict->value);
-		neg_get_final_capability(neg_ctx, "transport.transport-port");
+		neg_get_final_capability(neg_ctx, "network.transport-port");
 		printf("Transport Port is: %s\n", neg_ctx->neg_dict->value);
-		foo = neg_get_best_local_capability(neg_ctx, "transport.transport-port");
+		foo = neg_get_best_local_capability(neg_ctx, "network.transport-port");
 		printf("Best own decission for port is: %s\n", foo);
 		free(foo);
 	}

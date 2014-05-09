@@ -15,13 +15,13 @@ int main(void) {
 	int f, status;
 	
 	neg_ctx_t *neg_ctx = neg_init();
-	neg_set_local_capability(neg_ctx, "transport.transport-protocols.tcp.prec", "MUST");
-	neg_set_local_capability(neg_ctx, "transport.transport-protocols.udp.prec", "SHOULD");
-	neg_set_local_capability(neg_ctx, "transport.transport-port.*.prec", "5555");
+	neg_set_local_capability(neg_ctx, "network.transport-protocols.tcp.prec", "MUST");
+	neg_set_local_capability(neg_ctx, "network.transport-protocols.udp.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "network.transport-port.*.prec", "5555");
 	neg_set_local_capability(neg_ctx, "qos.user-protocols.http.prec", "MUST");
-	neg_set_local_capability(neg_ctx, "transport.transport-protocols.sctp.prec", "SHOULD");
-	neg_set_local_capability(neg_ctx, "transport.user-protocols.none.prec", "SHOULD");
-	neg_set_local_capability(neg_ctx, "transport.communication-paradigm.req-rep.prec", "MUST");
+	neg_set_local_capability(neg_ctx, "network.transport-protocols.sctp.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "network.user-protocols.none.prec", "SHOULD");
+	neg_set_local_capability(neg_ctx, "network.communication-paradigm.req-rep.prec", "MUST");
 	neg_set_local_capability(neg_ctx, "security.mechanism.tls.prec", "MUST");
 	neg_set_local_capability(neg_ctx, "security.mechanism.ssl.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "application.application-type.stream.prec", "MUST");
@@ -32,7 +32,7 @@ int main(void) {
 	if(f == 0) {
 		//Start the negotiation Server
 		int rc = neg_run_server(neg_ctx);
-		
+		neg_set_local_capability(neg_ctx, "network.transport-protocols.tcp.prec", "MUST");
 	}
 	else {
 		//Start the Server for the Service

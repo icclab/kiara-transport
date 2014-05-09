@@ -23,17 +23,17 @@ KT_Configuration::~KT_Configuration ( ) { }
 void KT_Configuration::negotiation ( neg_ctx_t* neg_ctx )   {
 	char *local;
 	//Check if the negotiation was successful
-	neg_get_final_capability(neg_ctx, "transport.transport-protocols");
+	neg_get_final_capability(neg_ctx, "network.transport-protocols");
 	if(neg_ctx->neg_dict == NULL) {
-		local = neg_get_best_local_capability(neg_ctx, "transport.transport-protocols");
+		local = neg_get_best_local_capability(neg_ctx, "network.transport-protocols");
 		this->set_transport_layer(neg_capability_to_int(local));
 	} else {
 		this->set_transport_layer(neg_capability_to_int(neg_ctx->neg_dict->value));
 	}
 	
-	neg_get_final_capability(neg_ctx, "transport.transport-port");
+	neg_get_final_capability(neg_ctx, "network.transport-port");
 	if(neg_ctx->neg_dict == NULL) {
-		local = neg_get_best_local_capability(neg_ctx, "transport.transport-port");
+		local = neg_get_best_local_capability(neg_ctx, "network.transport-port");
 		this->set_port_number((unsigned int)strtoull(local, NULL, 0));
 	} else {
 		this->set_port_number((unsigned int)strtoull(neg_ctx->neg_dict->value, NULL, 0));
