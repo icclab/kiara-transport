@@ -1,0 +1,39 @@
+# -*-Python-*-
+
+import os
+import os.path
+Import('env')
+
+platform = env['PLATFORM']
+compiler = env['compiler']
+isWin32 = (platform == 'win32')
+isGCC = (compiler == 'GCC')
+
+# Note: Clang is currently supported as a subset of GCC
+isClangCXX = 'clang' in env['CXX']
+isClangCC = 'clang' in env['CC']
+
+# First let's compile the C files
+
+if isGCC:
+    #env.Append(CCFLAGS='-v')
+    env.Append(CFLAGS='-std=c99 -pedantic')
+    env.Append(CXXFLAGS='-std=c++11 -pedantic')
+
+if isClangCC:
+    env.Append(CFLAGS='-Weverything -Wno-padded')
+if isClangCXX:
+    env.Append(CXXFLAGS='-Weverything -Wno-padded -Wno-c++98-compat-pedantic')
+
+env.SharedLibrary('SCALN', env.Split('''
+    #src/core/k_transport.cpp
+    #src/core/KT_C99_CallbackWrapper.cpp
+    #src/core/KT_Configuration.cpp
+    #src/core/KT_Connection.cpp
+    #src/core/KT_HTTP_Responder.cpp
+    #src/core/KT_HTTP_Parser.cpp
+    #src/core/http_parser.c
+    #src/core/KT_Msg.cpp
+    #src/core/KT_Session.cpp
+    #src/core/KT_Zeromq.cpp
+'''), LIBS=['zmq', 'czmq'])

@@ -1,0 +1,10 @@
+import os
+import os.path
+Import('env')
+
+env.Program('server_0mq_rep_c', env.Split('main_server_0mq_rep.c'), LIBS=['SCALN'])
+env.Program('client_0mq_req_c', env.Split('main_client_0mq_req.c'), LIBS=['SCALN'])
+env.Program('server_0mq_pub_c', env.Split('main_server_0mq_pub.c'), LIBS=['SCALN'])
+env.Program('client_0mq_sub_c', env.Split('main_client_0mq_sub.c'), LIBS=['SCALN'])
+env.Program('server_0mq_http_pp', env.Split('main_server_0mq_http.cpp'), LIBS=['SCALN'])
+env.Program('client_0mq_http_pp', env.Split('main_client_0mq_http.cpp'), LIBS=['SCALN'])

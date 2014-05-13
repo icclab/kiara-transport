@@ -1,0 +1,9 @@
+import os
+import os.path
+Import('env')
+
+# First let's compile the C files
+
+env.Program('demo_broker', env.Split('demo_main_broker.c'), LIBS=['SCALN'])
+env.Program('demo_reply', env.Split('demo_main_reply.c'), LIBS=['SCALN'])
+env.Program('demo_subscriber', env.Split('demo_main_subscriber.c'), LIBS=['SCALN'])

@@ -1,9 +1,14 @@
-GNU-amd64-Linux/*
-GNU-x86_64-MacOSX
-nbproject
-build
-.settings
-.externalToolBuilders
-.project
-.cproject
-.*.swp
+*.pyc
+*~
+*.o
+.sconsign.dblite
+*.so
+*.bak
+*.os
+*.a
+builder
+
+# Windows generated files
+transport_gen.*
+Debug/*
+vc90.*
