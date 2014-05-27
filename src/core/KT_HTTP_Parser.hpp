@@ -32,6 +32,7 @@ public:
 	std::string get_url();
 	std::string get_host();
 	std::string get_identifier();
+	int get_status_code();
 	int method;
 private:
 	friend std::ostream& operator<< (std::ostream& lhs, KT_HTTP_Parser& rhs);
@@ -40,6 +41,7 @@ private:
 	std::string* host;
 	std::string* query_string;
 	std::string* payload;
+	int status_code;
 };
 
 typedef struct {

@@ -47,6 +47,7 @@ typedef struct neg_ctx_t {
 	char* host;
 	int port;
 	int kiara_endpoint;
+	int client_nego;
 	char* server_repsonse;
 	char* server_repsonse_body;
 	json_t *root;
@@ -71,6 +72,7 @@ int neg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response);
 int neg_set_profile(int profile);
 int neg_capability_to_int(char *capability);
 int _prec_to_int(char *prec);
+void neg_negotiate_remote(neg_ctx_t* neg_ctx, char* identifier, char* payload);
 neg_ctx_t *neg_init(void);
 
 #ifdef	__cplusplus

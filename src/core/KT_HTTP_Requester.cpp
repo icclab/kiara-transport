@@ -24,8 +24,10 @@ std::string generate_request(std::string method, std::string host, std::string p
 	request += "Host: ";
 	request += host;
 	request += "\r\n\r\n";
-	request.append(payload.data(), payload.size());
-	request += "\r\n";
+	if(method.compare("GET") != 0 && method.compare("DELETE")){
+		request.append(payload.data(), payload.size());
+		request += "\r\n";
+	}
 	return request;
 }
 

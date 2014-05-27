@@ -23,6 +23,7 @@ neg_ctx_t *reg_create_context(void) {
 	neg_ctx->root = json_object();
 	neg_ctx->root_response = json_object();
 	neg_ctx->kiara_endpoint = 1;
+	neg_ctx->client_nego = 0;
 	return neg_ctx;
 }
 

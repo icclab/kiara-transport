@@ -46,6 +46,7 @@ KT_HTTP_Parser::KT_HTTP_Parser (KT_Msg& msg)
     payload = ((tmp_parser_fields*)parser->data)->body;
 	query_string = ((tmp_parser_fields*)parser->data)->query_string;
 	method = parser->method;
+	status_code = parser->status_code;
 	host = ((tmp_parser_fields*)parser->data)->host;
 	identifier = ((tmp_parser_fields*)parser->data)->host;
 	*identifier += *((tmp_parser_fields*)parser->data)->query_string;
@@ -75,6 +76,11 @@ std::string KT_HTTP_Parser::get_host()
 std::string KT_HTTP_Parser::get_identifier()
 {
 	return NULL != identifier ? *identifier : std::string("");
+}
+
+int KT_HTTP_Parser::get_status_code()
+{
+	return NULL != status_code ? status_code : 0;
 }
 
 std::ostream& operator<< (std::ostream& lhs, KT_HTTP_Parser& rhs)

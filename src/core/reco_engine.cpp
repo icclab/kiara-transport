@@ -77,11 +77,18 @@ void callback_handler_reco(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 		switch (parser.method) {
 				//GET Request
 			case 1:
+				std::cout << "GET request" << std::endl;
 				payload.append(reg_get_local_capability_json(neg_ctx));
 				payload = KT_HTTP_Responder::generate_200_OK(std::vector<char>(payload.begin(), payload.end()));
 				break;
 				//POST Request
-			case 3:
+			case 4:
+				std::cout << "PUT request" << std::endl;
+				if(neg_ctx->client_nego){
+					payload.append("Bad Request!");
+					payload = KT_HTTP_Responder::generate_400_BAD_REQUEST(std::vector<char>(payload.begin(), payload.end()));
+					break;
+				}
 				std::cout << parser.get_payload() << std::endl;
 				reg_set_remote_capability(neg_ctx, parser.get_identifier().c_str(), parser.get_payload().c_str());
 				payload.append(neg_negotiate(neg_ctx, parser.get_identifier().c_str()));
@@ -94,8 +101,8 @@ void callback_handler_reco(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 		}
 	}
 	//DEBUG Only
-	std::cout << parser.get_payload() << std::endl;
-	std::cout << parser.get_identifier() << std::endl;
+	//std::cout << parser.get_payload() << std::endl;
+	//std::cout << parser.get_identifier() << std::endl;
 
 	KT_Msg message;
 	message.set_payload(payload);
@@ -125,7 +132,7 @@ RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 
 		KT_Msg request;
 		std::string payload(reg_get_local_capability_json(neg_ctx));
-		payload = KT_HTTP_Requester::generate_request("POST", "localhost:5555", "/negotiation", std::vector<char>(payload.begin(), payload.end()));
+		payload = KT_HTTP_Requester::generate_request("PUT", "localhost:5555", "/negotiation", std::vector<char>(payload.begin(), payload.end()));
 
 		request.set_payload(payload);
 
@@ -138,7 +145,29 @@ RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 			remote_endpoint = 40;
 
 		KT_HTTP_Parser parser(reply);
-		response = parser.get_payload();
+		if(parser.get_status_code() < 200 || parser.get_status_code() > 300) {
+			//Try GET here
+			payload = KT_HTTP_Requester::generate_request("GET", "localhost:5555", "/negotiation", std::vector<char>(payload.begin(), payload.end()));
+
+			KT_Msg request;
+			request.set_payload(payload);
+
+			if (0 != connection->send(request, *session, 0)) {
+				remote_endpoint = 35;
+			}
+
+			KT_Msg reply;
+			if (0 != connection->recv(*session, reply, 0))
+				remote_endpoint = 40;
+
+			KT_HTTP_Parser parser(reply);
+			printf("done so\n");
+			neg_ctx->client_nego = 1;
+			response = parser.get_payload();
+		}
+		else {
+			response = parser.get_payload();
+		}
 	}
 }
 
@@ -166,6 +195,7 @@ extern "C" {
 			return "";
 		}
 		else {
+			//Try PUT first
 			RecoClient *out = new RecoClient(endpoint, neg_ctx);
 			return out->GetPayload();
 		}

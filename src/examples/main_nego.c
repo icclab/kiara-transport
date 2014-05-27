@@ -18,7 +18,7 @@ int main(void) {
 	neg_set_local_capability(neg_ctx, "network.transport-protocols.tcp.prec", "MUST");
 	neg_set_local_capability(neg_ctx, "network.transport-protocols.udp.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "network.transport-port.*.prec", "5555");
-	neg_set_local_capability(neg_ctx, "qos.user-protocols.http.prec", "MUST");
+	neg_set_local_capability(neg_ctx, "network.user-protocols.http.prec", "MUST");
 	neg_set_local_capability(neg_ctx, "network.transport-protocols.sctp.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "network.user-protocols.none.prec", "SHOULD");
 	neg_set_local_capability(neg_ctx, "network.communication-paradigm.req-rep.prec", "MUST");
@@ -27,6 +27,7 @@ int main(void) {
 	neg_set_local_capability(neg_ctx, "application.application-type.stream.prec", "MUST");
 	neg_ctx->host = "localhost";
 	neg_ctx->port = 5556;
+	neg_ctx->client_nego = 1;
 	
 	f = fork();
 	if(f == 0) {

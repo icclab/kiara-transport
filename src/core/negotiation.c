@@ -32,6 +32,11 @@ void neg_get_final_capability(neg_ctx_t* neg_ctx, char* key) {
 	reg_get_final_capability(neg_ctx, key);
 }
 
+void neg_negotiate_remote(neg_ctx_t* neg_ctx, char* identifier, char* payload) {
+	reg_set_remote_capability(neg_ctx, identifier, payload);
+	neg_set_final_capabilities(neg_ctx, neg_negotiate(neg_ctx, identifier));
+}
+
 char *neg_send_offer(neg_ctx_t *neg_ctx) {
 	return reco_send_offer(neg_ctx->host, neg_ctx);
 }
@@ -43,6 +48,7 @@ int neg_run_server(neg_ctx_t *neg_ctx) {
 }
 
 int neg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
+	printf("resp:%s\n", response);
 	reg_set_final_capabilities(neg_ctx, response);
 	return 1;
 }
@@ -93,7 +99,7 @@ char *neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 		s = malloc(sizeof (struct neg_dict_remote_collection_t));
 		HASH_FIND_STR(remote_dict->sub, current_dict->id, s);
 		if (s == NULL) {
-			printf("No coresponding value found in dict\n");
+			printf("No coresponding value found in dict %s\n", current_dict->id);
 		} else {
 			//Found value, negotiate
 			int i;
@@ -138,7 +144,12 @@ char *neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 					if (neg_value > 0) {
 						dec = malloc(sizeof (*dec));
 						if(strcmp(tmp_id, "*") == 0) {
-							dec->id = current_dict->value;
+							if(atoi(current_dict->value) > 0) {
+								dec->id = current_dict->value;
+							}
+							else {
+								dec->id = s->value;
+							}
 						}
 						else {
 							dec->id = tmp_id;
