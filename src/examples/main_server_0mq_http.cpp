@@ -24,7 +24,7 @@ int main ()
 	config.set_application_type ( KT_STREAM );
 	config.set_transport_layer( KT_TCP );
 	config.set_hostname( "*" );
-	config.set_port_number( 5555 );
+	config.set_port_number( 9090 );
 
 	KT_Connection* connection = new KT_Zeromq ();
 	connection->set_configuration (config);

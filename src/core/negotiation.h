@@ -6,6 +6,7 @@
  */
 #include <uthash.h>
 #include <jansson.h>
+#include "KT_Configuration_glob.h"
 
 #ifndef NEGOTIATION_H
 #define	NEGOTIATION_H
@@ -73,6 +74,7 @@ int neg_set_profile(int profile);
 int neg_capability_to_int(char *capability);
 int _prec_to_int(char *prec);
 void neg_negotiate_remote(neg_ctx_t* neg_ctx, char* identifier, char* payload);
+void neg_set_local_profile(neg_ctx_t* neg_ctx, kt_application_type app);
 neg_ctx_t *neg_init(void);
 
 #ifdef	__cplusplus

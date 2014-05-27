@@ -53,6 +53,18 @@ int neg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
 	return 1;
 }
 
+void neg_set_local_profile(neg_ctx_t* neg_ctx, kt_application_type app){
+	switch(app) {
+		case KT_WEBSERVER:
+			neg_set_local_capability(neg_ctx, "network.transport-protocols.tcp.prec", "MUST");
+			neg_set_local_capability(neg_ctx, "network.transport-port.*.prec", "9090");
+			neg_set_local_capability(neg_ctx, "network.communication-paradigm.req-rep.prec", "MUST");
+			neg_set_local_capability(neg_ctx, "application.application-type.stream.prec", "MUST");
+			neg_set_local_capability(neg_ctx, "application.application-protocols.http.prec", "MUST");
+			break;
+	}
+}
+
 char *neg_get_best_local_capability(neg_ctx_t *neg_ctx, const char *capability) {
 	neg_dict_t *current_dict, *tmp;
 	char *c = NULL, *key;
