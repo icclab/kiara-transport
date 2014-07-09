@@ -1,5 +1,19 @@
+/**
+ * @file
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * 
+ * @section LICENSE
+ * 
+ * TBD
+ */
+
 #include "ktransport.h"
 
+/**
+ * @brief Static array for transport prefixes
+ * @deprecated
+ */
 static const char* kt_transport_prefix[] = {
 	"tcp://",
 	"udp://",
