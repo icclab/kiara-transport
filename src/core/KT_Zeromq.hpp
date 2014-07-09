@@ -2,6 +2,7 @@
  * @file KT_Zeromq.hpp
  * @author Mathias Hablützel <habl@zhaw.ch>
  * @version 1.0
+ * @license TBD
  * @brief KIARA Transport Library for ZeroMQ Connections
  * 
  * This implements the KT_Connection using the ZeroMQ transport library written
