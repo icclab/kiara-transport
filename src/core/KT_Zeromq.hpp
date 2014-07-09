@@ -47,41 +47,43 @@ namespace Transport {
 class KT_Zeromq : public KT_Connection
 {
 private:
+    /// Thread used for polling. Requires C++11 with std::thread support
 	std::thread* poller_thread;
+    /// Indicates if the poller thread has to terminate, it' not acting as signal.
 	bool interupted;
-	void poller ( void* socket, std::string endpoint );
+	void poller(void* socket, std::string endpoint);
 	void* create_socket(unsigned int socket_type, bool listener);
 
 public:
 
-  KT_Zeromq ();
-  virtual ~KT_Zeromq ();
+  KT_Zeromq();
+  virtual ~KT_Zeromq();
   
   /**
    * @brief Create a ZeroMQ connection with specifying the remote host
    * @param host A string containing an URL
    * @warning Unimplemented!
    */
-  KT_Zeromq (std::string const& host);
+  KT_Zeromq(std::string const& host);
 
   int
-  connect ( KT_Session** ret);
+  connect(KT_Session** ret);
 
   int
-  send ( KT_Msg& message, KT_Session& session, int linger = 0 );
+  send(KT_Msg& message, KT_Session& session, int linger = 0);
 
   int
-  recv ( KT_Session& session, KT_Msg& ret, int linger = 0 );
+  recv(KT_Session& session, KT_Msg& ret, int linger = 0);
 
   int
-  disconnect ( KT_Session& session );
+  disconnect(KT_Session& session);
 
   int
-  register_callback ( std::function<void(KT_Msg&, KT_Session*, KT_Connection*)> );
+  register_callback(std::function<void(KT_Msg&, KT_Session*, KT_Connection*)>);
 
-  int bind ( );
+  int bind(void);
 
-  int unbind ( );
+  int unbind(void);
 
 }; // end of KT_Connection class
 } // end of Transport namespace
