@@ -1,10 +1,3 @@
-/*
- * KIARA transport library
- *
- * Author: Mathias Hablützel <habl@zhaw.ch>
- * Reference: doc/Library API contract.md
- */
-
 #include "KT_Zeromq.hpp"
 #include <iostream>
 
@@ -66,8 +59,13 @@ void* KT_Zeromq::create_socket (unsigned int socket_type, bool listener)
     }
     errno = errcode;
     return socket;
-}
+        }
 
+/**
+ * @brief Connects to configured remote host.
+ * @return int 0 if successful, non-zero on failure.
+ * @param ret Return a KT_Session pointer when successful.
+ */
 int
 KT_Zeromq::connect ( KT_Session** ret ) {
 	void* socket = nullptr;
@@ -127,7 +125,13 @@ KT_Zeromq::connect ( KT_Session** ret ) {
 	return 0;
 }
 
-// Zeromq has no synchronous send. Thus linger is correctly throwing a -Wunused warning
+/**
+* @brief Send a message to remote host.
+* @param message Message for the recipient.
+* @param session Session object to identify the remote target.
+* @param linger ZeroMQ does not support linger, value is being ignored.
+* @note Linger time is not supported by ZeroMQ, sending is queuing.
+*/
 int
 KT_Zeromq::send ( KT_Msg& message, KT_Session& session, int linger) {
     switch (_configuration.get_application_type ())
@@ -155,8 +159,14 @@ KT_Zeromq::send ( KT_Msg& message, KT_Session& session, int linger) {
 	return 0;
 }
 
-// Zeromq has no asynchronous recv. Thus linger is correctly throwing a -Wunused warning
-// zmq_recv will block until a message arrived
+/**
+* @brief Receive a message from remote host.
+* @return KIARA::Transport::KT_Msg The received message
+* @param linger Linger time before it aborts if receiving synchronous,
+*    0 will block forever, -1 will make the call asynchronous and only
+*    return a message if there was one previously received.
+* @note Linger time is not supported by ZeroMQ, receive is blocking.
+*/
 int
 KT_Zeromq::recv ( KT_Session& session, KT_Msg& ret, int linger ) {
 	KT_Msg message;
@@ -198,6 +208,11 @@ KT_Zeromq::recv ( KT_Session& session, KT_Msg& ret, int linger ) {
 	return 0;
 }
 
+/**
+* @brief Disconnect from remote host.
+* @param session Terminate this current session/connection.
+* @return Zero on success, non-zero on failure.
+*/
 int
 KT_Zeromq::disconnect ( KT_Session& session ) {
 	zmq_close ( session.get_socket() );
@@ -205,6 +220,12 @@ KT_Zeromq::disconnect ( KT_Session& session ) {
 	return 0;
 }
 
+/**
+* @brief Register a callback function which is called upon receiving a message
+*   when acting as a server.
+* @param callback Function to be called when a message arrives
+* @warning Callback function must accept KT_Msg* and KT_Session* object
+*/
 int
 KT_Zeromq::register_callback ( std::function<void(KT_Msg&, KT_Session*, KT_Connection*)> callback ) {
 	_std_callback = callback;
@@ -212,9 +233,11 @@ KT_Zeromq::register_callback ( std::function<void(KT_Msg&, KT_Session*, KT_Conne
 }
 
 /**
- * bind requires a valid callback handler which is called when a message is
- * received, it binds according to the set configuration
- */
+* @brief Bind according to the configuration and listen to incoming messages.
+* @return Zero on success, non-zero on failure.
+* @note Requires a valid callback handler which is called when a message is
+* received, it binds according to the set configuration
+*/
 int
 KT_Zeromq::bind ( ) {
 	void* socket = nullptr;
@@ -262,10 +285,11 @@ KT_Zeromq::bind ( ) {
 	}
 	return 0;
 }
-
+  
 /**
- * stops listening to incomming messages
- */
+* @brief Stops listening to incoming messages.
+* @return Zero on success, non-zero on failure.
+*/
 int
 KT_Zeromq::unbind ( ) {
 	interupted = true;

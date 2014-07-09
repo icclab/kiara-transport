@@ -1,9 +1,22 @@
 /**
- * KIARA Transport Library Connection
+ * @file KT_Zeromq.hpp
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @brief KIARA Transport Library for ZeroMQ Connections
  * 
- * Author: Mathias Hablützel <habl@zhaw.ch>
+ * This implements the KT_Connection using the ZeroMQ transport library written
+ * by Peter Hintjens et al. It is specialized for communication patterns like
+ * Request/Reply, Publish/Subscribe etc.
+ * 
+ * @warning It is strongly discouraged to use this implementation if you plan to
+ * use plain TCP streams. ZeroMQ is specialized for Request/Reply,
+ * Publish/Subscribe (amongst other) patterns and does only support stream as
+ * a makeshift.
+ * 
+ * @note Currently supported patterns are Stream (see warning), Request/Reply
+ * and Publish/Subscribe.
  */
- 
+
 #ifndef KT_ZEROMQ_HPP
 #define KT_ZEROMQ_HPP
 
@@ -25,8 +38,9 @@ namespace KIARA {
 namespace Transport {
 
 /**
-  * class KT_Connection
-  * 
+  * @class KT_Zeromq
+  * @brief Implementation of the interface KT_Connection
+ *  @see KT_Connection
   */
 
 class KT_Zeromq : public KT_Connection
@@ -39,55 +53,33 @@ private:
 
 public:
 
-  KT_Zeromq ( );
-  virtual ~KT_Zeromq ( );
-  KT_Zeromq ( std::string const& host);
-
+  KT_Zeromq ();
+  virtual ~KT_Zeromq ();
+  
   /**
-   * @return int
-   * @param ret Return a KT_Session pointer when successful
+   * @brief Create a ZeroMQ connection with specifying the remote host
+   * @param host A string containing an URL
+   * @warning Unimplemented!
    */
+  KT_Zeromq (std::string const& host);
+
   int
   connect ( KT_Session** ret);
 
-  /**
-   * @param message Message for the receipient
-   * @param linger Linger time before it aborts if sending synchronous,
-   *    0 will block forever, -1 will make the call asynchronous
-   */
   int
   send ( KT_Msg& message, KT_Session& session, int linger = 0 );
 
-  /**
-   * @return KIARA::Transport::KT_Msg
-   * @param linger Linger time before it aborts if receiving synchronous,
-   *    0 will block forever, -1 will make the call asynchronous and only
-   *    return a message if there was one previously received
-   */
   int
   recv ( KT_Session& session, KT_Msg& ret, int linger = 0 );
 
-  /**
-   *
-   */
   int
   disconnect ( KT_Session& session );
 
-  /**
-   * callback function must accept KT_Msg* and KT_Session* object
-   * @param callback Function to be called when a message arrives
-   */
-  int register_callback ( std::function<void(KT_Msg&, KT_Session*, KT_Connection*)> );
+  int
+  register_callback ( std::function<void(KT_Msg&, KT_Session*, KT_Connection*)> );
 
-  /**
-   * bind requires a valid callback handler which is called when a message is
-   * received, it binds according to the set configuration
-   */
   int bind ( );
-  
-  /**
-   * stops listening to incomming messages
-   */
+
   int unbind ( );
 
 }; // end of KT_Connection class
