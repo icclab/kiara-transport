@@ -1,8 +1,10 @@
-/*
- * KT_HTTP_Responder.cpp
+/**
+ * @file KT_HTTP_Responder.hpp
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @license TBD
  *
- *  Created on: Feb 6, 2014
- *      Author: habl
+ * @brief Generate HTTP responses
  */
 
 #include "KT_HTTP_Responder.hpp"
