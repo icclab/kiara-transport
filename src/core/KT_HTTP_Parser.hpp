@@ -1,8 +1,10 @@
-/*
- * KT_HTTP_Parser.hpp
+/**
+ * @file KT_HTTP_Parser.hpp
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @license TBD
  *
- *  Created on: Jan 29, 2014
- *      Author: habl
+ * @brief Simple wrapper for http_parser.c with ostream support.
  */
 
 #ifndef KT_HTTP_PARSER_HPP_
