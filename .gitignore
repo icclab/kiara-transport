@@ -12,3 +12,4 @@ builder
 transport_gen.*
 Debug/*
 vc90.*
+/build/
