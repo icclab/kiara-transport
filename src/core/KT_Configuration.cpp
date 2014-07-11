@@ -1,12 +1,12 @@
-/*
- * KT_Configuration.cpp
- *
- *  Created on: Mar 13, 2014
- *      Author: habl
- *   Copyright: 2014 ZHAW
- */
 /**
- * Lazy way to have C99 wrapper and C++ class implementation in one file
+ * @file KT_Configuration.cpp
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @license TBD
+ *
+ * @brief Configuration class for network stack.
+ *
+ * Lazy way to have C99 wrapper and C++ class implementation in one file.
  */
 #include "KT_Configuration.hpp"    // class declaration
 #include "KT_Configuration.h"      // wrapper declaration
@@ -14,58 +14,105 @@
 namespace KIARA {
 namespace Transport {
 
-KT_Configuration::KT_Configuration ( ) { }
+KT_Configuration::KT_Configuration() {}
 
-KT_Configuration::~KT_Configuration ( ) { }
+KT_Configuration::~KT_Configuration() {
+        }
 
-void KT_Configuration::set_network_layer ( unsigned int network_layer )   {
-    _network_layer = network_layer;
-}
+        /**
+         * @brief Set the value of _network_layer Layer 3 in the networking stack
+         * @param network_layer the new value of _network_layer
+         */
+        void KT_Configuration::set_network_layer(unsigned int network_layer) {
+            _network_layer = network_layer;
+        }
 
-unsigned int KT_Configuration::get_network_layer ( ) const {
-  return _network_layer;
-}
+        /**
+         * @brief Get the value of _network_layer Layer 3 in the networking stack
+         * @return the value of _network_layer
+         */
+        unsigned int KT_Configuration::get_network_layer()const {
+            return _network_layer;
+        }
 
-void KT_Configuration::set_transport_layer ( unsigned int transport_layer )   {
-    _transport_layer = transport_layer;
-}
+        /**
+         * @brief Set the value of _transport_layer Layer 4 in the networking stack
+         * @param transport_layer the new value of _transport_layer
+         */
+        void KT_Configuration::set_transport_layer(unsigned int transport_layer) {
+            _transport_layer = transport_layer;
+        }
 
-unsigned int KT_Configuration::get_transport_layer ( ) const {
-  return _transport_layer;
-}
+        /**
+         * @brief Get the value of _transport_layer Layer 4 in the networking stack
+         * @return the value of _transport_layer
+         */
+        unsigned int KT_Configuration::get_transport_layer() const {
+            return _transport_layer;
+        }
 
-void KT_Configuration::set_crypto_layer ( unsigned int crypto_layer )   {
-    _crypto_layer = crypto_layer;
-}
+        /**
+         * @brief Set the value of _crypto_layer Optional crypto layer, based on OpenSSL
+         * @param crypto_layer the new value of _crypto_layer
+         */
+        void KT_Configuration::set_crypto_layer(unsigned int crypto_layer) {
+            _crypto_layer = crypto_layer;
+        }
 
-unsigned int KT_Configuration::get_crypto_layer ( ) const {
-  return _crypto_layer;
-}
+        /**
+         * @brief Get the value of _crypto_layer Optional crypto layer, based on OpenSSL
+         * @return the value of _crypto_layer
+         */
+        unsigned int KT_Configuration::get_crypto_layer() const {
+            return _crypto_layer;
+        }
 
-void KT_Configuration::set_application_layer ( unsigned int application_layer )   {
-    _application_layer = application_layer;
-}
+        /**
+         * @brief Set the value of _application_layer
+         * @param application_layer the new value of _application_layer
+         */
+        void KT_Configuration::set_application_layer(unsigned int application_layer) {
+            _application_layer = application_layer;
+        }
 
-unsigned int KT_Configuration::get_application_layer ( ) const {
-  return _application_layer;
-}
+        /**
+         * @brief Get the value of _application_layer
+         * @return the value of _application_layer
+         */
+        unsigned int KT_Configuration::get_application_layer() const {
+            return _application_layer;
+        }
 
-void KT_Configuration::set_application_type ( unsigned int application_type )   {
-    _application_type = application_type;
-}
+        /**
+         * @brief Set the value of _application_type
+         * @param application_type the new value of _application_type
+         */
 
-unsigned int KT_Configuration::get_application_type ( ) const {
-  return _application_type;
-}
+        void KT_Configuration::set_application_type(unsigned int application_type) {
+            _application_type = application_type;
+        }
 
-void KIARA::Transport::KT_Configuration::set_host(unsigned int transport_layer,
-		std::string hostname, unsigned int port_number)
-{
+        /**
+         * @brief Get the value of _application_type
+         * @return the value of _application_type
+         */
+        unsigned int KT_Configuration::get_application_type() const {
+            return _application_type;
+        }
 
-	this->set_transport_layer( transport_layer );
-	this->set_hostname( hostname );
-	this->set_port_number( port_number );
-}
+        /**
+         * @brief Set the hostname.
+         * @param transport_layer Communication protocol.
+         * @param hostname Hostname.
+         * @param port_number Port number.
+         */
+        void KIARA::Transport::KT_Configuration::set_host(unsigned int transport_layer,
+                std::string hostname, unsigned int port_number) {
+
+            this->set_transport_layer(transport_layer);
+            this->set_hostname(hostname);
+            this->set_port_number(port_number);
+        }
 
 
 } // end of namespace Transport

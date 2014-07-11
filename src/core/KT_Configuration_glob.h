@@ -1,8 +1,10 @@
-/*
- * KT_Configuration_glob.h
+/**
+ * @file KT_Configuration_glob.h
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @license TBD
  *
- *  Created on: Mar 13, 2014
- *      Author: habl
+ * @brief Global static configuration variables.
  */
 
 #ifndef KT_CONFIGURATION_GLOB_H_
