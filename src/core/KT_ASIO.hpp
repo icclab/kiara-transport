@@ -1,7 +1,11 @@
 /**
- * KIARA Transport Library Connection
- * 
- * Author: Mathias Hablützel <habl@zhaw.ch>
+ * @file KT_ASIO.hpp
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @license TBD
+ *
+ * @brief boost::asio KT_Connection implementation.
+ * @note Not implemented.
  */
  
 #ifndef KT_ASIO_HPP
@@ -63,19 +67,19 @@ public:
   disconnect ( KT_Session& session );
 
   /**
-   * callback function must accept KT_Msg* and KT_Session* object
+   * @brief callback function must accept KT_Msg* and KT_Session* object
    * @param callback Function to be called when a message arrives
    */
   void register_callback ( void (*callback)(KT_Msg& message, KT_Session& session) );
 
   /**
-   * bind requires a valid callback handler which is called when a message is
+   * @brief bind requires a valid callback handler which is called when a message is
    * received, it binds according to the set configuration
    */
   void bind ( );
   
   /**
-   * stops listening to incomming messages
+   * @brief stops listening to incomming messages
    */
   void unbind ( );
   

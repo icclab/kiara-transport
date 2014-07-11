@@ -1,8 +1,11 @@
-/*
- * KT_ASIO.cpp
+/**
+ * @file KT_ASIO.hpp
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @license TBD
  *
- *  Created on: Feb 7, 2014
- *      Author: habl
+ * @brief boost::asio KT_Connection implementation.
+ * @note Not implemented.
  */
 
 #include "KT_ASIO.hpp"
