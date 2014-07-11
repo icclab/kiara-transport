@@ -5,7 +5,7 @@
  * @license TBD
  *
  * @brief Debug functions go here.
- * 
+ */
 
 #ifndef DEBUG_HPP_
 #define DEBUG_HPP_
