@@ -22,6 +22,10 @@ TBD
 Install https://github.com/zeromq/zeromq4-x
 ## czmq
 Install https://github.com/zeromq/czmq
+## libjansson
+Either install it via your package manager or via http://www.digip.org/jansson/
+## uthash
+Either install it via your package manager or via https://troydhanson.github.io/uthash/
 
 # Installation instructions
 * checkout this repo
