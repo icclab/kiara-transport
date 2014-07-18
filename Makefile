@@ -7,11 +7,11 @@
 # Tested with:
 # * MAC OS X 10.9 MAVERICKS (built from macports)
 #  * clang version 3.4 (tags/RELEASE_34/final)
-#    Target: x86_64-apple-darwin13.1.0
-#    Thread model: posix
+#	 Target: x86_64-apple-darwin13.1.0
+#	 Thread model: posix
 #  * clang version 3.5.0 (trunk 206638)
-#    Target: x86_64-apple-darwin13.1.0
-#    Thread model: posix
+#	 Target: x86_64-apple-darwin13.1.0
+#	 Thread model: posix
 
 CC = clang
 CXX = clang++
@@ -22,7 +22,7 @@ ASAN = 1
 # Be sure to run dsymutil(1) on the binaries/executables on OSX
 # or you'll lack of symbols even though -g is turned on
 
-ASAN_COMPILER_FLAGS = 	-fsanitize=address \
+ASAN_COMPILER_FLAGS =	-fsanitize=address \
 						-fno-omit-frame-pointer \
 						-fsanitize-memory-track-origins
 
@@ -76,21 +76,21 @@ negoc:	server_0mq_http_nego \
 		client_0mq_http_nego
 
 all:	examples \
-        demo \
-	negoc
+		demo \
+		negoc
 
 demo:	demo_broker \
-        demo_reply \
-        demo_subscriber
+		demo_reply \
+		demo_subscriber
 
-examples:   server_0mq_http_pp \
-    		client_0mq_http_pp \
-    		server_0mq_rep_pp \
-    		client_0mq_req_pp \
-    		server_0mq_rep_c \
-    		client_0mq_req_c \
-            server_0mq_pub_c \
-            client_0mq_sub_c 
+examples:	server_0mq_http_pp \
+			client_0mq_http_pp \
+			server_0mq_rep_pp \
+			client_0mq_req_pp \
+			server_0mq_rep_c \
+			client_0mq_req_c \
+			server_0mq_pub_c \
+			client_0mq_sub_c 
 
 # Demo applications
 
@@ -104,7 +104,7 @@ demo_broker:	$(BUILDDIR)/k_transport.o \
 				$(BUILDDIR)/demo_main_broker.o \
 				$(BUILDDIR)/demo_broker
 
-demo_reply:    	$(BUILDDIR)/k_transport.o \
+demo_reply:		$(BUILDDIR)/k_transport.o \
 				$(BUILDDIR)/KT_Configuration.o \
 				$(BUILDDIR)/KT_Connection.o \
 				$(BUILDDIR)/KT_HTTP_Responder.o \
@@ -114,15 +114,15 @@ demo_reply:    	$(BUILDDIR)/k_transport.o \
 				$(BUILDDIR)/demo_main_reply.o \
 				$(BUILDDIR)/demo_reply
 
-demo_subscriber:   	$(BUILDDIR)/k_transport.o \
-    				$(BUILDDIR)/KT_Configuration.o \
-    				$(BUILDDIR)/KT_Connection.o \
-    				$(BUILDDIR)/KT_HTTP_Responder.o \
-    				$(BUILDDIR)/KT_Msg.o \
-    				$(BUILDDIR)/KT_Session.o \
-    				$(BUILDDIR)/KT_Zeromq.o \
-    				$(BUILDDIR)/demo_main_subscriber.o \
-    				$(BUILDDIR)/demo_subscriber 
+demo_subscriber:	$(BUILDDIR)/k_transport.o \
+					$(BUILDDIR)/KT_Configuration.o \
+					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_Msg.o \
+					$(BUILDDIR)/KT_Session.o \
+					$(BUILDDIR)/KT_Zeromq.o \
+					$(BUILDDIR)/demo_main_subscriber.o \
+					$(BUILDDIR)/demo_subscriber 
 
 # Examples Server
 
@@ -196,16 +196,17 @@ server_0mq_pub_c:	$(BUILDDIR)/k_transport.o \
 # Examples Clients
 
 client_0mq_http_pp: $(BUILDDIR)/KT_Client.o \
-                    $(BUILDDIR)/KT_Configuration.o \
-                    $(BUILDDIR)/KT_Connection.o \
-                    $(BUILDDIR)/KT_HTTP_Parser.o \
-                    $(BUILDDIR)/KT_HTTP_Responder.o \
-                    $(BUILDDIR)/KT_Msg.o \
-                    $(BUILDDIR)/KT_Session.o \
-                    $(BUILDDIR)/KT_Zeromq.o \
-                    $(BUILDDIR)/http_parser.o \
-                    $(BUILDDIR)/main_client_0mq_http_pp.o  \
-                    $(BUILDDIR)/client_0mq_http_pp
+					$(BUILDDIR)/KT_Configuration.o \
+					$(BUILDDIR)/KT_Connection.o \
+					$(BUILDDIR)/KT_HTTP_Parser.o \
+					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_Msg.o \
+					$(BUILDDIR)/KT_Session.o \
+					$(BUILDDIR)/KT_Zeromq.o \
+					$(BUILDDIR)/http_parser.o \
+					$(BUILDDIR)/negotiation.o \
+					$(BUILDDIR)/main_client_0mq_http_pp.o  \
+					$(BUILDDIR)/client_0mq_http_pp
 
 client_0mq_http_nego:	$(BUILDDIR)/KT_Client.o \
 			$(BUILDDIR)/KT_Configuration.o \
@@ -220,7 +221,7 @@ client_0mq_http_nego:	$(BUILDDIR)/KT_Client.o \
 			$(BUILDDIR)/negotiation.o \
 			$(BUILDDIR)/reco_engine.o \
 			$(BUILDDIR)/registry.o \
-			$(BUILDDIR)/main_nego_client.o  \
+			$(BUILDDIR)/main_nego_client.o	\
 			$(BUILDDIR)/client_0mq_http_nego
 	
 client_0mq_http_pp_nego:	$(BUILDDIR)/KT_Client.o \
@@ -236,20 +237,21 @@ client_0mq_http_pp_nego:	$(BUILDDIR)/KT_Client.o \
 			$(BUILDDIR)/negotiation.o \
 			$(BUILDDIR)/reco_engine.o \
 			$(BUILDDIR)/registry.o \
-			$(BUILDDIR)/main_nego_client.o  \
+			$(BUILDDIR)/main_nego_client.o	\
 			$(BUILDDIR)/client_0mq_http_pp_nego
 
 client_0mq_req_pp: $(BUILDDIR)/KT_Client.o \
-                   $(BUILDDIR)/KT_Configuration.o \
-                   $(BUILDDIR)/KT_Connection.o \
-                   $(BUILDDIR)/KT_HTTP_Parser.o \
-                   $(BUILDDIR)/KT_HTTP_Responder.o \
-                   $(BUILDDIR)/KT_Msg.o \
-                   $(BUILDDIR)/KT_Session.o \
-                   $(BUILDDIR)/KT_Zeromq.o \
-                   $(BUILDDIR)/http_parser.o \
-                   $(BUILDDIR)/main_client_0mq_req_pp.o  \
-                   $(BUILDDIR)/client_0mq_req_pp
+				   $(BUILDDIR)/KT_Configuration.o \
+				   $(BUILDDIR)/KT_Connection.o \
+				   $(BUILDDIR)/KT_HTTP_Parser.o \
+				   $(BUILDDIR)/KT_HTTP_Responder.o \
+				   $(BUILDDIR)/KT_Msg.o \
+				   $(BUILDDIR)/KT_Session.o \
+				   $(BUILDDIR)/KT_Zeromq.o \
+				   $(BUILDDIR)/http_parser.o \
+					$(BUILDDIR)/negotiation.o \
+				   $(BUILDDIR)/main_client_0mq_req_pp.o  \
+				   $(BUILDDIR)/client_0mq_req_pp
 
 client_0mq_req_c:	$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/KT_Configuration.o \
@@ -258,7 +260,8 @@ client_0mq_req_c:	$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
 					$(BUILDDIR)/KT_Zeromq.o \
-					$(BUILDDIR)/main_client_0mq_req_c.o \
+						$(BUILDDIR)/negotiation.o \
+				$(BUILDDIR)/main_client_0mq_req_c.o \
 					$(BUILDDIR)/client_0mq_req_c
 
 client_0mq_sub_c:	$(BUILDDIR)/k_transport.o \
@@ -267,7 +270,8 @@ client_0mq_sub_c:	$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/KT_HTTP_Responder.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
-					$(BUILDDIR)/KT_Zeromq.o \
+							$(BUILDDIR)/negotiation.o \
+			$(BUILDDIR)/KT_Zeromq.o \
 					$(BUILDDIR)/main_client_0mq_sub_c.o \
 					$(BUILDDIR)/client_0mq_sub_c
 
@@ -276,10 +280,14 @@ client_0mq_sub_c:	$(BUILDDIR)/k_transport.o \
 DEMO_BROKER_DEPS =	$(BUILDDIR)/demo_main_broker.o \
 					$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/http_parser.o \
+					$(BUILDDIR)/negotiation.o \
+					$(BUILDDIR)/registry.o \
+					$(BUILDDIR)/reco_engine.o \
 					$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 					$(BUILDDIR)/KT_Configuration.o \
 					$(BUILDDIR)/KT_Connection.o \
 					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_HTTP_Requester.o \
 					$(BUILDDIR)/KT_HTTP_Parser.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
@@ -288,26 +296,34 @@ DEMO_BROKER_DEPS =	$(BUILDDIR)/demo_main_broker.o \
 DEMO_REPLY_DEPS =	$(BUILDDIR)/demo_main_reply.o \
 					$(BUILDDIR)/k_transport.o \
 					$(BUILDDIR)/http_parser.o \
+					$(BUILDDIR)/negotiation.o \
+					$(BUILDDIR)/registry.o \
+					$(BUILDDIR)/reco_engine.o \
 					$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 					$(BUILDDIR)/KT_Configuration.o \
 					$(BUILDDIR)/KT_Connection.o \
 					$(BUILDDIR)/KT_HTTP_Responder.o \
+					$(BUILDDIR)/KT_HTTP_Requester.o \
 					$(BUILDDIR)/KT_HTTP_Parser.o \
 					$(BUILDDIR)/KT_Msg.o \
 					$(BUILDDIR)/KT_Session.o \
 					$(BUILDDIR)/KT_Zeromq.o
 
 DEMO_SUBSCRIBER_DEPS =	$(BUILDDIR)/demo_main_subscriber.o \
-			    		$(BUILDDIR)/k_transport.o \
+						$(BUILDDIR)/k_transport.o \
 						$(BUILDDIR)/http_parser.o \
-			    		$(BUILDDIR)/KT_C99_CallbackWrapper.o \
-			    		$(BUILDDIR)/KT_Configuration.o \
-			    		$(BUILDDIR)/KT_Connection.o \
-			    		$(BUILDDIR)/KT_HTTP_Responder.o \
+						$(BUILDDIR)/negotiation.o \
+						$(BUILDDIR)/registry.o \
+						$(BUILDDIR)/reco_engine.o \
+						$(BUILDDIR)/KT_C99_CallbackWrapper.o \
+						$(BUILDDIR)/KT_Configuration.o \
+						$(BUILDDIR)/KT_Connection.o \
+						$(BUILDDIR)/KT_HTTP_Responder.o \
+						$(BUILDDIR)/KT_HTTP_Requester.o \
 						$(BUILDDIR)/KT_HTTP_Parser.o \
-			    		$(BUILDDIR)/KT_Msg.o \
-			    		$(BUILDDIR)/KT_Session.o \
-			    		$(BUILDDIR)/KT_Zeromq.o
+						$(BUILDDIR)/KT_Msg.o \
+						$(BUILDDIR)/KT_Session.o \
+						$(BUILDDIR)/KT_Zeromq.o
 
 # Example Servers build deps
 
@@ -329,6 +345,13 @@ SERVER_0MQ_HTTP_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
 SERVER_0MQ_REP_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
+							$(BUILDDIR)/negotiation.o \
+							$(BUILDDIR)/reco_engine.o \
+							$(BUILDDIR)/registry.o \
+							$(BUILDDIR)/KT_HTTP_Parser.o \
+							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Requester.o \
+							$(BUILDDIR)/http_parser.o \
 							$(BUILDDIR)/KT_Msg.o \
 							$(BUILDDIR)/KT_Session.o \
 							$(BUILDDIR)/KT_Zeromq.o \
@@ -338,10 +361,14 @@ SERVER_0MQ_REP_CC_DEPS =	$(BUILDDIR)/main_server_0mq_rep_c.o \
 							$(BUILDDIR)/k_transport.o \
 							$(BUILDDIR)/http_parser.o \
 							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
+							$(BUILDDIR)/negotiation.o \
+							$(BUILDDIR)/reco_engine.o \
+							$(BUILDDIR)/registry.o \
+							$(BUILDDIR)/KT_HTTP_Parser.o \
+							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Requester.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
-							$(BUILDDIR)/KT_HTTP_Responder.o \
-							$(BUILDDIR)/KT_HTTP_Parser.o \
 							$(BUILDDIR)/KT_Msg.o \
 							$(BUILDDIR)/KT_Session.o \
 							$(BUILDDIR)/KT_Zeromq.o
@@ -349,10 +376,14 @@ SERVER_0MQ_REP_CC_DEPS =	$(BUILDDIR)/main_server_0mq_rep_c.o \
 SERVER_0MQ_PUB_CC_DEPS =	$(BUILDDIR)/main_server_0mq_pub_c.o \
 							$(BUILDDIR)/k_transport.o \
 							$(BUILDDIR)/http_parser.o \
+							$(BUILDDIR)/negotiation.o \
+							$(BUILDDIR)/reco_engine.o \
+							$(BUILDDIR)/registry.o \
 							$(BUILDDIR)/KT_C99_CallbackWrapper.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
 							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Requester.o \
 							$(BUILDDIR)/KT_HTTP_Parser.o \
 							$(BUILDDIR)/KT_Msg.o \
 							$(BUILDDIR)/KT_Session.o \
@@ -390,38 +421,49 @@ CLIENT_0MQ_C_NEGO_DEPS =	$(BUILDDIR)/KT_Client.o \
 # Example Clients build deps
 
 CLIENT_0MQ_HTTP_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
-                   		    $(BUILDDIR)/KT_Configuration.o \
-                   		    $(BUILDDIR)/KT_Connection.o \
-                   		    $(BUILDDIR)/KT_HTTP_Parser.o \
-                   		    $(BUILDDIR)/KT_HTTP_Responder.o \
-                   		    $(BUILDDIR)/KT_Msg.o \
-                   		    $(BUILDDIR)/KT_Session.o \
-                   		    $(BUILDDIR)/KT_Zeromq.o \
-                   		    $(BUILDDIR)/http_parser.o \
-                   		    $(BUILDDIR)/main_client_0mq_http_pp.o
+							$(BUILDDIR)/KT_Configuration.o \
+							$(BUILDDIR)/KT_Connection.o \
+							$(BUILDDIR)/KT_HTTP_Parser.o \
+							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Requester.o \
+							$(BUILDDIR)/KT_Msg.o \
+							$(BUILDDIR)/KT_Session.o \
+							$(BUILDDIR)/KT_Zeromq.o \
+							$(BUILDDIR)/negotiation.o \
+							$(BUILDDIR)/reco_engine.o \
+							$(BUILDDIR)/registry.o \
+							$(BUILDDIR)/http_parser.o \
+							$(BUILDDIR)/main_client_0mq_http_pp.o
 
 CLIENT_0MQ_HTTP_CPP_NEGO_DEPS =	$(BUILDDIR)/KT_Client.o \
-                   		    $(BUILDDIR)/KT_Configuration.o \
-                   		    $(BUILDDIR)/KT_Connection.o \
-                   		    $(BUILDDIR)/KT_HTTP_Parser.o \
-                   		    $(BUILDDIR)/KT_HTTP_Responder.o \
-				    $(BUILDDIR)/KT_HTTP_Requester.o \
-                   		    $(BUILDDIR)/KT_Msg.o \
-                   		    $(BUILDDIR)/KT_Session.o \
-                   		    $(BUILDDIR)/KT_Zeromq.o \
-                   		    $(BUILDDIR)/http_parser.o \
-				    $(BUILDDIR)/negotiation.o \
-				    $(BUILDDIR)/reco_engine.o \
-				    $(BUILDDIR)/registry.o \
-                   		    $(BUILDDIR)/main_client_0mq_http_pp_nego.o
+							$(BUILDDIR)/KT_Configuration.o \
+							$(BUILDDIR)/KT_Connection.o \
+							$(BUILDDIR)/KT_HTTP_Parser.o \
+							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Requester.o \
+							$(BUILDDIR)/KT_Msg.o \
+							$(BUILDDIR)/KT_Session.o \
+							$(BUILDDIR)/KT_Zeromq.o \
+							$(BUILDDIR)/http_parser.o \
+							$(BUILDDIR)/negotiation.o \
+							$(BUILDDIR)/reco_engine.o \
+							$(BUILDDIR)/registry.o \
+							$(BUILDDIR)/main_client_0mq_http_pp_nego.o
 
 CLIENT_0MQ_REQ_CPP_DEPS =	$(BUILDDIR)/KT_Client.o \
-                    		$(BUILDDIR)/KT_Configuration.o \
-                    		$(BUILDDIR)/KT_Connection.o \
-                    		$(BUILDDIR)/KT_Msg.o \
-                    		$(BUILDDIR)/KT_Session.o \
-                    		$(BUILDDIR)/KT_Zeromq.o \
-                    		$(BUILDDIR)/main_client_0mq_req_pp.o
+							$(BUILDDIR)/KT_Configuration.o \
+							$(BUILDDIR)/KT_Connection.o \
+							$(BUILDDIR)/KT_Msg.o \
+							$(BUILDDIR)/KT_Session.o \
+							$(BUILDDIR)/reco_engine.o \
+							$(BUILDDIR)/registry.o \
+							$(BUILDDIR)/KT_HTTP_Parser.o \
+							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Requester.o \
+							$(BUILDDIR)/http_parser.o \
+							$(BUILDDIR)/negotiation.o \
+							$(BUILDDIR)/KT_Zeromq.o \
+							$(BUILDDIR)/main_client_0mq_req_pp.o
 
 CLIENT_0MQ_REQ_CC_DEPS =	$(BUILDDIR)/main_client_0mq_req_c.o \
 							$(BUILDDIR)/k_transport.o \
@@ -430,6 +472,10 @@ CLIENT_0MQ_REQ_CC_DEPS =	$(BUILDDIR)/main_client_0mq_req_c.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
 							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Requester.o \
+							$(BUILDDIR)/negotiation.o \
+							$(BUILDDIR)/reco_engine.o \
+							$(BUILDDIR)/registry.o \
 							$(BUILDDIR)/KT_HTTP_Parser.o \
 							$(BUILDDIR)/KT_Msg.o \
 							$(BUILDDIR)/KT_Session.o \
@@ -442,6 +488,10 @@ CLIENT_0MQ_SUB_CC_DEPS =	$(BUILDDIR)/main_client_0mq_sub_c.o \
 							$(BUILDDIR)/KT_Configuration.o \
 							$(BUILDDIR)/KT_Connection.o \
 							$(BUILDDIR)/KT_HTTP_Responder.o \
+							$(BUILDDIR)/KT_HTTP_Requester.o \
+							$(BUILDDIR)/negotiation.o \
+							$(BUILDDIR)/reco_engine.o \
+							$(BUILDDIR)/registry.o \
 							$(BUILDDIR)/KT_HTTP_Parser.o \
 							$(BUILDDIR)/KT_Msg.o \
 							$(BUILDDIR)/KT_Session.o \
