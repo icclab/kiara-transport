@@ -1,10 +1,11 @@
-/*
- * main_client_0mq_req.cpp
+/**
+ * @file reco_engine.cpp
+ * @author Philipp Aeschlimann <aepp@zhaw.ch>
+ * @version
+ * @license TBD
+ * @brief
  *
- *  Created on: Dec 2, 2013
- *      Author: habl
  */
-
 
 #include "KT_Zeromq.hpp"
 #include "KT_HTTP_Parser.hpp"
@@ -31,8 +32,19 @@
 
 using namespace KIARA::Transport;
 
+/**
+ * @param
+ * @param
+ * @param
+ * @brief
+ */
 void callback_handler_reco(KT_Msg&, KT_Session*, KT_Connection*);
 
+/**
+ * @param endpoint
+ * @param neg_ctx
+ * @brief
+ */
 RecoServer::RecoServer(char* endpoint, neg_ctx_t* neg_ctx) {
 	host = endpoint;
 	ctx = neg_ctx;
@@ -43,6 +55,10 @@ RecoServer::~RecoServer() {
 	//delete[];
 }
 
+/**
+ * @return
+ * @brief
+ */
 int RecoServer::RunServer() {
 	KT_Configuration config;
 	config.set_application_type(KT_STREAM);
@@ -65,6 +81,12 @@ int RecoServer::RunServer() {
 	return 0;
 }
 
+/**
+ * @param msg
+ * @param sess
+ * @param obj
+ * @brief
+ */
 void callback_handler_reco(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	KT_HTTP_Parser parser(msg);
 	neg_ctx_t *neg_ctx = (neg_ctx_t*) sess->get_k_user_data();
@@ -110,6 +132,11 @@ void callback_handler_reco(KT_Msg& msg, KT_Session* sess, KT_Connection* obj) {
 	obj->send(message, (*sess), 0);
 }
 
+/**
+ * @param serverhost
+ * @param neg_ctx
+ * @brief
+ */
 RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 
 	KT_Configuration config;
@@ -171,6 +198,10 @@ RecoClient::RecoClient(char* serverhost, neg_ctx_t* neg_ctx) {
 	}
 }
 
+/**
+ * @return
+ * @brief
+ */
 char *RecoClient::GetPayload() {
 	return (char *) response.c_str();
 }
@@ -179,16 +210,32 @@ char *RecoClient::GetPayload() {
 extern "C" {
 #endif
 
+        /**
+         * @param endpoint
+         * @param neg_ctx
+         * @return
+         * @brief
+         */
 	void* init_reco_server(char *endpoint, neg_ctx_t *neg_ctx) {
 		RecoServer *out = new RecoServer(endpoint, neg_ctx);
 		return ((void*) out);
 	}
 
+        /**
+         * @param reco_server
+         * @brief
+         */
 	void reco_run_server(void *reco_server) {
 		RecoServer *tmp_reco_server = ((RecoServer*) reco_server);
 		tmp_reco_server->RunServer();
 	}
 
+        /**
+         * @param endpoint
+         * @param neg_ctx
+         * @return
+         * @brief
+         */
 	char* reco_send_offer(char *endpoint, neg_ctx_t* neg_ctx) {
 		if(_check_remote_endpoint(endpoint, neg_ctx->port) == 0){
 			neg_ctx->kiara_endpoint = 0;
@@ -201,6 +248,12 @@ extern "C" {
 		}
 	}
 
+        /**
+         * @param hostname
+         * @param port
+         * @return
+         * @brief
+         */
 	int _check_remote_endpoint(char* hostname, int port) {
 		int sockfd, ret = 1;
 		struct addrinfo hints, *servinfo, *p;

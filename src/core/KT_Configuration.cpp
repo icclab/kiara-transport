@@ -20,6 +20,10 @@ KT_Configuration::KT_Configuration ( ) { }
 
 KT_Configuration::~KT_Configuration ( ) { }
 
+/**
+ * @brief
+ * @param neg_ctx
+ */
 void KT_Configuration::negotiation ( neg_ctx_t* neg_ctx )   {
 	char *local;
 	//Check if the negotiation was successful

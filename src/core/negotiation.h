@@ -1,9 +1,12 @@
-/* 
- * File:   negotiation.h
- * Author: aepp
+/**
+ * @file negotiation.h
+ * @author Philipp Aeschlimann <aepp@zhaw.ch>
+ * @version
+ * @license TBD
+ * @brief
  *
- * Created on 25. November 2013, 16:46
  */
+
 #include <uthash.h>
 #include <jansson.h>
 #include "KT_Configuration_glob.h"
@@ -15,14 +18,20 @@
 extern "C" {
 #endif
 
-//Local negotiation dictionary
+/**
+ * @struct neg_dict_t
+ * @brief Local negotiation dictionary
+ */
 typedef struct neg_dict_t {
     const char *id;
     char *value;             
     UT_hash_handle hh;
 } neg_dict_t;
 
-//Decision dictionary
+/**
+ * @struct dec_dict_t
+ * @brief Decision dictionary
+ */
 typedef struct dec_dict_t {
     const char *id;
 	struct dec_dict_t *sub;
@@ -30,7 +39,10 @@ typedef struct dec_dict_t {
     UT_hash_handle hh;
 } dec_dict_t;
 
-//Store for multiple endpoints
+/**
+ * @struct neg_dict_remote_collection_t
+ * @brief Store for multiple endpoints
+ */
 typedef struct neg_dict_remote_collection_t {
     const char *id;
     struct neg_dict_remote_collection_t *sub;
@@ -38,7 +50,10 @@ typedef struct neg_dict_remote_collection_t {
     UT_hash_handle hh;
 } neg_dict_remote_collection_t;
 
-//negotiation context
+/**
+ * @struct neg_ctx_t
+ * @brief negotiation context
+ */
 typedef struct neg_ctx_t {
 	//TODO: remove this neg_dict
     neg_dict_t *neg_dict;
@@ -55,6 +70,10 @@ typedef struct neg_ctx_t {
 	json_t *root_response;
 } neg_ctx_t;
 
+/**
+ * @enum precedence
+ * @brief
+ */
 enum precendence {
 	MUST,
 	MUST_NOT,

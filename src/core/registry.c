@@ -1,8 +1,10 @@
-/* 
- * File:   registry.c
- * Author: aepp
+/**
+ * @file registry.c
+ * @author Philipp Aeschlimann <aepp@zhaw.ch>
+ * @version
+ * @license TBD
+ * @brief
  *
- * Created on 25. November 2013, 16:44
  */
 
 #include <stdio.h>
@@ -14,6 +16,10 @@
 #include "registry.h"
 #include "negotiation.h"
 
+/**
+ * @return
+ * @brief
+ */
 neg_ctx_t *reg_create_context(void) {
 	neg_ctx_t *neg_ctx;
 	neg_ctx = (neg_ctx_t *) malloc(sizeof (struct neg_ctx_t));
@@ -27,6 +33,13 @@ neg_ctx_t *reg_create_context(void) {
 	return neg_ctx;
 }
 
+/**
+ * @param neg_ctx
+ * @param endpoint
+ * @param remote_body
+ * @return
+ * @brief
+ */
 int reg_set_remote_capability(neg_ctx_t *neg_ctx, const char *endpoint, const char *remote_body) {
 	neg_dict_remote_collection_t *remote_dict = reg_get_remote_dict(neg_ctx, endpoint);
 	neg_dict_remote_collection_t *tmp, *current_dict, *out;
@@ -55,6 +68,12 @@ int reg_set_remote_capability(neg_ctx_t *neg_ctx, const char *endpoint, const ch
 	return 0;
 }
 
+/**
+ * @param neg_ctx
+ * @param response
+ * @return
+ * @brief
+ */
 int reg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
 	json_t *root, *value;
 	json_error_t error;
@@ -71,6 +90,14 @@ int reg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
 	return 0;
 }
 
+/**
+ * @param value
+ * @param neg_ctx
+ * @param nego_key
+ * @param level
+ * @return
+ * @brief
+ */
 int _parse_final_capabilities(json_t *value, neg_ctx_t* neg_ctx, char *nego_key, enum dict_struct level) {
 	json_t *new_value;
 	char *new_key;
@@ -99,6 +126,12 @@ int _parse_final_capabilities(json_t *value, neg_ctx_t* neg_ctx, char *nego_key,
 	return 0;
 }
 
+/**
+ * @param neg_ctx
+ * @param endpoint
+ * @return
+ * @brief
+ */
 neg_dict_remote_collection_t* reg_get_remote_dict(neg_ctx_t *neg_ctx, const char *endpoint) {
 	neg_dict_remote_collection_t *s = malloc(sizeof (*s));
 	HASH_FIND_STR(neg_ctx->dict_collection, endpoint, s);
@@ -112,6 +145,13 @@ neg_dict_remote_collection_t* reg_get_remote_dict(neg_ctx_t *neg_ctx, const char
 	return s;
 }
 
+/**
+ * @param neg_ctx
+ * @param key
+ * @param value
+ * @return
+ * @brief
+ */
 int reg_set_capability(neg_ctx_t *neg_ctx, char *key, char *value) {
 	neg_dict_t *s = malloc(sizeof (struct neg_dict_t));
 	memset(s, 0, sizeof (struct neg_dict_t));
@@ -121,18 +161,40 @@ int reg_set_capability(neg_ctx_t *neg_ctx, char *key, char *value) {
 	return 0;
 }
 
+/**
+ * @param neg_ctx
+ * @param key
+ * @return
+ * @brief
+ */
 neg_dict_t* reg_get_capability(neg_ctx_t* neg_ctx, char* key) {
 	HASH_FIND_STR(neg_ctx->hash, key, neg_ctx->neg_dict);
 }
 
+/**
+ * @param neg_ctx
+ * @param key
+ * @brief
+ */
 void reg_get_final_capability(neg_ctx_t* neg_ctx, char* key) {
 	HASH_FIND_STR(neg_ctx->final_capabilities, key, neg_ctx->neg_dict);
 }
 
+/**
+ * @param neg_ctx
+ * @return
+ * @brief
+ */
 char* reg_get_local_capability_json(neg_ctx_t* neg_ctx) {
 	return _reg_get_local_capability_json(neg_ctx->hash, neg_ctx->root);
 }
 
+/**
+ * @param hash
+ * @param root
+ * @return
+ * @brief
+ */
 char* _reg_get_local_capability_json(neg_dict_t *hash, json_t *root) {
 	struct neg_dict_t *tmp;
 	json_t *category = NULL;
@@ -190,6 +252,13 @@ char* _reg_get_local_capability_json(neg_dict_t *hash, json_t *root) {
 	return json_dumps(root, JSON_ENCODE_ANY);
 }
 
+/**
+ * @param value
+ * @param remote_dict
+ * @param nego_key
+ * @return
+ * @brief
+ */
 int _reg_parse_dict(json_t* value, neg_dict_remote_collection_t* remote_dict, const char* nego_key) {
 	json_t *new_value;
 	const char *new_key;

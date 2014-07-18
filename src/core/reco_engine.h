@@ -1,9 +1,12 @@
-/* 
- * File:   reco_engine.h
- * Author: aepp
+/**
+ * @file reco_engine.h
+ * @author Philipp Aeschlimann <aepp@zhaw.ch>
+ * @version
+ * @license TBD
+ * @brief
  *
- * Created on 25. November 2013, 16:45
  */
+
 #include "negotiation.h"
 #ifdef	__cplusplus
 	#include <iostream>
@@ -14,6 +17,9 @@
 #define	RECO_ENGINE_H
 
 #ifdef	__cplusplus
+/**
+ * @class RecoServer
+ */
 class RecoServer {
 public:
 	RecoServer(char *endpoint, neg_ctx_t* neg_ctx);
@@ -24,6 +30,9 @@ private:
 	neg_ctx_t* ctx;
 };
 
+/**
+ * @class RecoClient
+ */
 class RecoClient {
 public:
 	RecoClient(char *serverhost, neg_ctx_t* neg_ctx);

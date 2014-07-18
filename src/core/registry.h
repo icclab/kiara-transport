@@ -1,8 +1,10 @@
-/* 
- * File:   registry.h
- * Author: aepp
+/**
+ * @file registry.h
+ * @author Philipp Aeschlimann <aepp@zhaw.ch>
+ * @version
+ * @license TBD
+ * @brief
  *
- * Created on 25. November 2013, 16:45
  */
 
 #include <uthash.h>
@@ -15,6 +17,10 @@
 extern "C" {
 #endif
 
+    /**
+     * @enum dict_struct
+     * @brief
+     */
 	enum dict_struct {
 		CATEGORY,
 		GROUP,

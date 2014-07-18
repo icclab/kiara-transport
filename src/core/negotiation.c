@@ -1,9 +1,12 @@
-/* 
- * File:   negotiation.c
- * Author: aepp
+/**
+ * @file negotiation.c
+ * @author Philipp Aeschlimann <aepp@zhaw.ch>
+ * @version
+ * @license TBD
+ * @brief
  *
- * Created on 26. November 2013, 09:47
  */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,47 +15,93 @@
 #include "registry.h"
 #include "KT_Configuration_glob.h"
 
-/*
- * 
+/**
+ * @return
+ * @brief
  */
 neg_ctx_t *neg_init() {
 	return reg_create_context();
 }
 
+/**
+ * @param neg_ctx
+ * @param key
+ * @param value
+ * @return
+ * @brief
+ */
 int neg_set_local_capability(neg_ctx_t *neg_ctx, char *key, char *value) {
 	reg_set_capability(neg_ctx, key, value);
 	return 1;
 }
 
+/**
+ * @param neg_ctx
+ * @param key
+ * @return
+ * @brief
+ */
 neg_dict_t *neg_get_capability(neg_ctx_t* neg_ctx, char* key) {
 	return reg_get_capability(neg_ctx, key);
 }
 
+/**
+ * @param neg_ctx
+ * @param key
+ * @brief
+ */
 void neg_get_final_capability(neg_ctx_t* neg_ctx, char* key) {
 	reg_get_final_capability(neg_ctx, key);
 }
 
+/**
+ * @param neg_ctx
+ * @param identifier
+ * @param payload
+ * @brief
+ */
 void neg_negotiate_remote(neg_ctx_t* neg_ctx, char* identifier, char* payload) {
 	reg_set_remote_capability(neg_ctx, identifier, payload);
 	neg_set_final_capabilities(neg_ctx, neg_negotiate(neg_ctx, identifier));
 }
 
+/**
+ * @param neg_ctx
+ * @return
+ * @brief
+ */
 char *neg_send_offer(neg_ctx_t *neg_ctx) {
 	return reco_send_offer(neg_ctx->host, neg_ctx);
 }
 
+/**
+ * @param neg_ctx
+ * @return
+ * @brief
+ */
 int neg_run_server(neg_ctx_t *neg_ctx) {
 	void* server = init_reco_server(neg_ctx->host, neg_ctx);
 	reco_run_server(server);
 	return 1;
 }
 
+/**
+ * @param neg_ctx
+ * @param response
+ * @return
+ * @brief
+ */
 int neg_set_final_capabilities(neg_ctx_t* neg_ctx, char *response) {
 	printf("resp:%s\n", response);
 	reg_set_final_capabilities(neg_ctx, response);
 	return 1;
 }
 
+/**
+ * @param neg_ctx
+ * @param app
+ * @brief
+ */
 void neg_set_local_profile(neg_ctx_t* neg_ctx, kt_application_type app){
 	switch(app) {
 		case KT_WEBSERVER:
@@ -65,6 +114,12 @@ void neg_set_local_profile(neg_ctx_t* neg_ctx, kt_application_type app){
 	}
 }
 
+/**
+ * @param neg_ctx
+ * @param capability
+ * @return
+ * @brief
+ */
 char *neg_get_best_local_capability(neg_ctx_t *neg_ctx, const char *capability) {
 	neg_dict_t *current_dict, *tmp;
 	char *c = NULL, *key;
@@ -97,6 +152,12 @@ char *neg_get_best_local_capability(neg_ctx_t *neg_ctx, const char *capability) 
 	return str;
 }
 
+/**
+ * @param neg_ctx
+ * @param endpoint
+ * @return
+ * @brief
+ */
 char *neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 	neg_dict_remote_collection_t *s = malloc(sizeof (*s));
 	neg_dict_remote_collection_t* remote_dict = reg_get_remote_dict(neg_ctx, endpoint);
@@ -194,6 +255,11 @@ char *neg_negotiate(neg_ctx_t *neg_ctx, const char *endpoint) {
 	return json;
 }
 
+/**
+ * @param prec
+ * @return
+ * @brief
+ */
 int _prec_to_int(char *prec) {
 	int ret;
 
@@ -213,6 +279,11 @@ int _prec_to_int(char *prec) {
 	return ret;
 }
 
+/**
+ * @param capability
+ * @return
+ * @brief
+ */
 int neg_capability_to_int(char *capability) {
 	if(strcmp(capability, "tcp") == 0){
 		return KT_TCP;
