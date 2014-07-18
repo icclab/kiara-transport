@@ -1,8 +1,9 @@
-/*
- * KIARA transport library
- * 
- * Author: Mathias Hablützel <habl@zhaw.ch>
- * Reference: doc/Library API contract.md
+/** 
+ * @file k_transport.h
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @license TBD
+ * @brief Header file for C99 bindings.
  */
 
 #ifndef KT_TRANSPORT
@@ -10,9 +11,10 @@
 
 #include <stddef.h>
 
+// Version number
 #define KT_TRANSPORT_MAJOR 0
-#define KT_TRANSPORT_MINOR 2
-#define KT_TRANSPORT_PATCH 0
+#define KT_TRANSPORT_MINOR 3
+#define KT_TRANSPORT_PATCH 2
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,14 +26,13 @@ struct kt_conn_session{
 };
 
 
-// typedefs to guarantee type safety when using them along with the wrapper
+// @typdef typedefs to guarantee type safety when using them along with the wrapper
 typedef struct kt_conn_session kt_conn_session_t;
 typedef struct kt_msg kt_msg_t;
 typedef void (*kt_handle_t)(kt_conn_session_t*, kt_msg_t*);
 typedef struct kt_configuration kt_configuration_t;
 
 // generic functions
-
 kt_msg_t* kt_msg_new ();
 void kt_msg_destroy ( kt_msg_t* );
 void kt_msg_set_payload ( kt_msg_t*, void*, size_t);

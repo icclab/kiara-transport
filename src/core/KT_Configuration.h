@@ -1,9 +1,10 @@
-/*
- * KT_Configuration.h
+/**
+ * @file KT_Configuration.h
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @license TBD
  *
- *  Created on: Mar 13, 2014
- *      Author: habl
- *   Copyright: 2014 ZHAW
+ * @brief C99 bindings for KT_Configuration class.
  */
 
 #ifndef SRC_CORE_KT_CONFIGURATION_H_

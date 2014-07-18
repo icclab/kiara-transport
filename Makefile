@@ -565,20 +565,20 @@ $(BUILDDIR)/client_0mq_sub_c: $(BUILDDIR) $(CLIENT_0MQ_SUB_CC_DEPS)
 
 # Build instructions Demo
 
-$(BUILDDIR)/demo_main_broker.o: $(BUILDDIR) src/examples/demo_main_broker.c
-		$(CC) -c $(CCFLAGS) -o $@ src/examples/demo_main_broker.c
+$(BUILDDIR)/demo_main_broker.o: $(BUILDDIR) src/demo/demo_main_broker.c
+		$(CC) -c $(CCFLAGS) -o $@ src/demo/demo_main_broker.c
 
 $(BUILDDIR)/demo_broker: $(BUILDDIR) $(DEMO_BROKER_DEPS)
 		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(DEMO_BROKER_DEPS)
 
-$(BUILDDIR)/demo_main_reply.o: $(BUILDDIR) src/examples/demo_main_reply.c
-		$(CC) -c $(CCFLAGS) -o $@ src/examples/demo_main_reply.c
+$(BUILDDIR)/demo_main_reply.o: $(BUILDDIR) src/demo/demo_main_reply.c
+		$(CC) -c $(CCFLAGS) -o $@ src/demo/demo_main_reply.c
 
 $(BUILDDIR)/demo_reply: $(BUILDDIR) $(DEMO_REPLY_DEPS)
 		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(DEMO_REPLY_DEPS)
 
-$(BUILDDIR)/demo_main_subscriber.o: $(BUILDDIR) src/examples/demo_main_subscriber.c
-		$(CC) -c $(CCFLAGS) -o $@ src/examples/demo_main_subscriber.c
+$(BUILDDIR)/demo_main_subscriber.o: $(BUILDDIR) src/demo/demo_main_subscriber.c
+		$(CC) -c $(CCFLAGS) -o $@ src/demo/demo_main_subscriber.c
 
 $(BUILDDIR)/demo_subscriber: $(BUILDDIR) $(DEMO_SUBSCRIBER_DEPS)
 		$(CXX) $(LDFLAGS) -lc $(CXXFLAGS) -o $@ $(DEMO_SUBSCRIBER_DEPS)

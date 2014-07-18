@@ -1,4 +1,11 @@
-
+/**
+ * @file KT_Configuration.hpp
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @license TBD
+ *
+ * @brief Configuration class for network stack.
+ */
 #ifndef KT_CONFIGURATION_HPP
 #define KT_CONFIGURATION_HPP
 
@@ -37,91 +44,32 @@ public:
   
   void negotiation ( neg_ctx_t* neg_ctx );
 
-  /**
-   * Set the value of _network_layer
-   * Layer 3 in the networking stack
-   * @param network_layer the new value of _network_layer
-   */
   void set_network_layer ( kt_network_layer network_layer );
-
-  /**
-   * Get the value of _network_layer
-   * Layer 3 in the networking stack
-   * @return the value of _network_layer
-   */
   kt_network_layer get_network_layer ( ) const;
-
-  /**
-   * Set the value of _transport_layer
-   * Layer 4 in the networking stack
-   * @param transport_layer the new value of _transport_layer
-   */
   void set_transport_layer ( kt_transport_layer transport_layer );
-
-  /**
-   * Get the value of _transport_layer
-   * Layer 4 in the networking stack
-   * @return the value of _transport_layer
-   */
   kt_transport_layer get_transport_layer ( ) const;
-
   const std::string& get_hostname() const
   {
 	  return _hostname;
   }
-
   void set_hostname(const std::string& hostname)
   {
 	  _hostname = hostname;
   }
-
   unsigned int get_port_number() const
   {
 	  return _port_number;
   }
-
   void set_port_number(unsigned int portNumber)
   {
 	  _port_number = portNumber;
   }
-
-  /**
-   * Set the value of _crypto_layer
-   * Optional crypto layer, based on OpenSSL
-   * @param crypto_layer the new value of _crypto_layer
-   */
   void set_crypto_layer ( kt_crypto_layer crypto_layer );
-
-  /**
-   * Get the value of _crypto_layer
-   * Optional crypto layer, based on OpenSSL
-   * @return the value of _crypto_layer
-   */
   kt_crypto_layer get_crypto_layer ( ) const;
-
-  /**
-   * Set the value of _application_layer
-   * @param application_layer the new value of _application_layer
-   */
   void set_application_layer ( kt_application_layer application_layer );
-
-  /**
-   * Get the value of _application_layer
-   * @return the value of _application_layer
-   */
   kt_application_layer get_application_layer ( ) const;
-
-  /**
-   * Set the value of _application_type
-   * @param application_type the new value of _application_type
-   */
   void set_application_type ( kt_application_type application_type );
-  /**
-   * Get the value of _application_type
-   * @return the value of _application_type
-   */
   kt_application_type get_application_type ( ) const;
-
   void set_host (kt_transport_layer transport_layer, std::string hostname, unsigned int port_number);
 
 };

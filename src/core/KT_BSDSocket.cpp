@@ -1,8 +1,11 @@
-/*
- * KT_BSDSocket.cpp
+/**
+ * @file KT_BSDSocket.cpp
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @license TBD
  *
- *  Created on: Feb 7, 2014
- *      Author: habl
+ * @brief BSD socket KT_Connection implementation.
+ * @note Not implemented.
  */
 
 #include "KT_BSDSocket.hpp"

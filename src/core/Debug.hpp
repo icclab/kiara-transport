@@ -1,8 +1,10 @@
-/*
- * Debug.hpp
+/**
+ * @file Debug.hpp
+ * @author Mathias Hablützel <habl@zhaw.ch>
+ * @version 1.0
+ * @license TBD
  *
- *  Created on: Dec 17, 2013
- *      Author: habl
+ * @brief Debug functions go here.
  */
 
 #ifndef DEBUG_HPP_
