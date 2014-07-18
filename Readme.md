@@ -17,6 +17,11 @@ TBD
 * std::thread support
 * facultative: scons
 
+## For Ubuntu minimal 14.04 copy&paste one-liner
+`sudo apt-get install clang gcc git cmake libtool automake autoconf libjansson-dev uthash-dev && git clone https://github.com/zeromq/zeromq4-x.git && git clone git://github.com/jedisct1/libsodium.git && git clone git clone git://github.com/zeromq/libzmq.git && git clone git://github.com/zeromq/czmq.git && cd zeromq4-x && ./autogen.sh && ./configure && make check && sudo make install && sudo ldconfig && cd libsodium/ && ./autogen.sh && ./configure && make check && sudo make install && sudo ldconfig && cd ../libzmq && ./autogen.sh && ./configure && make check && sudo make install && sudo ldconfig && cd ../czmq && git checkout v2.0.2 && ./autogen.sh && ./configure && make check && sudo make install && sudo ldconfig && git clone https://github.com/icclab/kiara-transport.git && cd kiara-transport && make all`
+
+
+
 # Dependencies
 ## ZeroMQ 4
 Install https://github.com/zeromq/zeromq4-x
