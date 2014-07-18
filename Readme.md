@@ -38,6 +38,32 @@ A doxyfile is available and the documentation can be built via `doxygen` and is 
 
 Also see doc/SCALN.md
 
+## Tests, Demo, Examples
+
+### Tests
+
+Unfortunately no tests, unittests exist.
+
+### Demo
+
+* Build the demo files with `make demo` or `scons`
+* Start in separate terminals `demo_broker`, `demo_reply` and `demo_subscriber`
+* Point a HTTP REST client to localhost:5555 and send some arbitrary request, for instance `hello world` with HTTP PUT
+
+### Examples
+* Build the examples with `make examples` or `scons`
+* Run the following pairs
+
+  Client                   | Server
+  ------------------------ | ----------------------
+  client_0mq_http_nego     | server_0mq_http_nego
+  client_0mq_http_pp       | server_0mq_http_pp
+  client_0mq_http_pp_nego  | server_0mq_http_nego
+  client_0mq_req_c         | server_0mq_rep_c
+  client_0mq_req_pp        | server_0mq_rep_pp
+  client_0mq_sub_c         | server_0mq_pub_c
+
+
 # git
 ## Branches
 * master: "stable" branch (owner: habl)
@@ -51,6 +77,7 @@ Also see doc/SCALN.md
 
 ## Tags
 * 0.3.2-beta - latest stable code base
+* 0.4.0-alpha - integrated negotiation
 
 ## Rules
 * Always comment your commits
